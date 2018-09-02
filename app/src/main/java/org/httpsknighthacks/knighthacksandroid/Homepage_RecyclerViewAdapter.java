@@ -23,16 +23,21 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
     private ArrayList<String> mTextList = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
     private ArrayList<Integer> mBgColors = new ArrayList<>();
+    private ArrayList<Class> activityList = new ArrayList<>();
+
     private Context mContext;
 
     public Homepage_RecyclerViewAdapter(Context mContext,
                                         ArrayList<String> mTexts,
                                         ArrayList<String> mImageUrls,
-                                        ArrayList<Integer> mBgColors) {
+                                        ArrayList<Integer> mBgColors,
+                                        ArrayList<Class> activityList
+                                        ) {
         this.mTextList = mTexts;
         this.mImageUrls = mImageUrls;
         this.mBgColors = mBgColors;
         this.mContext = mContext;
+        this.activityList = activityList;
     }
 
     @NonNull
@@ -45,6 +50,8 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+        activityList.add(Schedule.class);
 
         Glide.with(mContext)
                 .asBitmap()
@@ -59,11 +66,14 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
                 Toast.makeText(mContext, mTextList.get(position), Toast.LENGTH_SHORT).show();
                 // TODO: Add more activities here, based on position/index in array list to open the new activity
+                Intent newActivity = new Intent(mContext, activityList.get(position));
+                mContext.startActivity(newActivity);
+
             }
         });
 
         // This line below will be removed when we have pictures.
-        holder.mImageView.setBackgroundResource(R.color.colorHomePageCardBackgroundImage);
+//        holder.mImageView.setBackgroundResource(R.color.colorHomePageCardBackgroundImage);
 
     }
 

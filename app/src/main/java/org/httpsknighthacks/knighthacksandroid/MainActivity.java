@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mTextList = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
     private ArrayList<Integer> mBgColors = new ArrayList<>();
+    private ArrayList<Class> activityList = new ArrayList<>();
 
 
     @Override
@@ -58,29 +59,30 @@ public class MainActivity extends AppCompatActivity {
         mImageUrls.add("");
         mTextList.add("Schedule");
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardOrange));
+        activityList.add(Schedule.class);
 
         mImageUrls.add("");
         mTextList.add("Live Updates");
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardBlue));
+        activityList.add(LiveUpdates.class);
 
         mImageUrls.add("");
         mTextList.add("FAQs");
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
+        activityList.add(FAQs.class);
 
 
         mImageUrls.add("");
         mTextList.add("Workshops");
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardRed));
+        activityList.add(Workshops.class);
 
 
         mImageUrls.add("");
         mTextList.add("Sponsors");
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
+        activityList.add(Sponsors.class);
 
-
-        mImageUrls.add("");
-        mTextList.add("Devs Team");
-        mBgColors.add(getResources().getColor(R.color.colorHomePageCardPink));
 
         loadRecycleViewToHomepage();
     }
@@ -91,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         RecyclerView mRecyclerView = findViewById(R.id.homepage_list_container);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        Homepage_RecyclerViewAdapter homepage_recyclerViewAdapter = new Homepage_RecyclerViewAdapter(this, mTextList, mImageUrls, mBgColors);
+        Homepage_RecyclerViewAdapter homepage_recyclerViewAdapter =
+                new Homepage_RecyclerViewAdapter(this, mTextList, mImageUrls, mBgColors, activityList);
         mRecyclerView.setAdapter(homepage_recyclerViewAdapter);
     }
 

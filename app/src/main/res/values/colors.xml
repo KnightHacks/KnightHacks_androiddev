@@ -9,5 +9,8 @@
     <color name="colorHomePageCardRed">#fc3b32</color>
     <color name="colorHomePageCardPurple">#5653d5</color>
     <color name="colorHomePageCardPink">#FF4081</color>
-    <color name="colorHomePageCardBackgroundImage">#28c7f7</color> // will be removed
+    <color name="colorHomePageCardBackgroundImage">#28c7f7</color>
+
+    <color name="black_overlay">#66000000</color>
+    // will be removed
 </resources>
