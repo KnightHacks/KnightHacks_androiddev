@@ -1,14 +1,27 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.app.ActionBar;
+import android.graphics.Color;
+import android.nfc.Tag;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    // Properties:
+    private ArrayList<String> mTextList = new ArrayList<>();
+    private ArrayList<String> mImageUrls = new ArrayList<>();
+    private ArrayList<Integer> mBgColors = new ArrayList<>();
+    private ArrayList<Class> activityList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +48,54 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+
+        getImageAndTitles();
     }
+
+    // Get images and titles from the database
+    private void getImageAndTitles()
+    {
+        // TODO: Hard-coded for now, but will have to change later on
+        mImageUrls.add("");
+        mTextList.add("Schedule");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardOrange));
+        activityList.add(Schedule.class);
+
+        mImageUrls.add("");
+        mTextList.add("Live Updates");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardBlue));
+        activityList.add(LiveUpdates.class);
+
+        mImageUrls.add("");
+        mTextList.add("FAQs");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
+        activityList.add(FAQs.class);
+
+
+        mImageUrls.add("");
+        mTextList.add("Workshops");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardRed));
+        activityList.add(Workshops.class);
+
+
+        mImageUrls.add("");
+        mTextList.add("Sponsors");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
+        activityList.add(Sponsors.class);
+
+
+        loadRecycleViewToHomepage();
+    }
+
+    // Add everything into the recycler view and recycler adapter
+    private void loadRecycleViewToHomepage()
+    {
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView mRecyclerView = findViewById(R.id.homepage_list_container);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        Homepage_RecyclerViewAdapter homepage_recyclerViewAdapter =
+                new Homepage_RecyclerViewAdapter(this, mTextList, mImageUrls, mBgColors, activityList);
+        mRecyclerView.setAdapter(homepage_recyclerViewAdapter);
+    }
+
 }
