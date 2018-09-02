@@ -3,14 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="Orange">#FFFD9402</color>
-    <color name="Blue">#0678fe</color>
-    <color name="Green">#25ad60</color>
-    <color name="Red">#fc3b32</color>
-    <color name="Purple">#5653d5</color>
-    <color name="Pink">#FF4081</color>
-    <color name="Image">#28c7f7</color>
-
-
-
+    <color name="colorHomePageCardOrange">#FFFD9402</color>
+    <color name="colorHomePageCardBlue">#0678fe</color>
+    <color name="colorHomePageCardGreen">#25ad60</color>
+    <color name="colorHomePageCardRed">#fc3b32</color>
+    <color name="colorHomePageCardPurple">#5653d5</color>
+    <color name="colorHomePageCardPink">#FF4081</color>
+    <color name="colorHomePageCardBackgroundImage">#28c7f7</color> // will be removed
 </resources>

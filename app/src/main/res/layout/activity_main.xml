@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.httpsknighthacks.knighthacksandroid.MainActivity"
-    android:background="#f2f2f2"
     >
     <TextView
         android:id="@+id/homepage_greeting_text_view"
@@ -17,7 +16,7 @@
         tools:layout_editor_absoluteY="0dp"
         android:textStyle="bold"
         android:textSize="40dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:textColor="#000000"
         />
 

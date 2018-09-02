@@ -16,12 +16,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity called!";
-
     // Properties:
     private ArrayList<String> mTextList = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
-    private ArrayList<String> mBgColors = new ArrayList<>();
+    private ArrayList<Integer> mBgColors = new ArrayList<>();
 
 
     @Override
@@ -56,41 +54,33 @@ public class MainActivity extends AppCompatActivity {
     // Get images and titles from the database
     private void getImageAndTitles()
     {
-        // TODO: Hard code for now, but will have to change later on
-        //    <color name="Orange">#FFFD9402</color>
-        //    <color name="Blue">#0678fe</color>
-        //    <color name="Green">#25ad60</color>
-        //    <color name="Red">#fc3b32</color>
-        //    <color name="Purple">#5653d5</color>
-        //    <color name="Pink">#FF4081</color>
-
-        mImageUrls.add("https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg");
+        // TODO: Hard-coded for now, but will have to change later on
+        mImageUrls.add("");
         mTextList.add("Schedule");
-        mBgColors.add("#FFFD9402");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardOrange));
 
         mImageUrls.add("");
         mTextList.add("Live Updates");
-        mBgColors.add("#0678fe");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardBlue));
 
         mImageUrls.add("");
         mTextList.add("FAQs");
-        mBgColors.add("#25ad60");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
 
 
         mImageUrls.add("");
         mTextList.add("Workshops");
-        mBgColors.add("#fc3b32");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardRed));
 
 
         mImageUrls.add("");
         mTextList.add("Sponsors");
-        mBgColors.add("#5653d5");
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
 
 
         mImageUrls.add("");
         mTextList.add("Devs Team");
-        mBgColors.add("#FF4081");
-
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardPink));
 
         loadRecycleViewToHomepage();
     }

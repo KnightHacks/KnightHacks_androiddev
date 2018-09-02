@@ -1,11 +1,11 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,25 +17,18 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-
-
 public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_RecyclerViewAdapter.ViewHolder> {
-
-    // Debugging =)
-    private static final String TAG = "RecyclerViewAdapter";
 
     // Properties:
     private ArrayList<String> mTextList = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
-    private ArrayList<String> mBgColors = new ArrayList<>();
+    private ArrayList<Integer> mBgColors = new ArrayList<>();
     private Context mContext;
-
-
 
     public Homepage_RecyclerViewAdapter(Context mContext,
                                         ArrayList<String> mTexts,
                                         ArrayList<String> mImageUrls,
-                                        ArrayList<String> mBgColors) {
+                                        ArrayList<Integer> mBgColors) {
         this.mTextList = mTexts;
         this.mImageUrls = mImageUrls;
         this.mBgColors = mBgColors;
@@ -52,27 +45,25 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder: called this!");
 
         Glide.with(mContext)
                 .asBitmap()
                 .load(mImageUrls.get(position))
                 .into(holder.mImageView);
 
-        holder.mCardView.setCardBackgroundColor(Color.parseColor(mBgColors.get(position)));
-        holder.mImageView.setBackgroundResource(R.color.Image);
-
+        holder.mCardView.setCardBackgroundColor((mBgColors.get(position)));
         holder.mTextView.setText(mTextList.get(position));
-
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: Clicked this! Opening a new activity: " + mTextList.get(position));
+
                 Toast.makeText(mContext, mTextList.get(position), Toast.LENGTH_SHORT).show();
                 // TODO: Add more activities here, based on position/index in array list to open the new activity
             }
         });
 
+        // This line below will be removed when we have pictures.
+        holder.mImageView.setBackgroundResource(R.color.colorHomePageCardBackgroundImage);
 
     }
 
