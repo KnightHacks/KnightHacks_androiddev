@@ -2,6 +2,9 @@
     <string name="app_name">KnightHacksAndroid</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="schedule">Schedule</string>
+    <string name="liveUpdates">Live Updates</string>
+    <string name="faqs">FAQs</string>
+    <string name="workshops">Workshops</string>
+    <string name="sponsors">Sponsors</string>
 </resources>
