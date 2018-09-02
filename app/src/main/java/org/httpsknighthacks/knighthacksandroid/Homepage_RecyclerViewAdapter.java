@@ -64,7 +64,7 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
         holder.mTextView.setText(mTextList.get(position));
 
-        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: Clicked this! Opening a new activity: " + mTextList.get(position));
