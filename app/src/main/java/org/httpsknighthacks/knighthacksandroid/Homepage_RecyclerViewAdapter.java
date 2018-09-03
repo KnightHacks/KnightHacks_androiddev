@@ -47,7 +47,6 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
         return new ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
@@ -72,9 +71,6 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
             }
         });
 
-        // This line below will be removed when we have pictures.
-//        holder.mImageView.setBackgroundResource(R.color.colorHomePageCardBackgroundImage);
-
     }
 
     @Override
@@ -95,6 +91,5 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
             mCardView = itemView.findViewById(R.id.list_item_card_view);
         }
     }
-
 
 }

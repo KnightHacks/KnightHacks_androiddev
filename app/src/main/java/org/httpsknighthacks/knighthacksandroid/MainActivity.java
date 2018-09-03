@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> mBgColors = new ArrayList<>();
     private ArrayList<Class> activityList = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,18 +70,15 @@ public class MainActivity extends AppCompatActivity {
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
         activityList.add(FAQs.class);
 
-
         mImageUrls.add("");
         mTextList.add(getResources().getString(R.string.workshops));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardRed));
         activityList.add(Workshops.class);
 
-
         mImageUrls.add("");
         mTextList.add(getResources().getString(R.string.sponsors));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
         activityList.add(Sponsors.class);
-
 
         loadRecycleViewToHomepage();
     }
