@@ -2,9 +2,9 @@
     <string name="app_name">KnightHacksAndroid</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="schedule">Schedule</string>
-    <string name="liveUpdates">Live Updates</string>
-    <string name="faqs">FAQs</string>
-    <string name="workshops">Workshops</string>
-    <string name="sponsors">Sponsors</string>
+    <string name="schedule_card_title">Schedule</string>
+    <string name="liveUpdates_card_title">Live Updates</string>
+    <string name="faqs_card_title">FAQs</string>
+    <string name="workshops_card_title">Workshops</string>
+    <string name="sponsors_card_title">Sponsors</string>
 </resources>

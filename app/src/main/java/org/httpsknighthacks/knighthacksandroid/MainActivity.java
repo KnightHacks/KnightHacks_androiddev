@@ -56,27 +56,27 @@ public class MainActivity extends AppCompatActivity {
     {
         // TODO: Hard-coded for now, but will have to change later on
         mImageUrls.add("");
-        mTextList.add(getResources().getString(R.string.schedule));
+        mTextList.add(getResources().getString(R.string.schedule_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardOrange));
         activityList.add(Schedule.class);
 
         mImageUrls.add("");
-        mTextList.add(getResources().getString(R.string.liveUpdates));
+        mTextList.add(getResources().getString(R.string.liveUpdates_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardBlue));
         activityList.add(LiveUpdates.class);
 
         mImageUrls.add("");
-        mTextList.add(getResources().getString(R.string.faqs));
+        mTextList.add(getResources().getString(R.string.faqs_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
         activityList.add(FAQs.class);
 
         mImageUrls.add("");
-        mTextList.add(getResources().getString(R.string.workshops));
+        mTextList.add(getResources().getString(R.string.workshops_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardRed));
         activityList.add(Workshops.class);
 
         mImageUrls.add("");
-        mTextList.add(getResources().getString(R.string.sponsors));
+        mTextList.add(getResources().getString(R.string.sponsors_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
         activityList.add(Sponsors.class);
 
