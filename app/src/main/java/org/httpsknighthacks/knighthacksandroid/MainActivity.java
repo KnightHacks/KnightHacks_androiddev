@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         activityList.add(Schedule.class);
 
         mImageUrls.add("");
-        mTextList.add(getResources().getString(R.string.liveUpdates_card_title));
+        mTextList.add(getResources().getString(R.string.live_updates_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardBlue));
         activityList.add(LiveUpdates.class);
 
