@@ -7,4 +7,9 @@
     <string name="faqs_card_title">FAQs</string>
     <string name="workshops_card_title">Workshops</string>
     <string name="sponsors_card_title">Sponsors</string>
+
+    <string name="vertical_card_image_dummy">https://user-images.githubusercontent.com/13206138/45260286-148a6e80-b3b1-11e8-9d14-8001a1b8333d.png</string>
+    <string name="vertical_card_title_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="vertical_card_subtitle_dummy">Quisque a egestas orci.</string>
+
 </resources>

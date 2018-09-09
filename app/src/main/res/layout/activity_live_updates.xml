@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".LiveUpdates">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/live_updates_vertical_section_card_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Live Updates Works"
-        />
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>

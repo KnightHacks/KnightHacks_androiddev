@@ -6,10 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".FAQs">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/faqs_vertical_section_card_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="FAQs works!"
-        />
-
+        android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>
