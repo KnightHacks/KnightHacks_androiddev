@@ -62,12 +62,8 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(mContext, mTextList.get(position), Toast.LENGTH_SHORT).show();
-                // TODO: Add more activities here, based on position/index in array list to open the new activity
                 Intent newActivity = new Intent(mContext, activityList.get(position));
                 mContext.startActivity(newActivity);
-
             }
         });
 
