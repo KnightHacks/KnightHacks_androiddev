@@ -8,6 +8,10 @@
     <string name="workshops_card_title">Workshops</string>
     <string name="sponsors_card_title">Sponsors</string>
 
+    <string name="vertical_card_image_dummy">https://user-images.githubusercontent.com/13206138/45260286-148a6e80-b3b1-11e8-9d14-8001a1b8333d.png</string>
+    <string name="vertical_card_title_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="vertical_card_subtitle_dummy">Quisque a egestas orci.</string>
+  
     <string name="horizontal_card_image_dummy">https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/challenge_photos/000/542/472/datas/full_width.png</string>
     <string name="horizontal_card_title_dummy">Title</string>
     <string name="horizontal_card_side_subtitle_dummy">City, State</string>
