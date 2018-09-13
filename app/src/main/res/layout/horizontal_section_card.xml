@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/horizontal_section_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:background="@android:color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:id="@+id/horizontal_section_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:padding="20dp">
+
+            <ImageView
+                android:id="@+id/horizontal_section_card_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/horizontal_section_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/horizontal_section_card_image"
+                android:text="@string/horizontal_card_title_dummy"
+                android:textColor="@color/colorHomePageCardPurple"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/horizontal_section_card_side_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/horizontal_section_card_title"
+                android:layout_alignBottom="@+id/horizontal_section_card_title"
+                android:layout_marginLeft="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_toEndOf="@+id/horizontal_section_card_title"
+                android:layout_toRightOf="@+id/horizontal_section_card_title"
+                android:text="@string/horizontal_card_side_subtitle_dummy" />
+
+            <TextView
+                android:id="@+id/horizontal_section_card_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/horizontal_section_card_body"
+                android:layout_alignStart="@+id/horizontal_section_card_body"
+                android:layout_below="@+id/horizontal_section_card_title"
+                android:text="@string/horizontal_card_subtitle_dummy"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/horizontal_section_card_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/horizontal_section_card_title"
+                android:layout_alignStart="@+id/horizontal_section_card_title"
+                android:layout_below="@+id/horizontal_section_card_subtitle"
+                android:text="@string/horizontal_card_body_dummy"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/horizontal_section_card_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@+id/horizontal_section_card_title"
+                android:text="@string/horizontal_card_timestamp_dummy"
+                android:textColor="@android:color/black" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Schedule">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/schedule_horizontal_section_card_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Schedule Works"
-        />
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
