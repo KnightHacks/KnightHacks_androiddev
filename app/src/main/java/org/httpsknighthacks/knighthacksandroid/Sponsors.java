@@ -46,10 +46,27 @@ public class Sponsors extends AppCompatActivity {
             mCardTitleList.add(getResources().getString(R.string.horizontal_card_title_dummy));
             mCardSideSubtitleList.add(getResources().getString(R.string.horizontal_card_side_subtitle_dummy));
             mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
-
-            mFilterSearchTextList.add("All");
-            mFilterSearchImageList.add("");
         }
+        mFilterSearchTextList.add("Full-time");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
+
+        mFilterSearchTextList.add("Internship");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
+
+        mFilterSearchTextList.add("Design");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
+
+        mFilterSearchTextList.add("Development");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+
+        mFilterSearchTextList.add("Talks");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
+
+        mFilterSearchTextList.add("Workshops");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
+
+        mFilterSearchTextList.add("All");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
     }
 
     private void loadRecyclerView() {

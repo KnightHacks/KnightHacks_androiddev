@@ -18,10 +18,8 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
     private ArrayList<String> mTextList = new ArrayList<>();
-    private ArrayList<String> mImageList= new ArrayList<>();
+    private ArrayList<String> mImageList = new ArrayList<>();
     private Context mContext;
-
-    public SharedFilterSearchComponent_RecyclerViewAdapter(){}
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
                                                            ArrayList<String> mTextList,
