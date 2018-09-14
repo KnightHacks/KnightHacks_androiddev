@@ -16,6 +16,9 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
 
+    private ArrayList<String> mFilterSearchTextList;
+    private ArrayList<String> mFilterSearchImageList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,9 @@ public class Sponsors extends AppCompatActivity {
         mCardSubtitleList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
+
+        mFilterSearchTextList = new ArrayList<>();
+        mFilterSearchImageList = new ArrayList<>();
 
         getCardComponents();
         loadRecyclerView();
@@ -40,6 +46,9 @@ public class Sponsors extends AppCompatActivity {
             mCardTitleList.add(getResources().getString(R.string.horizontal_card_title_dummy));
             mCardSideSubtitleList.add(getResources().getString(R.string.horizontal_card_side_subtitle_dummy));
             mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
+
+            mFilterSearchTextList.add("All");
+            mFilterSearchImageList.add("");
         }
     }
 
@@ -53,5 +62,14 @@ public class Sponsors extends AppCompatActivity {
                         mCardTitleList, mCardSideSubtitleList, mCardSubtitleList, mCardBodyList,
                         mCardTimestampList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
+
+        LinearLayoutManager mFilterSearchLinearLayoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.schedule_horizontal_filter_search_component_container);
+        mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
+
+        SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
+                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList);
+        mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 }

@@ -17,8 +17,8 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
 
-    private ArrayList<String> mFilterSearchTextList = new ArrayList<>();
-    private ArrayList<String> mFilterSearchImageList= new ArrayList<>();
+    private ArrayList<String> mFilterSearchTextList;
+    private ArrayList<String> mFilterSearchImageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,9 @@ public class Schedule extends AppCompatActivity {
         mCardSubtitleList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
+
+        mFilterSearchTextList = new ArrayList<>();
+        mFilterSearchImageList = new ArrayList<>();
 
         getCardComponents();
         loadRecyclerView();
