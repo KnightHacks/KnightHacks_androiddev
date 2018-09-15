@@ -42,7 +42,6 @@
                     android:layout_gravity="center"
                     android:padding="15dp"
                     >
-                    <!--android:background="@drawable/round_border"-->
 
                 </ImageView>
 
