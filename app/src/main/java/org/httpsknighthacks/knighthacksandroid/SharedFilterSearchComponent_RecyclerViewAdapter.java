@@ -3,17 +3,18 @@ package org.httpsknighthacks.knighthacksandroid;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
@@ -40,14 +41,17 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, final int position) {
         Glide.with(mContext)
                 .asBitmap()
                 .load(mImageList.get(position))
-                .into(holder.mCircleImageView);
+                .into(holder.mImageView);
 
         holder.mTextView.setText(mTextList.get(position));
 
+        if(position == (mImageList.size()-1)) {
+            holder.mImageView.setBackgroundResource(R.drawable.round_border);
+        }
     }
 
     @Override
@@ -55,16 +59,14 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         return mImageList.size();
     }
 
-
-    // View Holder and its constructor
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView mCircleImageView;
+        ImageView mImageView;
         TextView mTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mCircleImageView = itemView.findViewById(R.id.shared_filter_search_img_view);
+            mImageView = itemView.findViewById(R.id.shared_filter_search_img_view);
             mTextView = itemView.findViewById(R.id.shared_filter_search_text_view);
         }
     }

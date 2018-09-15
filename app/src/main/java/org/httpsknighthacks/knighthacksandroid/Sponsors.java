@@ -15,7 +15,6 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
-
     private ArrayList<String> mFilterSearchTextList;
     private ArrayList<String> mFilterSearchImageList;
 
@@ -30,7 +29,6 @@ public class Sponsors extends AppCompatActivity {
         mCardSubtitleList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
-
         mFilterSearchTextList = new ArrayList<>();
         mFilterSearchImageList = new ArrayList<>();
 
@@ -53,11 +51,11 @@ public class Sponsors extends AppCompatActivity {
         mFilterSearchTextList.add("Internship");
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
 
+        mFilterSearchTextList.add("Dev");
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+
         mFilterSearchTextList.add("Design");
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
-
-        mFilterSearchTextList.add("Development");
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
 
         mFilterSearchTextList.add("Talks");
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
@@ -84,7 +82,7 @@ public class Sponsors extends AppCompatActivity {
         LinearLayoutManager mFilterSearchLinearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mFilterSearchLinearLayoutManager.setStackFromEnd(true);
-        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.schedule_horizontal_filter_search_component_container);
+        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
         mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
 
         SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
