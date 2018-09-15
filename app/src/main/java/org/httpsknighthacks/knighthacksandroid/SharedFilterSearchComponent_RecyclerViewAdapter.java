@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -58,12 +59,12 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     // View Holder and its constructor
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        CircleImageView mCircleImageView;
+        ImageView mCircleImageView;
         TextView mTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mCircleImageView = itemView.findViewById(R.id.shared_filter_search_cir_img_view);
+            mCircleImageView = itemView.findViewById(R.id.shared_filter_search_img_view);
             mTextView = itemView.findViewById(R.id.shared_filter_search_text_view);
         }
     }

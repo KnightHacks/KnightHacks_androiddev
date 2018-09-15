@@ -82,8 +82,10 @@ public class Workshops extends AppCompatActivity {
                         mCardTimestampList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
+        // Recycler Filter Search Bar
         LinearLayoutManager mFilterSearchLinearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mFilterSearchLinearLayoutManager.setStackFromEnd(true);
         RecyclerView mFilterSearchRecyclerView = findViewById(R.id.schedule_horizontal_filter_search_component_container);
         mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
 
