@@ -60,7 +60,6 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, mTextList.get(position), Toast.LENGTH_SHORT).show();
                 previousHolder.mImageView.setBackgroundResource(0);
                 holder.mImageView.setBackgroundResource(R.drawable.round_border);
 
