@@ -45,25 +45,25 @@ public class Sponsors extends AppCompatActivity {
             mCardSideSubtitleList.add(getResources().getString(R.string.horizontal_card_side_subtitle_dummy));
             mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
         }
-        mFilterSearchTextList.add("Full-time");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
 
-        mFilterSearchTextList.add("Internship");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
 
-        mFilterSearchTextList.add("Dev");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
 
-        mFilterSearchTextList.add("Design");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
 
-        mFilterSearchTextList.add("Talks");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
 
-        mFilterSearchTextList.add("Workshops");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
 
-        mFilterSearchTextList.add("All");
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
     }
 

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import java.util.ArrayList;
@@ -21,10 +20,6 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     private ArrayList<String> mImageList = new ArrayList<>();
     private Context mContext;
     private ViewHolder previousHolder;
-
-    public void setPreviousHolder(ViewHolder previousHolder) {
-        this.previousHolder = previousHolder;
-    }
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
                                                            ArrayList<String> mTextList,
@@ -53,7 +48,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         holder.mTextView.setText(mTextList.get(position));
 
         if(position == (mImageList.size()-1)) {
-            holder.mImageView.setBackgroundResource(R.drawable.round_border);
+            holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
             setPreviousHolder(holder);
         }
 
@@ -61,7 +56,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             @Override
             public void onClick(View v) {
                 previousHolder.mImageView.setBackgroundResource(0);
-                holder.mImageView.setBackgroundResource(R.drawable.round_border);
+                holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
 
                 setPreviousHolder(holder);
             }
@@ -85,5 +80,9 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             mTextView = itemView.findViewById(R.id.shared_filter_search_text_view);
             mCardView = itemView.findViewById(R.id.shared_filter_search_parent_card_view_container);
         }
+    }
+
+    public void setPreviousHolder(ViewHolder previousHolder) {
+        this.previousHolder = previousHolder;
     }
 }
