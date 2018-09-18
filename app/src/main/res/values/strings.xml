@@ -19,4 +19,26 @@
     <string name="horizontal_card_body_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a egestas orci. Suspendisse molestie pulvinar sem, accumsan rhoncus nibh finibus vitae. In facilisis, odio id venenatis porttitor, nisi mi congue nulla, ac sodales neque mi eu nulla.</string>
     <string name="horizontal_card_timestamp_dummy">XX:XX</string>
 
+    <string name="home_screen_schedule_card_img">https://user-images.githubusercontent.com/32247767/45531079-dfac5c00-b7a2-11e8-9a70-99590e0da00f.png</string>
+    <string name="home_screen_live_updates_card_img">https://user-images.githubusercontent.com/32247767/45531076-df13c580-b7a2-11e8-8755-6687992d76fb.png</string>
+    <string name="home_screen_faqs_card_img">https://user-images.githubusercontent.com/32247767/45531067-df13c580-b7a2-11e8-8f8d-6858e98c8a63.png</string>
+    <string name="home_screen_workshops_card_img">https://user-images.githubusercontent.com/32247767/45531089-e044f280-b7a2-11e8-8bf4-4c7684b185a9.png</string>
+    <string name="home_screen_sponsors_card_img">https://user-images.githubusercontent.com/32247767/45531083-dfac5c00-b7a2-11e8-8413-b969cbcf94b3.png</string>
+
+    <string name="shared_filter_search_component_all">https://user-images.githubusercontent.com/32247767/45531058-de7b2f00-b7a2-11e8-8876-1881c18d5115.png</string>
+    <string name="shared_filter_search_component_workshops">https://user-images.githubusercontent.com/32247767/45531092-e044f280-b7a2-11e8-9ee9-bd56f1349a1f.png</string>
+    <string name="shared_filter_search_component_talks">https://user-images.githubusercontent.com/32247767/45531086-dfac5c00-b7a2-11e8-8b3c-41a54472230e.png</string>
+    <string name="shared_filter_search_component_development">https://user-images.githubusercontent.com/32247767/45531064-de7b2f00-b7a2-11e8-92f7-8489fbbf5c5f.png</string>
+    <string name="shared_filter_search_component_design">https://user-images.githubusercontent.com/32247767/45531061-de7b2f00-b7a2-11e8-933d-5530ac1c3569.png</string>
+    <string name="shared_filter_search_component_internships">https://user-images.githubusercontent.com/32247767/45531073-df13c580-b7a2-11e8-8547-8739c03e41ab.png</string>
+    <string name="shared_filter_search_component_full_time">https://user-images.githubusercontent.com/32247767/45531070-df13c580-b7a2-11e8-9f87-3996b17a3102.png</string>
+
+    <string name="search_filter_all">All</string>
+    <string name="search_filter_workshops">Workshops</string>
+    <string name="search_filter_talks">Talks</string>
+    <string name="search_filter_design">Design</string>
+    <string name="search_filter_dev">Dev</string>
+    <string name="search_filter_internship">Internship</string>
+    <string name="search_filter_full_time">Full time</string>
+
 </resources>

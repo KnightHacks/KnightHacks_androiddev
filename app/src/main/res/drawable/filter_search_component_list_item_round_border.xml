@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadius="0dp"
+    android:shape="ring"
+    android:thicknessRatio="2"
+    android:useLevel="false"
+    >
+
+    <solid android:color="@android:color/transparent" />
+
+    <size android:width="47dp"
+        android:height="47dp" />
+
+    <stroke android:width="3dp"
+        android:color="@color/colorHomePageCardPurple" />
+
+</shape>
