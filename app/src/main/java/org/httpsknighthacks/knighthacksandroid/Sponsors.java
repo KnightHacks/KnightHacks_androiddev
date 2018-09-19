@@ -33,6 +33,7 @@ public class Sponsors extends AppCompatActivity {
         mFilterSearchImageList = new ArrayList<>();
 
         getCardComponents();
+        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -45,26 +46,6 @@ public class Sponsors extends AppCompatActivity {
             mCardSideSubtitleList.add(getResources().getString(R.string.horizontal_card_side_subtitle_dummy));
             mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
         }
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
     }
 
     private void loadRecyclerView() {
@@ -88,5 +69,28 @@ public class Sponsors extends AppCompatActivity {
         SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
                 new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList);
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
+    }
+
+    private void getFilterSearchComponents() {
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
+
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
+
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
+
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
+
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
+
+        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
+        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
     }
 }
