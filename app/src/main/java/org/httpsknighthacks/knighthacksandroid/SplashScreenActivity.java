@@ -1,7 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.Keyframe;
@@ -29,36 +28,23 @@ public class SplashScreenActivity extends AppCompatActivity {
         ImageView rocket = findViewById(R.id.rocket);
         ImageView flames = findViewById(R.id.flames);
         final ImageView spaceCloud = findViewById(R.id.clouds);
+        final ImageView miniCloud = findViewById(R.id.minicloud);
+        final ImageView microCloud = findViewById(R.id.microcloud);
         final TextView splashText = findViewById(R.id.splashText);
         final ImageView blueStar = findViewById(R.id.blue_star);
         final ImageView redStar = findViewById(R.id.red_star);
-        final AnimatorSet cloudSet = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.translate_cloud);
-        cloudSet.setTarget(spaceCloud);
-        cloudSet.setDuration(2000);
 
         Animation translateBlueStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
         Animation translateRedStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
+
+        final Animation translateMicroCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
+        final Animation translateMiniCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
+        final Animation translateBigCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
 
         // Alpha animation will fade out the views before transitioning to new activity
         final Animation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
         alphaAnimation.setDuration(1000);
         alphaAnimation.setInterpolator(new LinearInterpolator());
-        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                cloudSet.end();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
 
         // Set up rocket acceleration algorithm
         Keyframe k0 = Keyframe.ofFloat(0f, 0);
@@ -90,13 +76,15 @@ public class SplashScreenActivity extends AppCompatActivity {
                 blueStar.startAnimation(alphaAnimation);
                 redStar.startAnimation(alphaAnimation);
                 spaceCloud.startAnimation(alphaAnimation);
+                miniCloud.startAnimation(alphaAnimation);
+                microCloud.startAnimation(alphaAnimation);
             }
         });
 
         // Animate flames to create the illusion of movement
         PropertyValuesHolder scalePropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, (float) 0.8);
         ObjectAnimator scaleFlamesAnimator = ObjectAnimator.ofPropertyValuesHolder(flames, scalePropertyValuesHolder);
-        scaleFlamesAnimator.setRepeatCount(20);
+        scaleFlamesAnimator.setRepeatCount(30);
         scaleFlamesAnimator.setRepeatMode(ValueAnimator.REVERSE);
         scaleFlamesAnimator.setDuration(450);
 
@@ -112,8 +100,70 @@ public class SplashScreenActivity extends AppCompatActivity {
         translateRedStar.setRepeatCount(3);
         redStar.startAnimation(translateRedStar);
 
+        final boolean[] isAnimating = {false};
+
+        translateBigCloud.setDuration(2000);
+        translateBigCloud.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+               if(!isAnimating[0])
+                    microCloud.startAnimation(translateMicroCloud);
+
+                spaceCloud.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        translateMicroCloud.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isAnimating[0] = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isAnimating[0] = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        translateMicroCloud.setDuration(14000);
+        translateMicroCloud.setStartOffset(1000);
+
+        translateMiniCloud.setDuration(8000);
+        translateBigCloud.setStartOffset(4000);
+        translateMiniCloud.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                spaceCloud.startAnimation(translateBigCloud);
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                miniCloud.clearAnimation();
+                miniCloud.startAnimation(translateMiniCloud);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        miniCloud.startAnimation(translateMiniCloud);
+
         s.start();
-        cloudSet.start();
     }
 
 }
