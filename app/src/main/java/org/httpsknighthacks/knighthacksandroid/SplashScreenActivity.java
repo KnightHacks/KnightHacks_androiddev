@@ -20,11 +20,16 @@ import android.widget.TextView;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    boolean isPaused;
+    boolean isEndOfanimations;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        isPaused = false;
+        isEndOfanimations = false;
         ImageView rocket = findViewById(R.id.rocket);
         ImageView flames = findViewById(R.id.flames);
         final ImageView spaceCloud = findViewById(R.id.clouds);
@@ -62,10 +67,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-
                 splashText.setVisibility(View.INVISIBLE);
-                startActivity(intent);
-                finish();
+                isEndOfanimations = true;
+
+                if(!isPaused) {
+                    startActivity(intent);
+                    finish();
+                }
             }
 
             @Override
@@ -164,6 +172,26 @@ public class SplashScreenActivity extends AppCompatActivity {
         miniCloud.startAnimation(translateMiniCloud);
 
         s.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isPaused = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(isEndOfanimations)
+        {
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        isPaused = false;
     }
 
 }
