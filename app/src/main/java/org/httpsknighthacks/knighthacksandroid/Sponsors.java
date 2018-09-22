@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Sponsors extends AppCompatActivity {
 
+    private ArrayList<Integer> mViewTypeList;
+    private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSideSubtitleList;
@@ -23,6 +25,8 @@ public class Sponsors extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sponsors);
 
+        mViewTypeList = new ArrayList<>();
+        mSubSectionTitleList = new ArrayList<>();
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSideSubtitleList = new ArrayList<>();
@@ -37,14 +41,56 @@ public class Sponsors extends AppCompatActivity {
         loadRecyclerView();
     }
 
+    private void addSubSectionTitle(String title) {
+        mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.TitleViewHolder.VIEW_TYPE);
+
+        if (title != null && !title.isEmpty()) {
+            mSubSectionTitleList.add(title);
+        }
+    }
+
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardBody, String cardTimestamp) {
+        mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            mCardImageList.add(imageUrl);
+        }
+
+        if (cardTitle != null && !cardTitle.isEmpty()) {
+            mCardTitleList.add(cardTitle);
+        }
+
+        if (cardSideSubtitle != null && !cardSideSubtitle.isEmpty()) {
+            mCardSideSubtitleList.add(cardSideSubtitle);
+        }
+
+        if (cardSubtitle != null && !cardSubtitle.isEmpty()) {
+            mCardSubtitleList.add(cardSubtitle);
+        }
+
+        if (cardBody != null && !cardBody.isEmpty()) {
+            mCardBodyList.add(cardBody);
+        }
+
+        if (cardTimestamp != null && !cardTimestamp.isEmpty()) {
+            mCardTimestampList.add(cardTimestamp);
+        }
+    }
+
     private void getCardComponents() {
-        int tempNumCards = 5;
+        int tempNumCards = 10;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getString(R.string.horizontal_card_image_dummy));
-            mCardTitleList.add(getResources().getString(R.string.horizontal_card_title_dummy));
-            mCardSideSubtitleList.add(getResources().getString(R.string.horizontal_card_side_subtitle_dummy));
-            mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
+            if (i == 0 || i == tempNumCards / 2) {
+                addSubSectionTitle(getResources().getString(R.string.horizontal_card_sub_section_title));
+            } else {
+                addHorizontalSectionCard(getResources().getString(R.string.horizontal_card_image_dummy),
+                        getResources().getString(R.string.horizontal_card_title_dummy),
+                        getResources().getString(R.string.horizontal_card_side_subtitle_dummy),
+                        null,
+                        getResources().getString(R.string.horizontal_card_body_dummy),
+                        null);
+            }
         }
     }
 
@@ -54,9 +100,9 @@ public class Sponsors extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
-                new HorizontalSectionCard_RecyclerViewAdapter(this,mCardImageList,
-                        mCardTitleList, mCardSideSubtitleList, mCardSubtitleList, mCardBodyList,
-                        mCardTimestampList);
+                new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
+                        mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
+                        mCardSubtitleList, mCardBodyList, mCardTimestampList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
