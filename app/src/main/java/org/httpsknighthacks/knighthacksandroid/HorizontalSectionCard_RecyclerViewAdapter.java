@@ -12,10 +12,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapter<HorizontalSectionCard_RecyclerViewAdapter.ViewHolder> {
+public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private ArrayList<Integer> mViewTypeList;
+    private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSideSubtitleList;
@@ -26,6 +29,8 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private Context mContext;
 
     public HorizontalSectionCard_RecyclerViewAdapter(Context mContext,
+                                                     ArrayList<Integer> mViewTypeList,
+                                                     ArrayList<String> mSubSectionTitleList,
                                                      ArrayList<String> mCardImageList,
                                                      ArrayList<String> mCardTitleList,
                                                      ArrayList<String> mCardSideSubtitleList,
@@ -33,6 +38,8 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
                                                      ArrayList<String> mCardBodyList,
                                                      ArrayList<String> mCardTimestampList) {
         this.mContext = mContext;
+        this.mViewTypeList = mViewTypeList;
+        this.mSubSectionTitleList = mSubSectionTitleList;
         this.mCardImageList = mCardImageList;
         this.mCardTitleList = mCardTitleList;
         this.mCardSideSubtitleList = mCardSideSubtitleList;
@@ -44,49 +51,97 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_section_card, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case ContentViewHolder.VIEW_TYPE:
+                return new ContentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_section_card, parent, false));
+            case TitleViewHolder.VIEW_TYPE:
+                return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_section_title_card, parent, false));
+            default:
+                return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_section_title_card, parent, false));
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        // Only load parts of the generic horizontal card if needed
+    public int getItemViewType(int position) {
+        return mViewTypeList.get(position);
+    }
 
-        if (position < mCardImageList.size()) {
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        switch (holder.getItemViewType()) {
+            case ContentViewHolder.VIEW_TYPE:
+                setContentViewHolderAtPosition((ContentViewHolder) holder, position);
+                break;
+            case TitleViewHolder.VIEW_TYPE:
+                setTitleViewHolderAtPosition((TitleViewHolder) holder, position);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private int getNumOfViewTypeUntilPosition(int type, int position) {
+        int numOfViewType = 0;
+        int len = mViewTypeList.size();
+
+        for (int i = 0; i < position && i < len; i++) {
+            if (mViewTypeList.get(i) == type) {
+                numOfViewType++;
+            }
+        }
+
+        return numOfViewType;
+    }
+
+    private void setTitleViewHolderAtPosition(TitleViewHolder holder, int position) {
+        int numOfViewType = getNumOfViewTypeUntilPosition(TitleViewHolder.VIEW_TYPE, position);
+
+        if (numOfViewType < mSubSectionTitleList.size()) {
+            holder.mTitle.setText(mSubSectionTitleList.get(numOfViewType));
+        } else {
+            holder.mTitle.setVisibility(View.GONE);
+        }
+    }
+
+    private void setContentViewHolderAtPosition(ContentViewHolder holder, int position) {
+        int numOfViewType = getNumOfViewTypeUntilPosition(ContentViewHolder.VIEW_TYPE, position);
+
+        if (numOfViewType < mCardImageList.size()) {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mCardImageList.get(position))
+                    .load(mCardImageList.get(numOfViewType))
                     .into(holder.mCardImage);
         } else {
             holder.mCardImage.setVisibility(View.GONE);
         }
 
-        if (position < mCardTitleList.size()) {
-            holder.mCardTitle.setText(mCardTitleList.get(position));
+        if (numOfViewType < mCardTitleList.size()) {
+            holder.mCardTitle.setText(mCardTitleList.get(numOfViewType));
         } else {
             holder.mCardTitle.setVisibility(View.GONE);
         }
 
-        if (position < mCardSideSubtitleList.size()) {
-            holder.mCardSideSubtitle.setText(mCardSideSubtitleList.get(position));
+        if (numOfViewType < mCardSideSubtitleList.size()) {
+            holder.mCardSideSubtitle.setText(mCardSideSubtitleList.get(numOfViewType));
         } else {
             holder.mCardSideSubtitle.setVisibility(View.GONE);
         }
 
-        if (position < mCardSubtitleList.size()) {
-            holder.mCardSubtitle.setText(mCardSubtitleList.get(position));
+        if (numOfViewType < mCardSubtitleList.size()) {
+            holder.mCardSubtitle.setText(mCardSubtitleList.get(numOfViewType));
         } else {
             holder.mCardSubtitle.setVisibility(View.GONE);
         }
 
-        if (position < mCardBodyList.size()) {
-            holder.mCardBody.setText(mCardBodyList.get(position));
+        if (numOfViewType < mCardBodyList.size()) {
+            holder.mCardBody.setText(mCardBodyList.get(numOfViewType));
         } else {
             holder.mCardBody.setVisibility(View.GONE);
         }
 
-        if (position < mCardTimestampList.size()) {
-            holder.mCardTimestamp.setText(mCardTimestampList.get(position));
+        if (numOfViewType < mCardTimestampList.size()) {
+            holder.mCardTimestamp.setText(mCardTimestampList.get(numOfViewType));
         } else {
             holder.mCardTimestamp.setVisibility(View.GONE);
         }
@@ -94,10 +149,10 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
 
     @Override
     public int getItemCount() {
-        return Math.max(mCardImageList.size(), Math.max(mCardTitleList.size(), Math.max(mCardSideSubtitleList.size(), Math.max(mCardSubtitleList.size(), Math.max(mCardBodyList.size(), mCardTimestampList.size())))));
+        return mViewTypeList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ContentViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
         ImageView mCardImage;
         TextView mCardTitle;
@@ -106,7 +161,9 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         TextView mCardBody;
         TextView mCardTimestamp;
 
-        public ViewHolder(View itemView) {
+        public static final int VIEW_TYPE = 1;
+
+        public ContentViewHolder(View itemView) {
             super(itemView);
             this.mCardView = itemView.findViewById(R.id.horizontal_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.horizontal_section_card_image);
@@ -118,4 +175,16 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
     }
 
+    public class TitleViewHolder extends RecyclerView.ViewHolder {
+        CardView mCardView;
+        TextView mTitle;
+
+        public static final int VIEW_TYPE = 2;
+
+        public TitleViewHolder(View itemView) {
+            super(itemView);
+            this.mCardView = itemView.findViewById(R.id.sub_section_title_card_view);
+            this.mTitle = itemView.findViewById(R.id.sub_section_title_card_title);
+        }
+    }
 }

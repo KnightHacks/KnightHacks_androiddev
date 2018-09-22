@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
 
+    private ArrayList<Integer> mViewTypeList;
+    private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSideSubtitleList;
@@ -23,6 +25,8 @@ public class Workshops extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshops);
 
+        mViewTypeList = new ArrayList<>();
+        mSubSectionTitleList = new ArrayList<>();
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSideSubtitleList = new ArrayList<>();
@@ -38,14 +42,20 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getCardComponents() {
-        int tempNumCards = 5;
+        int tempNumCards = 10;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getString(R.string.horizontal_card_image_dummy));
-            mCardTitleList.add(getResources().getString(R.string.horizontal_card_title_dummy));
-            mCardSubtitleList.add(getResources().getString(R.string.horizontal_card_subtitle_dummy));
-            mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
-            mCardTimestampList.add(getResources().getString(R.string.horizontal_card_timestamp_dummy));
+            if (i == 0 || i == tempNumCards / 2) {
+                mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.TitleViewHolder.VIEW_TYPE);
+                mSubSectionTitleList.add(getResources().getString(R.string.horizontal_card_sub_section_title));
+            } else {
+                mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
+                mCardImageList.add(getResources().getString(R.string.horizontal_card_image_dummy));
+                mCardTitleList.add(getResources().getString(R.string.horizontal_card_title_dummy));
+                mCardSubtitleList.add(getResources().getString(R.string.horizontal_card_subtitle_dummy));
+                mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
+                mCardTimestampList.add(getResources().getString(R.string.horizontal_card_timestamp_dummy));
+            }
         }
     }
 
@@ -55,9 +65,9 @@ public class Workshops extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
-                new HorizontalSectionCard_RecyclerViewAdapter(this,mCardImageList,
-                        mCardTitleList, mCardSideSubtitleList, mCardSubtitleList, mCardBodyList,
-                        mCardTimestampList);
+                new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
+                        mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
+                        mCardSubtitleList, mCardBodyList, mCardTimestampList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
