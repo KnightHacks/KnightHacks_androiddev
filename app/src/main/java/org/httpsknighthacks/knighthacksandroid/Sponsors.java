@@ -43,7 +43,10 @@ public class Sponsors extends AppCompatActivity {
 
     private void addSubSectionTitle(String title) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.TitleViewHolder.VIEW_TYPE);
-        mSubSectionTitleList.add(title);
+
+        if (title != null && !title.isEmpty()) {
+            mSubSectionTitleList.add(title);
+        }
     }
 
     private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardBody, String cardTimestamp) {
