@@ -41,20 +41,52 @@ public class Workshops extends AppCompatActivity {
         loadRecyclerView();
     }
 
+    private void addSubSectionTitle(String title) {
+        mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.TitleViewHolder.VIEW_TYPE);
+        mSubSectionTitleList.add(title);
+    }
+
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardBody, String cardTimestamp) {
+        mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            mCardImageList.add(imageUrl);
+        }
+
+        if (cardTitle != null && !cardTitle.isEmpty()) {
+            mCardTitleList.add(cardTitle);
+        }
+
+        if (cardSideSubtitle != null && !cardSideSubtitle.isEmpty()) {
+            mCardSideSubtitleList.add(cardSideSubtitle);
+        }
+
+        if (cardSubtitle != null && !cardSubtitle.isEmpty()) {
+            mCardSubtitleList.add(cardSubtitle);
+        }
+
+        if (cardBody != null && !cardBody.isEmpty()) {
+            mCardBodyList.add(cardBody);
+        }
+
+        if (cardTimestamp != null && !cardTimestamp.isEmpty()) {
+            mCardTimestampList.add(cardTimestamp);
+        }
+    }
+
     private void getCardComponents() {
         int tempNumCards = 10;
 
         for (int i = 0; i < tempNumCards; i++) {
             if (i == 0 || i == tempNumCards / 2) {
-                mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.TitleViewHolder.VIEW_TYPE);
-                mSubSectionTitleList.add(getResources().getString(R.string.horizontal_card_sub_section_title));
+                addSubSectionTitle(getResources().getString(R.string.horizontal_card_sub_section_title));
             } else {
-                mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
-                mCardImageList.add(getResources().getString(R.string.horizontal_card_image_dummy));
-                mCardTitleList.add(getResources().getString(R.string.horizontal_card_title_dummy));
-                mCardSubtitleList.add(getResources().getString(R.string.horizontal_card_subtitle_dummy));
-                mCardBodyList.add(getResources().getString(R.string.horizontal_card_body_dummy));
-                mCardTimestampList.add(getResources().getString(R.string.horizontal_card_timestamp_dummy));
+                addHorizontalSectionCard(getResources().getString(R.string.horizontal_card_image_dummy),
+                        getResources().getString(R.string.horizontal_card_title_dummy),
+                        null,
+                        getResources().getString(R.string.horizontal_card_subtitle_dummy),
+                        getResources().getString(R.string.horizontal_card_body_dummy),
+                        getResources().getString(R.string.horizontal_card_timestamp_dummy));
             }
         }
     }
