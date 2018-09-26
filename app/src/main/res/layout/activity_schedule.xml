@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Schedule">
+    tools:context=".Schedule"
+    >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/schedule_horizontal_section_card_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="100"
+        >
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/shared_horizontal_filter_search_component_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorHomePageCardPurple"
+            android:orientation="horizontal"
+            android:layout_weight="22"
+            >
+        </android.support.v7.widget.RecyclerView>
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/schedule_horizontal_section_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="78"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/shared_horizontal_filter_search_component_container"
+            >
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout >
