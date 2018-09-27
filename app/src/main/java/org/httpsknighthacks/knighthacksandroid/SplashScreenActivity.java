@@ -21,54 +21,87 @@ import android.widget.TextView;
 public class SplashScreenActivity extends AppCompatActivity {
 
     boolean isPaused;
-    boolean isEndOfanimations;
+    boolean isEndOfAnimations;
+    private boolean isAnimating;
+    private static final int ALPHA_ANIMATION_DURATION = 1000;
+    private static final int ROCKET_ACCELERATION_ANIMATION_DURATION = 1000;
+    private ImageView rocket;
+    private ImageView flames;
+    private ImageView spaceCloud;
+    private ImageView miniCloud;
+    private ImageView microCloud;
+    private TextView splashText;
+    private ImageView blueStar;
+    private ImageView redStar;
+    private static Animation alphaAnimation;
+    private static Animation translateBlueStar;
+    private static Animation translateRedStar;
+    private static Animation translateMicroCloud;
+    private static Animation translateMiniCloud;
+    private static Animation translateBigCloud;
+    private static AnimatorSet rocketAnimatorSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        initComponents();
+        setUpAnimations();
+        playAnimations();
+    }
 
-        isPaused = false;
-        isEndOfanimations = false;
-        ImageView rocket = findViewById(R.id.rocket);
-        ImageView flames = findViewById(R.id.flames);
-        final ImageView spaceCloud = findViewById(R.id.clouds);
-        final ImageView miniCloud = findViewById(R.id.minicloud);
-        final ImageView microCloud = findViewById(R.id.microcloud);
-        final TextView splashText = findViewById(R.id.splashText);
-        final ImageView blueStar = findViewById(R.id.blue_star);
-        final ImageView redStar = findViewById(R.id.red_star);
-
-        Animation translateBlueStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
-        Animation translateRedStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
-
-        final Animation translateMicroCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
-        final Animation translateMiniCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
-        final Animation translateBigCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
-
-        // Alpha animation will fade out the views before transitioning to new activity
-        final Animation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-        alphaAnimation.setDuration(1000);
+    private void initComponents() {
+        initViews();
+        alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation.setDuration(ALPHA_ANIMATION_DURATION);
         alphaAnimation.setInterpolator(new LinearInterpolator());
+    }
 
-        // Set up rocket acceleration algorithm
+    private void initViews() {
+        rocket = findViewById(R.id.splash_screen_rocket);
+        flames = findViewById(R.id.splash_screen_flames);
+        spaceCloud = findViewById(R.id.splash_screen_big_cloud);
+        miniCloud = findViewById(R.id.splash_screen_mini_cloud);
+        microCloud = findViewById(R.id.splash_screen_micro_cloud);
+        splashText = findViewById(R.id.splash_screen_text);
+        blueStar = findViewById(R.id.splash_screen_blue_star);
+        redStar = findViewById(R.id.splash_screen_red_star);
+    }
+
+    private void setUpAnimations() {
+        setUpRocketAnimation();
+        setUpStarAnimations();
+        setUpCloudAnimations();
+    }
+
+    private void setUpRocketAnimation() {
+        // Animate flames to create the illusion of movement
+        // The second argument float value scales the image by that much. After trying different
+        // values, I've decided this one produces the best result.
+        PropertyValuesHolder scalePropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.25f);
+        ObjectAnimator scaleFlamesAnimator = ObjectAnimator.ofPropertyValuesHolder(flames, scalePropertyValuesHolder);
+        scaleFlamesAnimator.setRepeatCount(30);
+        scaleFlamesAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        scaleFlamesAnimator.setDuration(450);
+
+        // Animate rocket acceleration
+        // Since this animation is a sequence of different translations, the keyframe arguments
+        // denote the order and time intervals each translation should run on.
         Keyframe k0 = Keyframe.ofFloat(0f, 0);
         Keyframe k1 = Keyframe.ofFloat(.2f, 200f);
         Keyframe k2 = Keyframe.ofFloat(.5f, -2000f);
-        PropertyValuesHolder translatePropertyValuesholder = PropertyValuesHolder.ofKeyframe(View.TRANSLATION_Y, k0, k1, k2);
-        ObjectAnimator translateFlamesAnimator = ObjectAnimator.ofPropertyValuesHolder(flames, translatePropertyValuesholder);
-        ObjectAnimator translateRocketAnimator = ObjectAnimator.ofPropertyValuesHolder(rocket, translatePropertyValuesholder);
-        translateFlamesAnimator.setDuration(1000);
-        translateRocketAnimator.setDuration(1000);
-
-        // Trigger transition to main activity once the rocket leaves the screen
+        PropertyValuesHolder translatePropertyValuesHolder = PropertyValuesHolder.ofKeyframe(View.TRANSLATION_Y, k0, k1, k2);
+        ObjectAnimator translateFlamesAnimator = ObjectAnimator.ofPropertyValuesHolder(flames, translatePropertyValuesHolder);
+        ObjectAnimator translateRocketAnimator = ObjectAnimator.ofPropertyValuesHolder(rocket, translatePropertyValuesHolder);
+        translateFlamesAnimator.setDuration(ROCKET_ACCELERATION_ANIMATION_DURATION);
+        translateRocketAnimator.setDuration(ROCKET_ACCELERATION_ANIMATION_DURATION);
         translateRocketAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 splashText.setVisibility(View.INVISIBLE);
-                isEndOfanimations = true;
+                isEndOfAnimations = true;
 
                 if(!isPaused) {
                     startActivity(intent);
@@ -89,73 +122,63 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         });
 
-        // Animate flames to create the illusion of movement
-        PropertyValuesHolder scalePropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, (float) 0.8);
-        ObjectAnimator scaleFlamesAnimator = ObjectAnimator.ofPropertyValuesHolder(flames, scalePropertyValuesHolder);
-        scaleFlamesAnimator.setRepeatCount(30);
-        scaleFlamesAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        scaleFlamesAnimator.setDuration(450);
+        rocketAnimatorSet = new AnimatorSet();
+        rocketAnimatorSet.play(scaleFlamesAnimator).before(translateFlamesAnimator);
+        rocketAnimatorSet.play(translateFlamesAnimator).with(translateRocketAnimator);
+    }
 
-        // Set up the order at which the rocket animations will play
-        AnimatorSet s = new AnimatorSet();
-        s.play(scaleFlamesAnimator).before(translateFlamesAnimator);
-        s.play(translateFlamesAnimator).with(translateRocketAnimator);
-
+    private void setUpStarAnimations() {
+        translateBlueStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
+        translateRedStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
         translateBlueStar.setRepeatCount(3);
         translateBlueStar.setStartOffset(4000);
-        blueStar.startAnimation(translateBlueStar);
-
         translateRedStar.setRepeatCount(3);
-        redStar.startAnimation(translateRedStar);
+    }
 
-        final boolean[] isAnimating = {false};
-
+    private void setUpCloudAnimations() {
+        translateMicroCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
+        translateMiniCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
+        translateBigCloud = AnimationUtils.loadAnimation(this, R.anim.cloud_translation);
+        translateBigCloud.setStartOffset(4000);
         translateBigCloud.setDuration(2000);
         translateBigCloud.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
             public void onAnimationEnd(Animation animation) {
-               if(!isAnimating[0])
+                if(!isAnimating)
                     microCloud.startAnimation(translateMicroCloud);
 
                 spaceCloud.clearAnimation();
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
 
+        translateMicroCloud.setDuration(14000);
+        translateMicroCloud.setStartOffset(1000);
         translateMicroCloud.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                isAnimating[0] = true;
+                isAnimating = true;
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                isAnimating[0] = false;
+                isAnimating = false;
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
-        translateMicroCloud.setDuration(14000);
-        translateMicroCloud.setStartOffset(1000);
 
         translateMiniCloud.setDuration(8000);
-        translateBigCloud.setStartOffset(4000);
         translateMiniCloud.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 spaceCloud.startAnimation(translateBigCloud);
-
             }
 
             @Override
@@ -165,13 +188,15 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
-        miniCloud.startAnimation(translateMiniCloud);
+    }
 
-        s.start();
+    private void playAnimations() {
+        blueStar.startAnimation(translateBlueStar);
+        redStar.startAnimation(translateRedStar);
+        miniCloud.startAnimation(translateMiniCloud);
+        rocketAnimatorSet.start();
     }
 
     @Override
@@ -184,7 +209,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(isEndOfanimations)
+        if(isEndOfAnimations)
         {
             Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
@@ -193,5 +218,4 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         isPaused = false;
     }
-
 }
