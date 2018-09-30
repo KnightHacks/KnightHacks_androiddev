@@ -69,7 +69,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         this.mCardBodyList = mCardBodyList;
         this.mCardTimestampList = mCardTimestampList;
         this.mCardDifficultyList = mCardDifficultyList;
-        this.mCardDifficultyList = mCardDifficultyList;
     }
 
     @NonNull
