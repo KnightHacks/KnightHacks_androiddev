@@ -24,6 +24,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
+    private ArrayList<String> mCardDifficultyList;
 
     private Context mContext;
 
@@ -45,7 +46,30 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         this.mCardSubtitleList = mCardSubtitleList;
         this.mCardBodyList = mCardBodyList;
         this.mCardTimestampList = mCardTimestampList;
+    }
 
+    // This is the constructor specific to the Workshops section that includes workshop difficulty levels
+    public HorizontalSectionCard_RecyclerViewAdapter(Context mContext,
+                                                     ArrayList<Integer> mViewTypeList,
+                                                     ArrayList<String> mSubSectionTitleList,
+                                                     ArrayList<String> mCardImageList,
+                                                     ArrayList<String> mCardTitleList,
+                                                     ArrayList<String> mCardSideSubtitleList,
+                                                     ArrayList<String> mCardSubtitleList,
+                                                     ArrayList<String> mCardBodyList,
+                                                     ArrayList<String> mCardTimestampList,
+                                                     ArrayList<String> mCardDifficultyList) {
+        this.mContext = mContext;
+        this.mViewTypeList = mViewTypeList;
+        this.mSubSectionTitleList = mSubSectionTitleList;
+        this.mCardImageList = mCardImageList;
+        this.mCardTitleList = mCardTitleList;
+        this.mCardSideSubtitleList = mCardSideSubtitleList;
+        this.mCardSubtitleList = mCardSubtitleList;
+        this.mCardBodyList = mCardBodyList;
+        this.mCardTimestampList = mCardTimestampList;
+        this.mCardDifficultyList = mCardDifficultyList;
+        this.mCardDifficultyList = mCardDifficultyList;
     }
 
     @NonNull
@@ -144,6 +168,15 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         } else {
             holder.mCardTimestamp.setVisibility(View.GONE);
         }
+
+        if(mCardDifficultyList != null) {
+
+            if (numOfViewType < mCardDifficultyList.size()) {
+                holder.mCardDifficultyWorkshop.setText(mCardDifficultyList.get(numOfViewType));
+            } else {
+                holder.mCardDifficultyWorkshop.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -159,6 +192,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         TextView mCardSubtitle;
         TextView mCardBody;
         TextView mCardTimestamp;
+        TextView mCardDifficultyWorkshop;
 
         public static final int VIEW_TYPE = 1;
 
@@ -171,6 +205,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardSubtitle = itemView.findViewById(R.id.horizontal_section_card_subtitle);
             this.mCardBody = itemView.findViewById(R.id.horizontal_section_card_body);
             this.mCardTimestamp = itemView.findViewById(R.id.horizontal_section_card_timestamp);
+            this.mCardDifficultyWorkshop = itemView.findViewById(R.id.horizontal_section_card_workshop_difficulty);
         }
     }
 
@@ -187,3 +222,4 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
     }
 }
+
