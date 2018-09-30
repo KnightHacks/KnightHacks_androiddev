@@ -30,8 +30,9 @@ public class FAQs extends AppCompatActivity {
         int tempNumCards = 5;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getString(R.string.vertical_card_image_dummy));
+            mCardImageList.add(getResources().getResourceEntryName(R.drawable.ic_faq_plus));
             mCardTitleList.add(getResources().getString(R.string.vertical_card_title_dummy));
+            mCardSubtitleList.add(getResources().getString(R.string.vertical_card_subtitle_dummy));
         }
     }
 
@@ -39,7 +40,6 @@ public class FAQs extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
-
         VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
                         mCardTitleList, mCardSubtitleList);

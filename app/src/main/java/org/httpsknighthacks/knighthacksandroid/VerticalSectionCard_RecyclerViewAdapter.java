@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,8 +20,8 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
-
     private Context mContext;
+    private boolean[] isVisible;
 
     public VerticalSectionCard_RecyclerViewAdapter(Context mContext,
                                                      ArrayList<String> mCardImageList,
@@ -30,6 +31,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         this.mCardImageList = mCardImageList;
         this.mCardTitleList = mCardTitleList;
         this.mCardSubtitleList = mCardSubtitleList;
+        isVisible = new boolean[mCardSubtitleList.size()];
     }
 
     @NonNull
@@ -41,12 +43,24 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         // Only load parts of the generic vertical card if needed
-
         if (position < mCardImageList.size()) {
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(mCardImageList.get(position))
-                    .into(holder.mCardImage);
+
+            // Use the resource id to determine what drawables (if any) need to load
+            int id = mContext.getResources().
+                    getIdentifier(mCardImageList.get(position), "drawable", mContext.getPackageName());
+
+            // The FAQ cards will have some differences in UI functionality since it needs to expand and collapse
+            if(mCardImageList.get(position).equals("ic_faq_plus")) {
+                setUpFaqIcon(id, holder, position);
+            }
+
+            else {
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(mCardImageList.get(position))
+                        .into(holder.mCardImage);
+            }
+
         } else {
             holder.mCardImage.setVisibility(View.GONE);
         }
@@ -62,6 +76,39 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         } else {
             holder.mCardSubtitle.setVisibility(View.GONE);
         }
+
+
+    }
+
+    private void setUpFaqIcon(int id, final ViewHolder holder, int position) {
+        // Without this, the answers will display upon starting the activity, which we don't want
+        if(!isVisible[position])
+        {
+            holder.mCardSubtitle.setVisibility(View.GONE);
+            isVisible[position] = true;
+        }
+        Glide.with(mContext)
+                .asBitmap()
+                .load(id)
+                .into(holder.mCardImage);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(120, 120);
+        holder.mCardImage.setLayoutParams(params);
+
+        // Expand or collapse card when icon is pressed
+        holder.mCardImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.mCardSubtitle.getVisibility() == View.GONE) {
+                    holder.mCardSubtitle.setVisibility(View.VISIBLE);
+                    holder.mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_minimize));
+                }
+
+                else {
+                    holder.mCardSubtitle.setVisibility(View.GONE);
+                    holder.mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_plus));
+                }
+            }
+        });
     }
 
     @Override
@@ -69,7 +116,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         return Math.max(mCardImageList.size(), Math.max(mCardTitleList.size(), mCardSubtitleList.size()));
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
         ImageView mCardImage;
         TextView mCardTitle;
@@ -83,5 +130,4 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
             this.mCardSubtitle = itemView.findViewById(R.id.vertical_section_card_subtitle);
         }
     }
-
 }
