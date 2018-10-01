@@ -75,6 +75,7 @@
                 android:textColor="@android:color/white"
                 android:gravity="center"
                 android:background="@drawable/horizontal_section_card_text_view_round_border"
+                android:layout_marginRight="10dp"
                 />
 
             <TextView
@@ -88,7 +89,7 @@
                 android:textColor="@android:color/white"
                 android:gravity="center"
                 android:background="@drawable/horizontal_section_card_text_view_round_border"
-                android:layout_marginLeft="10dp"
+
                 />
 
             <TextView
