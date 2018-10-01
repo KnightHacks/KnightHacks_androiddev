@@ -22,8 +22,7 @@
     <string name="horizontal_card_full_time_subtitle">Full-time</string>
     <string name="horizontal_card_body_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a egestas orci. Suspendisse molestie pulvinar sem, accumsan rhoncus nibh finibus vitae. In facilisis, odio id venenatis porttitor, nisi mi congue nulla, ac sodales neque mi eu nulla.</string>
     <string name="horizontal_card_timestamp_dummy">XX:XX</string>
-
-
+    
     <string name="home_screen_schedule_card_img">https://user-images.githubusercontent.com/32247767/45531079-dfac5c00-b7a2-11e8-9a70-99590e0da00f.png</string>
     <string name="home_screen_live_updates_card_img">https://user-images.githubusercontent.com/32247767/45531076-df13c580-b7a2-11e8-8755-6687992d76fb.png</string>
     <string name="home_screen_faqs_card_img">https://user-images.githubusercontent.com/32247767/45531067-df13c580-b7a2-11e8-8f8d-6858e98c8a63.png</string>
