@@ -103,24 +103,22 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
             this.mCardDetails = itemView.findViewById(R.id.vertical_section_card_detail);
             this.mTag = tag;
 
-            if(this.mTag.equals(FAQs.TAG))
+            if(this.mTag.equals(FAQs.TAG)) {
                 this.mCardDetails.setVisibility(View.GONE);
                 this.mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_plus_icon));
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mCardDetails.getVisibility() == View.GONE) {
+                        if (mCardDetails.getVisibility() == View.GONE) {
                             mCardDetails.setVisibility(View.VISIBLE);
                             mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_minus_icon));
-                        }
-
-                        else {
+                        } else {
                             mCardDetails.setVisibility(View.GONE);
                             mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_plus_icon));
                         }
                     }
                 });
+            }
         }
     }
-
 }
