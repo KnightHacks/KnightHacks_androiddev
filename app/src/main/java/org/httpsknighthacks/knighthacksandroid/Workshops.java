@@ -19,7 +19,7 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mFilterSearchTextList;
     private ArrayList<String> mFilterSearchImageList;
-    private ArrayList<String> mCardDifficultyList;
+    private ArrayList<String> mCardFooterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class Workshops extends AppCompatActivity {
         mCardTimestampList = new ArrayList<>();
         mFilterSearchTextList = new ArrayList<>();
         mFilterSearchImageList = new ArrayList<>();
-        mCardDifficultyList = new ArrayList<>();
+        mCardFooterList = new ArrayList<>();
 
         getCardComponents();
         getFilterSearchComponents();
@@ -51,8 +51,7 @@ public class Workshops extends AppCompatActivity {
         }
     }
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardBody, String cardTimestamp,
-                                          String workshopDifficulty) {
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -79,8 +78,8 @@ public class Workshops extends AppCompatActivity {
             mCardTimestampList.add(cardTimestamp);
         }
 
-        if (workshopDifficulty != null && !workshopDifficulty.isEmpty()) {
-            mCardDifficultyList.add(workshopDifficulty);
+        if (cardFooter != null && !cardFooter.isEmpty()) {
+            mCardFooterList.add(cardFooter);
         }
     }
 
@@ -97,7 +96,7 @@ public class Workshops extends AppCompatActivity {
                         getResources().getString(R.string.horizontal_card_subtitle_dummy),
                         getResources().getString(R.string.horizontal_card_body_dummy),
                         getResources().getString(R.string.horizontal_card_timestamp_dummy),
-                        getResources().getString(R.string.horizontal_card_workshop_difficulty_dummy));
+                        getResources().getString(R.string.horizontal_card_footer_dummy));
             }
         }
     }
@@ -110,7 +109,7 @@ public class Workshops extends AppCompatActivity {
         HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardBodyList, mCardTimestampList, mCardDifficultyList);
+                        mCardSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
