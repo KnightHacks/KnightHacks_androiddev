@@ -12,6 +12,8 @@ public class LiveUpdates extends AppCompatActivity {
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardDetailsList;
+    private static final String TAG = "LiveUpdates";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,7 @@ public class LiveUpdates extends AppCompatActivity {
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
+        mCardDetailsList = new ArrayList<>();
 
         getCardComponents();
         loadRecyclerView();
@@ -43,7 +46,7 @@ public class LiveUpdates extends AppCompatActivity {
 
         VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
     }
 }
