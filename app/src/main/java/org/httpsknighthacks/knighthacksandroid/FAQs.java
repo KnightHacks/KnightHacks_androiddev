@@ -7,18 +7,18 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class FAQs extends AppCompatActivity {
+public class LiveUpdates extends AppCompatActivity {
 
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
-    public static final String TAG = "FAQ";
+    private static final String TAG = "LiveUpdates";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_faqs);
+        setContentView(R.layout.activity_live_updates);
 
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
@@ -33,15 +33,15 @@ public class FAQs extends AppCompatActivity {
         int tempNumCards = 5;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getResourceEntryName(R.drawable.ic_faq_plus_icon));
+            mCardImageList.add(getResources().getString(R.string.vertical_card_image_dummy));
             mCardTitleList.add(getResources().getString(R.string.vertical_card_title_dummy));
-            mCardDetailsList.add(getResources().getString(R.string.vertical_card_details_dummy));
+            mCardSubtitleList.add(getResources().getString(R.string.vertical_card_subtitle_dummy));
         }
     }
 
     private void loadRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
+        RecyclerView recyclerView = findViewById(R.id.live_updates_vertical_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
