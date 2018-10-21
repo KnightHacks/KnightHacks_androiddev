@@ -12,6 +12,8 @@ public class FAQs extends AppCompatActivity {
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardDetailsList;
+    public static final String TAG = "FAQ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,7 @@ public class FAQs extends AppCompatActivity {
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
+        mCardDetailsList = new ArrayList<>();
 
         getCardComponents();
         loadRecyclerView();
@@ -30,9 +33,9 @@ public class FAQs extends AppCompatActivity {
         int tempNumCards = 5;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getResourceEntryName(R.drawable.ic_faq_plus));
+            mCardImageList.add(getResources().getResourceEntryName(R.drawable.ic_faq_plus_icon));
             mCardTitleList.add(getResources().getString(R.string.vertical_card_title_dummy));
-            mCardSubtitleList.add(getResources().getString(R.string.vertical_card_subtitle_dummy));
+            mCardDetailsList.add(getResources().getString(R.string.vertical_card_details_dummy));
         }
     }
 
@@ -40,9 +43,10 @@ public class FAQs extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
+
         VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
     }
 }
