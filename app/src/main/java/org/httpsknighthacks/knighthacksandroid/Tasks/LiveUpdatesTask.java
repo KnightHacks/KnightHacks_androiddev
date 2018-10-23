@@ -15,6 +15,7 @@ import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class LiveUpdatesTask extends AsyncTask<Void, Void, ArrayList<LiveUpdate>> {
@@ -22,14 +23,14 @@ public class LiveUpdatesTask extends AsyncTask<Void, Void, ArrayList<LiveUpdate>
     public static final String TAG = LiveUpdatesTask.class.getSimpleName();
     public static final String GET_LIVE_UPDATES_ROUTE = "/api/get_live_updates";
 
-    private Context mContext;
+    private WeakReference<Context> mContext;
     private ArrayList<LiveUpdate> mLiveUpdates;
     private ResponseListener<LiveUpdate> mResponseListener;
 
-    public LiveUpdatesTask(Context mContext, ResponseListener<LiveUpdate> mResponseListener) {
-        this.mContext = mContext;
+    public LiveUpdatesTask(Context context, ResponseListener<LiveUpdate> responseListener) {
+        this.mContext = new WeakReference<>(context);
         this.mLiveUpdates = new ArrayList<>();
-        this.mResponseListener = mResponseListener;
+        this.mResponseListener = responseListener;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class LiveUpdatesTask extends AsyncTask<Void, Void, ArrayList<LiveUpdate>
                     try {
                         mLiveUpdates.add(new LiveUpdate(response.getJSONObject(i)));
                     } catch (JSONException ex) {
-                        Toast.makeText(mContext, "Cannot parse JSON", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -63,7 +64,11 @@ public class LiveUpdatesTask extends AsyncTask<Void, Void, ArrayList<LiveUpdate>
             }
         });
 
-        RequestQueueSingleton.getInstance(mContext).addToRequestQueue(request, TAG);
+        RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(request, TAG);
         return mLiveUpdates;
+    }
+
+    public Context getContext() {
+        return mContext.get();
     }
 }

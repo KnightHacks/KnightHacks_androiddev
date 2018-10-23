@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.LiveUpdate;
+import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.LiveUpdatesTask;
 
@@ -56,13 +57,11 @@ public class LiveUpdates extends AppCompatActivity {
                 for (int i = 0; i < numUpdates; i++) {
                     LiveUpdate currUpdate = response.get(i);
 
-                    if (!LiveUpdate.isValid(currUpdate)) {
-                        continue;
+                    if (LiveUpdate.isValid(currUpdate)) {
+                        mCardImageList.add(currUpdate.getPicture().getValue());
+                        mCardTitleList.add(currUpdate.getMessage().getValue());
+                        mCardSubtitleList.add(currUpdate.getmTimeSent().getValue());
                     }
-
-                    mCardImageList.add(currUpdate.getPicture().getValue());
-                    mCardTitleList.add(currUpdate.getMessage().getValue());
-                    mCardSubtitleList.add(currUpdate.getmTimeSent().getValue());
                 }
 
                 mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
@@ -71,8 +70,7 @@ public class LiveUpdates extends AppCompatActivity {
             @Override
             public void onFailure() {
                 mProgressBar.setVisibility(View.GONE);
-                // TODO: Show graphic to indicate error
-                Toast.makeText(getApplicationContext(), "Error making network request.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
         });
 
