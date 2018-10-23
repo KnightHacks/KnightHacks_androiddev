@@ -1,7 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.request.RequestOptions;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -112,6 +108,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
 
         if (numOfViewType < mCardImageList.size()) {
             Glide.with(mContext)
+                    .asBitmap()
                     .load(mCardImageList.get(numOfViewType))
                     .into(holder.mCardImage);
         } else {
