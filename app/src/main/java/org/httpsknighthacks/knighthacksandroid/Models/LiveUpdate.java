@@ -38,19 +38,21 @@ public class LiveUpdate {
         this.mPicture = Optional.of(picture);
     }
 
-    public Optional<String> getMessage() {
+    public Optional<String> getMessageOptional() {
         return mMessage;
     }
 
-    public Optional<String> getmTimeSent() {
+    public Optional<String> getTimeSentOptional() {
         return mTimeSent;
     }
 
-    public Optional<String> getPicture() {
+    public Optional<String> getPictureOptional() {
         return mPicture;
     }
 
     public static boolean isValid(LiveUpdate update) {
-        return update.getMessage().isPresent() && update.getmTimeSent().isPresent();
+        return update.getMessageOptional().isPresent()
+                && update.getTimeSentOptional().isPresent()
+                && update.getPictureOptional().isPresent();
     }
 }

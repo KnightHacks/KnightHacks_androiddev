@@ -58,9 +58,9 @@ public class LiveUpdates extends AppCompatActivity {
                     LiveUpdate currUpdate = response.get(i);
 
                     if (LiveUpdate.isValid(currUpdate)) {
-                        mCardImageList.add(currUpdate.getPicture().getValue());
-                        mCardTitleList.add(currUpdate.getMessage().getValue());
-                        mCardSubtitleList.add(currUpdate.getmTimeSent().getValue());
+                        mCardImageList.add(currUpdate.getPictureOptional().getValue());
+                        mCardTitleList.add(currUpdate.getMessageOptional().getValue());
+                        mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
                     }
                 }
 
