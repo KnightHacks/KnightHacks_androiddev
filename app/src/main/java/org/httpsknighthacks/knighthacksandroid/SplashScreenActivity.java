@@ -20,11 +20,13 @@ import android.widget.TextView;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    boolean isPaused;
-    boolean isEndOfAnimations;
-    private boolean isAnimating;
     private static final int ALPHA_ANIMATION_DURATION = 1000;
     private static final int ROCKET_ACCELERATION_ANIMATION_DURATION = 1000;
+    private static final int TRANSLATION_REPEAT_COUNT = 3;
+
+    private boolean isPaused;
+    private boolean isEndOfAnimations;
+    private boolean isAnimating;
     private ImageView rocket;
     private ImageView flames;
     private ImageView spaceCloud;
@@ -44,6 +46,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_splash_screen);
         initComponents();
         setUpAnimations();
@@ -99,6 +102,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 splashText.setVisibility(View.INVISIBLE);
                 isEndOfAnimations = true;
@@ -130,9 +134,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void setUpStarAnimations() {
         translateBlueStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
         translateRedStar = AnimationUtils.loadAnimation(this, R.anim.star_translation);
-        translateBlueStar.setRepeatCount(3);
+        translateBlueStar.setRepeatCount(TRANSLATION_REPEAT_COUNT);
         translateBlueStar.setStartOffset(4000);
-        translateRedStar.setRepeatCount(3);
+        translateRedStar.setRepeatCount(TRANSLATION_REPEAT_COUNT);
     }
 
     private void setUpCloudAnimations() {
@@ -147,8 +151,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(!isAnimating)
+                if(!isAnimating) {
                     microCloud.startAnimation(translateMicroCloud);
+                }
 
                 spaceCloud.clearAnimation();
             }
@@ -157,8 +162,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void onAnimationRepeat(Animation animation) {}
         });
 
-        translateMicroCloud.setDuration(14000);
         translateMicroCloud.setStartOffset(1000);
+        translateMicroCloud.setDuration(14000);
         translateMicroCloud.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -202,6 +207,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
         isPaused = true;
     }
 
