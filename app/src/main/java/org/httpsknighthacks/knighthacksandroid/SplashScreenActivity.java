@@ -26,7 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private boolean isPaused;
     private boolean isEndOfAnimations;
-    private boolean isAnimating;
+    private boolean isCloudAnimating;
     private ImageView rocket;
     private ImageView flames;
     private ImageView spaceCloud;
@@ -151,7 +151,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(!isAnimating) {
+                if(!isCloudAnimating) {
                     microCloud.startAnimation(translateMicroCloud);
                 }
 
@@ -167,12 +167,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         translateMicroCloud.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                isAnimating = true;
+                isCloudAnimating = true;
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                isAnimating = false;
+                isCloudAnimating = false;
             }
 
             @Override
@@ -215,8 +215,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(isEndOfAnimations)
-        {
+        if(isEndOfAnimations) {
             Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
