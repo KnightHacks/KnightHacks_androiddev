@@ -19,6 +19,8 @@
     <string name="horizontal_card_title_dummy">Title</string>
     <string name="horizontal_card_side_subtitle_dummy">City, State</string>
     <string name="horizontal_card_subtitle_dummy">Building</string>
+    <string name="horizontal_card_first_text_tag_subtitle">Internships</string>
+    <string name="horizontal_card_second_text_tag_subtitle">Full-time</string>
     <string name="horizontal_card_body_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a egestas orci. Suspendisse molestie pulvinar sem, accumsan rhoncus nibh finibus vitae. In facilisis, odio id venenatis porttitor, nisi mi congue nulla, ac sodales neque mi eu nulla.</string>
     <string name="horizontal_card_timestamp_dummy">XX:XX</string>
     <string name="horizontal_card_footer_dummy">Footer</string>
