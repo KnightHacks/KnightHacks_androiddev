@@ -13,6 +13,7 @@
     <string name="vertical_card_image_dummy">https://user-images.githubusercontent.com/13206138/45260286-148a6e80-b3b1-11e8-9d14-8001a1b8333d.png</string>
     <string name="vertical_card_title_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="vertical_card_subtitle_dummy">Quisque a egestas orci.</string>
+    <string name="vertical_card_details_dummy">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
   
     <string name="horizontal_card_image_dummy">https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/challenge_photos/000/542/472/datas/full_width.png</string>
     <string name="horizontal_card_title_dummy">Title</string>
@@ -22,7 +23,8 @@
     <string name="horizontal_card_second_text_tag_subtitle">Full-time</string>
     <string name="horizontal_card_body_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a egestas orci. Suspendisse molestie pulvinar sem, accumsan rhoncus nibh finibus vitae. In facilisis, odio id venenatis porttitor, nisi mi congue nulla, ac sodales neque mi eu nulla.</string>
     <string name="horizontal_card_timestamp_dummy">XX:XX</string>
-    
+    <string name="horizontal_card_footer_dummy">Footer</string>
+
     <string name="home_screen_schedule_card_img">https://user-images.githubusercontent.com/32247767/45531079-dfac5c00-b7a2-11e8-9a70-99590e0da00f.png</string>
     <string name="home_screen_live_updates_card_img">https://user-images.githubusercontent.com/32247767/45531076-df13c580-b7a2-11e8-8755-6687992d76fb.png</string>
     <string name="home_screen_faqs_card_img">https://user-images.githubusercontent.com/32247767/45531067-df13c580-b7a2-11e8-8f8d-6858e98c8a63.png</string>

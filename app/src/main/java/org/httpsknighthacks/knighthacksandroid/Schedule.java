@@ -21,6 +21,7 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mFilterSearchTextList;
     private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mCardFooterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class Schedule extends AppCompatActivity {
         mCardTimestampList = new ArrayList<>();
         mFilterSearchTextList = new ArrayList<>();
         mFilterSearchImageList = new ArrayList<>();
+        mCardFooterList = new ArrayList<>();
 
         getCardComponents();
         getFilterSearchComponents();
@@ -53,7 +55,8 @@ public class Schedule extends AppCompatActivity {
         }
     }
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardFirstTextTagSubtitle, String cardSecondTextTagSubtitle, String cardBody, String cardTimestamp) {
+
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardFirstTextTagSubtitle, String cardSecondTextTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -85,6 +88,10 @@ public class Schedule extends AppCompatActivity {
         if (cardTimestamp != null && !cardTimestamp.isEmpty()) {
             mCardTimestampList.add(cardTimestamp);
         }
+
+        if (cardFooter != null && !cardFooter.isEmpty()) {
+            mCardFooterList.add(cardFooter);
+        }
     }
 
     private void getCardComponents() {
@@ -101,7 +108,8 @@ public class Schedule extends AppCompatActivity {
                         null,
                         null,
                         null,
-                        getResources().getString(R.string.horizontal_card_timestamp_dummy));
+                        getResources().getString(R.string.horizontal_card_timestamp_dummy),
+                        null);
             }
         }
     }
@@ -114,7 +122,8 @@ public class Schedule extends AppCompatActivity {
         HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList);
+                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
+      
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
