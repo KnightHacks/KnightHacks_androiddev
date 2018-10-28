@@ -22,8 +22,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSideSubtitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardFirstTextTagList;
+    private ArrayList<String> mCardSecondTextTagList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
+    private ArrayList<String> mCardFooterList;
 
     private Context mContext;
 
@@ -34,8 +37,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
                                                      ArrayList<String> mCardTitleList,
                                                      ArrayList<String> mCardSideSubtitleList,
                                                      ArrayList<String> mCardSubtitleList,
+                                                     ArrayList<String> mCardFirstTextTagList,
+                                                     ArrayList<String> mCardSecondTextTagList,
                                                      ArrayList<String> mCardBodyList,
-                                                     ArrayList<String> mCardTimestampList) {
+                                                     ArrayList<String> mCardTimestampList,
+                                                     ArrayList<String> mCardFooterList) {
         this.mContext = mContext;
         this.mViewTypeList = mViewTypeList;
         this.mSubSectionTitleList = mSubSectionTitleList;
@@ -43,9 +49,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         this.mCardTitleList = mCardTitleList;
         this.mCardSideSubtitleList = mCardSideSubtitleList;
         this.mCardSubtitleList = mCardSubtitleList;
+        this.mCardFirstTextTagList = mCardFirstTextTagList;
+        this.mCardSecondTextTagList = mCardSecondTextTagList;
         this.mCardBodyList = mCardBodyList;
         this.mCardTimestampList = mCardTimestampList;
-
+        this.mCardFooterList = mCardFooterList;
     }
 
     @NonNull
@@ -133,6 +141,18 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             holder.mCardSubtitle.setVisibility(View.GONE);
         }
 
+        if (numOfViewType < mCardFirstTextTagList.size()) {
+            holder.mCardFirstTextTagSubtitle.setText(mCardFirstTextTagList.get(numOfViewType));
+        } else {
+            holder.mCardFirstTextTagSubtitle.setVisibility(View.GONE);
+        }
+
+        if (numOfViewType < mCardSecondTextTagList.size()) {
+            holder.mCardSecondTextTagSubtitle.setText(mCardSecondTextTagList.get(numOfViewType));
+        } else {
+            holder.mCardSecondTextTagSubtitle.setVisibility(View.GONE);
+        }
+
         if (numOfViewType < mCardBodyList.size()) {
             holder.mCardBody.setText(mCardBodyList.get(numOfViewType));
         } else {
@@ -143,6 +163,12 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             holder.mCardTimestamp.setText(mCardTimestampList.get(numOfViewType));
         } else {
             holder.mCardTimestamp.setVisibility(View.GONE);
+        }
+
+        if (numOfViewType < mCardFooterList.size()) {
+            holder.mCardFooter.setText(mCardFooterList.get(numOfViewType));
+        } else {
+            holder.mCardFooter.setVisibility(View.GONE);
         }
     }
 
@@ -157,8 +183,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         TextView mCardTitle;
         TextView mCardSideSubtitle;
         TextView mCardSubtitle;
+        TextView mCardFirstTextTagSubtitle;
+        TextView mCardSecondTextTagSubtitle;
         TextView mCardBody;
         TextView mCardTimestamp;
+        TextView mCardFooter;
 
         public static final int VIEW_TYPE = 1;
 
@@ -169,8 +198,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardTitle = itemView.findViewById(R.id.horizontal_section_card_title);
             this.mCardSideSubtitle = itemView.findViewById(R.id.horizontal_section_card_side_subtitle);
             this.mCardSubtitle = itemView.findViewById(R.id.horizontal_section_card_subtitle);
+            this.mCardFirstTextTagSubtitle = itemView.findViewById(R.id.horizontal_section_card_first_tag_subtitle);
+            this.mCardSecondTextTagSubtitle = itemView.findViewById(R.id.horizontal_section_card_second_tag_subtitle);
             this.mCardBody = itemView.findViewById(R.id.horizontal_section_card_body);
             this.mCardTimestamp = itemView.findViewById(R.id.horizontal_section_card_timestamp);
+            this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);
         }
     }
 
