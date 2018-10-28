@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class LiveUpdates extends AppCompatActivity {
 
+    private static final String TAG = LiveUpdates.class.getSimpleName();
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
-    private static final String TAG = "LiveUpdates";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
