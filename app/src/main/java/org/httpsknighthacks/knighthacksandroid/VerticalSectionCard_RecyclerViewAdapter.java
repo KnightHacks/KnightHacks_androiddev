@@ -50,7 +50,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         if (position < mCardImageList.size()) {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(tag.equals(FAQs.TAG) ? getDrawableId(mCardImageList.get(position)) : mCardImageList.get(position))
+                    .load(mCardImageList.get(position))
                     .into(holder.mCardImage);
         } else {
             holder.mCardImage.setVisibility(View.GONE);
@@ -73,12 +73,6 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         } else {
             holder.mCardDetails.setVisibility(View.GONE);
         }
-    }
-
-    private int getDrawableId(String imageName) {
-
-        return mContext.getResources().getIdentifier(imageName,
-                "drawable", mContext.getPackageName());
     }
 
     @Override
@@ -105,17 +99,21 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
 
             if(this.mTag.equals(FAQs.TAG)) {
                 this.mCardDetails.setVisibility(View.GONE);
-                this.mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_plus_icon));
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (mCardDetails.getVisibility() == View.GONE) {
                             mCardDetails.setVisibility(View.VISIBLE);
-                            mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_minus_icon));
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(mContext.getResources().getString(R.string.faq_minus_icon))
+                                    .into(mCardImage);
                         } else {
                             mCardDetails.setVisibility(View.GONE);
-                            mCardImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_faq_plus_icon));
-                        }
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(mContext.getResources().getString(R.string.faq_plus_icon))
+                                    .into(mCardImage);                        }
                     }
                 });
             }
