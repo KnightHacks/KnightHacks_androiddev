@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class FAQs extends AppCompatActivity {
 
+    public static final String TAG = FAQs.class.getSimpleName();
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
-    public static final String TAG = "FAQ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class FAQs extends AppCompatActivity {
         int tempNumCards = 5;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getResourceEntryName(R.drawable.ic_faq_plus_icon));
+            mCardImageList.add(getResources().getString(R.string.faq_plus_icon));
             mCardTitleList.add(getResources().getString(R.string.vertical_card_title_dummy));
             mCardDetailsList.add(getResources().getString(R.string.vertical_card_details_dummy));
         }
