@@ -113,7 +113,8 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                             Glide.with(mContext)
                                     .asBitmap()
                                     .load(mContext.getResources().getString(R.string.faq_plus_icon))
-                                    .into(mCardImage);                        }
+                                    .into(mCardImage);                        
+                        }
                     }
                 });
             }
