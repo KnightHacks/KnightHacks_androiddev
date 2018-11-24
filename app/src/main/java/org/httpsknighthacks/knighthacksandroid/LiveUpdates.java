@@ -36,7 +36,6 @@ public class LiveUpdates extends AppCompatActivity {
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
-        mProgressBar.setVisibility(View.GONE);
 
         loadLiveUpdates();
         loadRecyclerView();
