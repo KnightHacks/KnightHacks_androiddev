@@ -124,7 +124,7 @@ public class Sponsors extends AppCompatActivity {
         HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList mCardFooterList);
+                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
