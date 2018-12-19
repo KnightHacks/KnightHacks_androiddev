@@ -56,11 +56,13 @@ public class ScheduleEventsTask extends AsyncTask<Void, Void, ArrayList<Schedule
                 }
 
                 mResponseListener.onSuccess(mScheduleEvents);
+                mResponseListener.onComplete();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mResponseListener.onFailure();
+                mResponseListener.onComplete();
             }
         });
 

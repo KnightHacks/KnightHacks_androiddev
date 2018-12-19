@@ -1,9 +1,8 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.ScheduleEventTypes;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class ScheduleEvent {
 
@@ -79,39 +78,5 @@ public class ScheduleEvent {
                 && event.getLocationOptional().isPresent()
                 && event.getStartTimeOptional().isPresent()
                 && event.getEndTimeOptional().isPresent();
-    }
-}
-
-enum ScheduleEventTypes {
-    DEV ("dev"),
-    DESIGN ("design"),
-    TALK ("talk"),
-    WORKSHOP ("workshop"),
-    OTHER ("other");
-
-    private final String scheduleEventString;
-    private static HashMap<String, ScheduleEventTypes> lookupTable = new HashMap<>();
-
-    static {
-        for (ScheduleEventTypes type: ScheduleEventTypes.values()) {
-            lookupTable.put(type.getScheduleEventString(), type);
-        }
-    }
-
-    ScheduleEventTypes(final String scheduleEventString) {
-        this.scheduleEventString = scheduleEventString;
-    }
-
-    public static ScheduleEventTypes getScheduleEventType(String scheduleEventString) {
-        return lookupTable.containsKey(scheduleEventString) ? lookupTable.get(scheduleEventString) : OTHER;
-    }
-
-    public String getScheduleEventString() {
-        return this.scheduleEventString;
-    }
-
-    @Override
-    public String toString() {
-        return scheduleEventString;
     }
 }

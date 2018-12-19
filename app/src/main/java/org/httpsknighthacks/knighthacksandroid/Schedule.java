@@ -4,15 +4,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.ScheduleEventTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
 import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.ScheduleEventsTask;
 
 import java.util.ArrayList;
@@ -29,16 +33,22 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardSecondTextTagList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
+    private ArrayList<String> mCardFooterList;
+
     private ArrayList<String> mFilterSearchTextList;
     private ArrayList<String> mFilterSearchImageList;
-    private ArrayList<String> mCardFooterList;
+    private ArrayList<ScheduleEventTypes> mFilterSearchEventTypeList;
 
     private LinearLayoutManager scheduleEventsLinearLayoutManager;
     private RecyclerView scheduleEventsRecyclerView;
     private HorizontalSectionCard_RecyclerViewAdapter scheduleEventsRecyclerViewAdapter;
-
+    private LinearLayoutManager searchFilterLinearLayoutManager;
+    private RecyclerView searchFilterRecyclerView;
+    private SharedFilterSearchComponent_RecyclerViewAdapter searchFilterRecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+
+    private ArrayList<ScheduleEvent> scheduleEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +65,15 @@ public class Schedule extends AppCompatActivity {
         mCardSecondTextTagList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
+        mCardFooterList = new ArrayList<>();
+
         mFilterSearchTextList = new ArrayList<>();
         mFilterSearchImageList = new ArrayList<>();
-        mCardFooterList = new ArrayList<>();
+        mFilterSearchEventTypeList = new ArrayList<>();
+
         mProgressBar = findViewById(R.id.schedule_progress_bar);
+
+        scheduleEvents = new ArrayList<>();
 
         loadSchedule();
         getFilterSearchComponents();
@@ -112,15 +127,15 @@ public class Schedule extends AppCompatActivity {
         }
     }
 
-    private void addScheduleEvent(String title, String location, String time) {
+    private void addScheduleEventCard(ScheduleEvent event) {
         addHorizontalSectionCard(null,
-                title,
+                event.getTitleOptional().getValue(),
                 null,
-                location,
+                event.getLocationOptional().getValue(),
                 null,
                 null,
                 null,
-                time,
+                DateTimeUtils.getTime(event.getStartTimeOptional().getValue()),
                 null);
     }
 
@@ -133,8 +148,6 @@ public class Schedule extends AppCompatActivity {
 
             @Override
             public void onSuccess(ArrayList<ScheduleEvent> response) {
-                mProgressBar.setVisibility(View.GONE);
-
                 Optional<String> lastStartTime = Optional.empty();
                 int numEvents = response.size();
 
@@ -149,9 +162,8 @@ public class Schedule extends AppCompatActivity {
                             addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
                         }
 
-                        addScheduleEvent(currEvent.getTitleOptional().getValue(),
-                                currEvent.getLocationOptional().getValue(),
-                                DateTimeUtils.getTime(currStartTime));
+                        addScheduleEventCard(currEvent);
+                        scheduleEvents.add(currEvent);
                     }
                 }
 
@@ -160,12 +172,26 @@ public class Schedule extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-                mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete() {
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 
         scheduleEventsTask.execute();
+    }
+
+    private void clearScheduleEvents() {
+        mViewTypeList.clear();
+        mSubSectionTitleList.clear();
+        mCardTitleList.clear();
+        mCardSubtitleList.clear();
+        mCardSideSubtitleList.clear();
+        mCardTimestampList.clear();
+        scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void loadRecyclerView() {
@@ -181,37 +207,83 @@ public class Schedule extends AppCompatActivity {
         scheduleEventsRecyclerView.setAdapter(scheduleEventsRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
-        LinearLayoutManager mFilterSearchLinearLayoutManager =
+        searchFilterLinearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mFilterSearchLinearLayoutManager.setStackFromEnd(true);
-        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
-        mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
+        searchFilterLinearLayoutManager.setStackFromEnd(true);
+        searchFilterRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
+        searchFilterRecyclerView.setLayoutManager(searchFilterLinearLayoutManager);
 
-        SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList);
-        mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
+        searchFilterRecyclerViewAdapter  =
+                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList, mFilterSearchEventTypeList, new SearchFilterListener() {
+                    @Override
+                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+                        filterScheduleEventsByType(holder.mEventType);
+                    }
+                });
+        searchFilterRecyclerView.setAdapter(searchFilterRecyclerViewAdapter);
+    }
+
+    private ArrayList<ScheduleEvent> getScheduleEventsByType(ScheduleEventTypes type) {
+        if (type.equals(ScheduleEventTypes.ALL)) {
+            return scheduleEvents;
+        }
+
+        ArrayList<ScheduleEvent> events = new ArrayList<>();
+        int numEvents = scheduleEvents.size();
+
+        for (int i = 0; i < numEvents; i++) {
+            ScheduleEvent event = scheduleEvents.get(i);
+
+            if (event.getEventType().equals(type)) {
+                events.add(event);
+            }
+        }
+
+        return events;
+    }
+
+    private void filterScheduleEventsByType(ScheduleEventTypes eventType) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        clearScheduleEvents();
+
+        Optional<String> lastStartTime = Optional.empty();
+        ArrayList<ScheduleEvent> events = getScheduleEventsByType(eventType);
+        int numEvents = events.size();
+
+        for (int i = 0; i < numEvents; i++) {
+            ScheduleEvent currEvent = events.get(i);
+            String currStartTime = currEvent.getStartTimeOptional().getValue();
+
+            if ((lastStartTime.isPresent() && !lastStartTime.getValue().equals(currStartTime)) || i == 0) {
+                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+            }
+
+            addScheduleEventCard(currEvent);
+        }
+
+        mProgressBar.setVisibility(View.GONE);
+        scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
-
         mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+        mFilterSearchEventTypeList.add(ScheduleEventTypes.DEV);
 
         mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
+        mFilterSearchEventTypeList.add(ScheduleEventTypes.DESIGN);
 
         mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
+        mFilterSearchEventTypeList.add(ScheduleEventTypes.TALK);
 
         mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
+        mFilterSearchEventTypeList.add(ScheduleEventTypes.WORKSHOP);
 
         mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
+        mFilterSearchEventTypeList.add(ScheduleEventTypes.ALL);
     }
 }
