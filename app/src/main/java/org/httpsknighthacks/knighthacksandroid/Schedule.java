@@ -4,13 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.ScheduleEventTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
 import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
@@ -35,9 +33,8 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<String> mFilterSearchTextList;
     private ArrayList<String> mFilterSearchImageList;
-    private ArrayList<ScheduleEventTypes> mFilterSearchEventTypeList;
+    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
 
     private LinearLayoutManager scheduleEventsLinearLayoutManager;
     private RecyclerView scheduleEventsRecyclerView;
@@ -67,9 +64,8 @@ public class Schedule extends AppCompatActivity {
         mCardTimestampList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
 
-        mFilterSearchTextList = new ArrayList<>();
         mFilterSearchImageList = new ArrayList<>();
-        mFilterSearchEventTypeList = new ArrayList<>();
+        mSearchFilterTypeList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.schedule_progress_bar);
 
@@ -214,17 +210,17 @@ public class Schedule extends AppCompatActivity {
         searchFilterRecyclerView.setLayoutManager(searchFilterLinearLayoutManager);
 
         searchFilterRecyclerViewAdapter  =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList, mFilterSearchEventTypeList, new SearchFilterListener() {
+                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
                     @Override
                     public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
-                        filterScheduleEventsByType(holder.mEventType);
+                        filterScheduleEventsByType(holder.mSearchFilterType);
                     }
                 });
         searchFilterRecyclerView.setAdapter(searchFilterRecyclerViewAdapter);
     }
 
-    private ArrayList<ScheduleEvent> getScheduleEventsByType(ScheduleEventTypes type) {
-        if (type.equals(ScheduleEventTypes.ALL)) {
+    private ArrayList<ScheduleEvent> getScheduleEventsByType(SearchFilterTypes type) {
+        if (type.equals(SearchFilterTypes.ALL)) {
             return scheduleEvents;
         }
 
@@ -242,7 +238,7 @@ public class Schedule extends AppCompatActivity {
         return events;
     }
 
-    private void filterScheduleEventsByType(ScheduleEventTypes eventType) {
+    private void filterScheduleEventsByType(SearchFilterTypes eventType) {
         mProgressBar.setVisibility(View.VISIBLE);
         clearScheduleEvents();
 
@@ -266,24 +262,19 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
-        mFilterSearchEventTypeList.add(ScheduleEventTypes.DEV);
+        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
-        mFilterSearchEventTypeList.add(ScheduleEventTypes.DESIGN);
+        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
-        mFilterSearchEventTypeList.add(ScheduleEventTypes.TALK);
+        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
-        mFilterSearchEventTypeList.add(ScheduleEventTypes.WORKSHOP);
+        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
-        mFilterSearchEventTypeList.add(ScheduleEventTypes.ALL);
+        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
     }
 }

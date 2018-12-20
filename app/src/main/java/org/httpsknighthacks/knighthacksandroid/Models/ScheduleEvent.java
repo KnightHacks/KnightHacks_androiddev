@@ -1,6 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.ScheduleEventTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +10,7 @@ public class ScheduleEvent {
     private Optional<String> mLocation;
     private Optional<String> mStartTime;
     private Optional<String> mEndTime;
-    private ScheduleEventTypes mEventType;
+    private SearchFilterTypes mEventType;
 
     public static final String TITLE_KEY = "title";
     public static final String LOCATION_KEY = "location";
@@ -29,7 +29,7 @@ public class ScheduleEvent {
             this.mTitle = Optional.empty();
             this.mStartTime = Optional.empty();
             this.mEndTime = Optional.empty();
-            this.mEventType = ScheduleEventTypes.OTHER;
+            this.mEventType = SearchFilterTypes.OTHER;
         }
     }
 
@@ -50,7 +50,7 @@ public class ScheduleEvent {
     }
 
     public void withEventType(String eventType) {
-        this.mEventType = ScheduleEventTypes.getScheduleEventType(eventType);
+        this.mEventType = SearchFilterTypes.getSearchFilterType(eventType);
     }
 
     public Optional<String> getTitleOptional() {
@@ -69,7 +69,7 @@ public class ScheduleEvent {
         return mEndTime;
     }
 
-    public ScheduleEventTypes getEventType() {
+    public SearchFilterTypes getEventType() {
         return mEventType;
     }
 

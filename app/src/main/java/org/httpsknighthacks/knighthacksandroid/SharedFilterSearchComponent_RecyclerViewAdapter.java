@@ -12,32 +12,27 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.ScheduleEventTypes;
-import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
-    private ArrayList<String> mTextList = new ArrayList<>();
     private ArrayList<String> mImageList = new ArrayList<>();
-    private ArrayList<ScheduleEventTypes> mEventTypes;
+    private ArrayList<SearchFilterTypes> mSearchFilterTypes;
     private Context mContext;
     private ViewHolder previousHolder;
     private SearchFilterListener mListener;
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
-                                                           ArrayList<String> mTextList,
                                                            ArrayList<String> mImageList,
-                                                           ArrayList<ScheduleEventTypes> mEventTypes,
+                                                           ArrayList<SearchFilterTypes> mSearchFilterTypes,
                                                            SearchFilterListener mListener) {
         this.mContext = mContext;
-        this.mTextList = mTextList;
         this.mImageList = mImageList;
-        this.mEventTypes = mEventTypes;
+        this.mSearchFilterTypes = mSearchFilterTypes;
         this.mListener = mListener;
     }
 
@@ -56,8 +51,10 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
                 .load(mImageList.get(position))
                 .into(holder.mImageView);
 
-        holder.mTextView.setText(mTextList.get(position));
-        holder.setEventType(mEventTypes.get(position));
+        SearchFilterTypes searchFilter = mSearchFilterTypes.get(position);
+
+        holder.mTextView.setText(searchFilter.getSearchFilterString());
+        holder.setEventType(searchFilter);
 
         if(position == (mImageList.size()-1)) {
             holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
@@ -93,7 +90,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         ImageView mImageView;
         TextView mTextView;
         CardView mCardView;
-        ScheduleEventTypes mEventType;
+        SearchFilterTypes mSearchFilterType;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -102,8 +99,8 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             mCardView = itemView.findViewById(R.id.shared_filter_search_parent_card_view_container);
         }
 
-        public void setEventType(ScheduleEventTypes type) {
-            mEventType = type;
+        public void setEventType(SearchFilterTypes type) {
+            mSearchFilterType = type;
         }
     }
 

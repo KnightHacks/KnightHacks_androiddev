@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+
 import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
@@ -19,9 +22,17 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardSecondTextTagList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
-    private ArrayList<String> mFilterSearchTextList;
-    private ArrayList<String> mFilterSearchImageList;
     private ArrayList<String> mCardFooterList;
+
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter;
+    private LinearLayoutManager mFilterSearchLinearLayoutManager;
+    private RecyclerView mFilterSearchRecyclerView;
+    private SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +49,10 @@ public class Workshops extends AppCompatActivity {
         mCardSecondTextTagList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
-        mFilterSearchTextList = new ArrayList<>();
-        mFilterSearchImageList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
+
+        mFilterSearchImageList = new ArrayList<>();
+        mSearchFilterTypeList = new ArrayList<>();
 
         getCardComponents();
         getFilterSearchComponents();
@@ -116,48 +128,48 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void loadRecyclerView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = findViewById(R.id.workshops_horizontal_section_card_container);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView = findViewById(R.id.workshops_horizontal_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
+        horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
                         mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
-        LinearLayoutManager mFilterSearchLinearLayoutManager =
+        mFilterSearchLinearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mFilterSearchLinearLayoutManager.setStackFromEnd(true);
-        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
+        mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
         mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
 
-//        SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
-//                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList);
-//        mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
+        sharedFilterSearchComponent_RecyclerViewAdapter =
+                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
+                    @Override
+                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+
+                    }
+                });
+        mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
     private void getFilterSearchComponents() {
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
+        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
+        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
+        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
         mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
+        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
+
     }
 
 }
