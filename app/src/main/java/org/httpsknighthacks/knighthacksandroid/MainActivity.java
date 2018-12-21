@@ -1,16 +1,15 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.app.ActionBar;
-import android.graphics.Color;
-import android.nfc.Tag;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
+
+import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 
 import java.util.ArrayList;
 
@@ -21,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mImageUrls = new ArrayList<>();
     private ArrayList<Integer> mBgColors = new ArrayList<>();
     private ArrayList<Class> activityList = new ArrayList<>();
+
+    public RequestQueueSingleton mRequestQueueSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        mRequestQueueSingleton = new RequestQueueSingleton(getApplicationContext());
         getImageAndTitles();
     }
 

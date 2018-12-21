@@ -15,7 +15,6 @@
     <string name="vertical_card_subtitle_dummy">Quisque a egestas orci.</string>
     <string name="vertical_card_details_dummy">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 
-
     <string name="faq_plus_icon">https://user-images.githubusercontent.com/38079769/47611865-a8d59100-da44-11e8-81b3-aeb2d494bdae.png</string>
     <string name="faq_minus_icon">https://user-images.githubusercontent.com/38079769/47611859-72981180-da44-11e8-84d3-b0a551c4e849.png</string>
   
@@ -23,6 +22,8 @@
     <string name="horizontal_card_title_dummy">Title</string>
     <string name="horizontal_card_side_subtitle_dummy">City, State</string>
     <string name="horizontal_card_subtitle_dummy">Building</string>
+    <string name="horizontal_card_first_text_tag_subtitle">Internships</string>
+    <string name="horizontal_card_second_text_tag_subtitle">Full-time</string>
     <string name="horizontal_card_body_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a egestas orci. Suspendisse molestie pulvinar sem, accumsan rhoncus nibh finibus vitae. In facilisis, odio id venenatis porttitor, nisi mi congue nulla, ac sodales neque mi eu nulla.</string>
     <string name="horizontal_card_timestamp_dummy">XX:XX</string>
     <string name="horizontal_card_footer_dummy">Footer</string>

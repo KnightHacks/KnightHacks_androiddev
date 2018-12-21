@@ -15,10 +15,13 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSideSubtitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardFirstTextTagList;
+    private ArrayList<String> mCardSecondTextTagList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mFilterSearchTextList;
     private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mCardFooterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +34,13 @@ public class Schedule extends AppCompatActivity {
         mCardTitleList = new ArrayList<>();
         mCardSideSubtitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
+        mCardFirstTextTagList = new ArrayList<>();
+        mCardSecondTextTagList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
         mFilterSearchTextList = new ArrayList<>();
         mFilterSearchImageList = new ArrayList<>();
+        mCardFooterList = new ArrayList<>();
 
         getCardComponents();
         getFilterSearchComponents();
@@ -49,7 +55,8 @@ public class Schedule extends AppCompatActivity {
         }
     }
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardBody, String cardTimestamp) {
+
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardFirstTextTagSubtitle, String cardSecondTextTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -67,6 +74,12 @@ public class Schedule extends AppCompatActivity {
         if (cardSubtitle != null && !cardSubtitle.isEmpty()) {
             mCardSubtitleList.add(cardSubtitle);
         }
+        if (cardFirstTextTagSubtitle != null && !cardFirstTextTagSubtitle.isEmpty()) {
+            mCardFirstTextTagList.add(cardFirstTextTagSubtitle);
+        }
+        if (cardSecondTextTagSubtitle != null && !cardSecondTextTagSubtitle.isEmpty()) {
+            mCardSecondTextTagList.add(cardSecondTextTagSubtitle);
+        }
 
         if (cardBody != null && !cardBody.isEmpty()) {
             mCardBodyList.add(cardBody);
@@ -74,6 +87,10 @@ public class Schedule extends AppCompatActivity {
 
         if (cardTimestamp != null && !cardTimestamp.isEmpty()) {
             mCardTimestampList.add(cardTimestamp);
+        }
+
+        if (cardFooter != null && !cardFooter.isEmpty()) {
+            mCardFooterList.add(cardFooter);
         }
     }
 
@@ -89,7 +106,10 @@ public class Schedule extends AppCompatActivity {
                         null,
                         getResources().getString(R.string.horizontal_card_subtitle_dummy),
                         null,
-                        getResources().getString(R.string.horizontal_card_timestamp_dummy));
+                        null,
+                        null,
+                        getResources().getString(R.string.horizontal_card_timestamp_dummy),
+                        null);
             }
         }
     }
@@ -102,7 +122,8 @@ public class Schedule extends AppCompatActivity {
         HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardBodyList, mCardTimestampList);
+                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
+      
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
