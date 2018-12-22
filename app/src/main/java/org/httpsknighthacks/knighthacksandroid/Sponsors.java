@@ -4,11 +4,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Optional;
+import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
+import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
+import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.SponsorsTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Sponsors extends AppCompatActivity {
 
@@ -34,6 +43,10 @@ public class Sponsors extends AppCompatActivity {
     private RecyclerView mFilterSearchRecyclerView;
     private SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter;
 
+    private ProgressBar mProgressBar;
+
+    private ArrayList<Sponsor> sponsors;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +67,50 @@ public class Sponsors extends AppCompatActivity {
         mFilterSearchImageList = new ArrayList<>();
         mSearchFilterTypeList = new ArrayList<>();
 
-        getCardComponents();
+        mProgressBar = findViewById(R.id.sponsor_progress_bar);
+
+        sponsors = new ArrayList<>();
+
+        loadSponsors();
         getFilterSearchComponents();
         loadRecyclerView();
+    }
+
+    private void loadSponsors() {
+        SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
+            @Override
+            public void onStart() {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onSuccess(ArrayList<Sponsor> response) {
+                int numSponsors = response.size();
+
+                for (int i = 0; i < numSponsors; i++) {
+                    Sponsor currSponsor = response.get(i);
+
+                    if (Sponsor.isValid(currSponsor)) {
+                        addSponsorCard(currSponsor);
+                        sponsors.add(currSponsor);
+                    }
+                }
+
+                horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete() {
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+
+        sponsorsTask.execute();
     }
 
     private void addSubSectionTitle(String title) {
@@ -108,24 +162,25 @@ public class Sponsors extends AppCompatActivity {
         }
     }
 
-    private void getCardComponents() {
-        int tempNumCards = 10;
+    private void addSponsorCard(Sponsor sponsor) {
+        addHorizontalSectionCard(sponsor.getPictureOptional().getValue(),
+                sponsor.getNameOptional().getValue(),
+                sponsor.getLocationOptional().getValue(),
+                null,
+                null,
+                null,
+                sponsor.getDescriptionOptional().getValue(),
+                null,
+                null);
+    }
 
-        for (int i = 0; i < tempNumCards; i++) {
-            if (i == 0 || i == tempNumCards / 2) {
-                addSubSectionTitle(getResources().getString(R.string.horizontal_card_sub_section_title));
-            } else {
-                addHorizontalSectionCard(getResources().getString(R.string.horizontal_card_image_dummy),
-                        getResources().getString(R.string.horizontal_card_title_dummy),
-                        getResources().getString(R.string.horizontal_card_side_subtitle_dummy),
-                        null,
-                        getResources().getString(R.string.horizontal_card_first_text_tag_subtitle),
-                        getResources().getString(R.string.horizontal_card_second_text_tag_subtitle),
-                        getResources().getString(R.string.horizontal_card_body_dummy),
-                        null,
-                        null);
-            }
-        }
+    private void clearSponsors() {
+        mViewTypeList.clear();
+        mCardImageList.clear();
+        mCardTitleList.clear();
+        mCardSideSubtitleList.clear();
+        mCardBodyList.clear();
+        horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void loadRecyclerView() {
@@ -150,10 +205,44 @@ public class Sponsors extends AppCompatActivity {
                 new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
                     @Override
                     public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
-
+                        filterSponsorsByOffering(holder.mSearchFilterType);
                     }
                 });
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
+    }
+
+    private ArrayList<Sponsor> getSponsorsByOfferType(SearchFilterTypes type) {
+        if (type.equals(SearchFilterTypes.ALL)) {
+            return sponsors;
+        }
+
+        ArrayList<Sponsor> sponsors = new ArrayList<>();
+        int numSponsors = this.sponsors.size();
+
+        for (int i = 0; i < numSponsors; i++) {
+            Sponsor sponsor = this.sponsors.get(i);
+
+            if (Arrays.asList(sponsor.getOfferringsOptional().getValue()).contains(type)) {
+                sponsors.add(sponsor);
+            }
+        }
+
+        return sponsors;
+    }
+
+    private void filterSponsorsByOffering(SearchFilterTypes offerType) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        clearSponsors();
+
+        ArrayList<Sponsor> sponsors = getSponsorsByOfferType(offerType);
+        int numSponsors = sponsors.size();
+
+        for (int i = 0; i < numSponsors; i++) {
+            addSponsorCard(sponsors.get(i));
+        }
+
+        mProgressBar.setVisibility(View.GONE);
+        horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void getFilterSearchComponents() {
