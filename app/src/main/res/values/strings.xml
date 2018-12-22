@@ -14,6 +14,9 @@
     <string name="vertical_card_title_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="vertical_card_subtitle_dummy">Quisque a egestas orci.</string>
     <string name="vertical_card_details_dummy">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+
+    <string name="faq_plus_icon">https://user-images.githubusercontent.com/38079769/47611865-a8d59100-da44-11e8-81b3-aeb2d494bdae.png</string>
+    <string name="faq_minus_icon">https://user-images.githubusercontent.com/38079769/47611859-72981180-da44-11e8-84d3-b0a551c4e849.png</string>
   
     <string name="horizontal_card_image_dummy">https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/challenge_photos/000/542/472/datas/full_width.png</string>
     <string name="horizontal_card_title_dummy">Title</string>

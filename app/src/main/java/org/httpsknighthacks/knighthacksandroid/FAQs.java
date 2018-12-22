@@ -17,9 +17,11 @@ import java.util.ArrayList;
 
 public class FAQs extends AppCompatActivity {
 
+    public static final String TAG = FAQs.class.getSimpleName();
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardDetailsList;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
@@ -36,6 +38,7 @@ public class FAQs extends AppCompatActivity {
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
         mProgressBar = findViewById(R.id.faqs_progress_bar);
+        mCardDetailsList = new ArrayList<>();
 
         loadFAQs();
         loadRecyclerView();
@@ -82,7 +85,7 @@ public class FAQs extends AppCompatActivity {
 
         horizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
     }
 }
