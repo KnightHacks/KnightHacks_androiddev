@@ -61,7 +61,7 @@ public class FAQs extends AppCompatActivity {
 
                     if (FAQ.isValid(currFAQ)) {
                         mCardTitleList.add(currFAQ.getQuestionOptional().getValue());
-                        mCardSubtitleList.add(currFAQ.getAnswerOptional().getValue());
+                        mCardDetailsList.add(currFAQ.getAnswerOptional().getValue());
                     }
                 }
 
