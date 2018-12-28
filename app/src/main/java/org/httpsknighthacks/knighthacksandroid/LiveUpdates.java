@@ -17,9 +17,11 @@ import java.util.ArrayList;
 
 public class LiveUpdates extends AppCompatActivity {
 
+    private static final String TAG = LiveUpdates.class.getSimpleName();
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardDetailsList;
 
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
@@ -35,6 +37,8 @@ public class LiveUpdates extends AppCompatActivity {
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
+        mCardDetailsList = new ArrayList<>();
+
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
         mProgressBar.setVisibility(View.GONE);
 
@@ -86,7 +90,7 @@ public class LiveUpdates extends AppCompatActivity {
 
         mHorizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList);
-        mRecyclerView.setAdapter(mHorizontalSectionCardRecyclerViewAdapter);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
+        recyclerView.setAdapter(mHorizontalSectionCardRecyclerViewAdapter);
     }
 }

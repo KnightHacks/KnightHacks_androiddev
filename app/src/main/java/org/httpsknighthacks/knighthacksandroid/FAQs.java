@@ -9,9 +9,11 @@ import java.util.ArrayList;
 
 public class FAQs extends AppCompatActivity {
 
+    public static final String TAG = FAQs.class.getSimpleName();
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
+    private ArrayList<String> mCardDetailsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,7 @@ public class FAQs extends AppCompatActivity {
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
+        mCardDetailsList = new ArrayList<>();
 
         getCardComponents();
         loadRecyclerView();
@@ -30,8 +33,9 @@ public class FAQs extends AppCompatActivity {
         int tempNumCards = 5;
 
         for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getString(R.string.vertical_card_image_dummy));
+            mCardImageList.add(getResources().getString(R.string.faq_plus_icon));
             mCardTitleList.add(getResources().getString(R.string.vertical_card_title_dummy));
+            mCardDetailsList.add(getResources().getString(R.string.vertical_card_details_dummy));
         }
     }
 
@@ -42,7 +46,7 @@ public class FAQs extends AppCompatActivity {
 
         VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
     }
 }

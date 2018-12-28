@@ -19,23 +19,28 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
-
+    private ArrayList<String> mCardDetailsList;
+    private String tag;
     private Context mContext;
 
     public VerticalSectionCard_RecyclerViewAdapter(Context mContext,
                                                      ArrayList<String> mCardImageList,
                                                      ArrayList<String> mCardTitleList,
-                                                     ArrayList<String> mCardSubtitleList) {
+                                                     ArrayList<String> mCardSubtitleList,
+                                                     ArrayList<String> mCardDetailsList,
+                                                     String tag) {
         this.mContext = mContext;
         this.mCardImageList = mCardImageList;
         this.mCardTitleList = mCardTitleList;
         this.mCardSubtitleList = mCardSubtitleList;
+        this.mCardDetailsList = mCardDetailsList;
+        this.tag = tag;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_section_card, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_section_card, parent, false), tag);
     }
 
     @Override
@@ -62,6 +67,12 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         } else {
             holder.mCardSubtitle.setVisibility(View.GONE);
         }
+
+        if (position < mCardDetailsList.size()) {
+            holder.mCardDetails.setText(mCardDetailsList.get(position));
+        } else {
+            holder.mCardDetails.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -74,14 +85,39 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         ImageView mCardImage;
         TextView mCardTitle;
         TextView mCardSubtitle;
+        TextView mCardDetails;
+        String mTag;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, String tag) {
             super(itemView);
             this.mCardView = itemView.findViewById(R.id.vertical_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.vertical_section_card_image);
             this.mCardTitle = itemView.findViewById(R.id.vertical_section_card_title);
             this.mCardSubtitle = itemView.findViewById(R.id.vertical_section_card_subtitle);
+            this.mCardDetails = itemView.findViewById(R.id.vertical_section_card_detail);
+            this.mTag = tag;
+
+            if(this.mTag.equals(FAQs.TAG)) {
+                this.mCardDetails.setVisibility(View.GONE);
+                mCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mCardDetails.getVisibility() == View.GONE) {
+                            mCardDetails.setVisibility(View.VISIBLE);
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(mContext.getResources().getString(R.string.faq_minus_icon))
+                                    .into(mCardImage);
+                        } else {
+                            mCardDetails.setVisibility(View.GONE);
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(mContext.getResources().getString(R.string.faq_plus_icon))
+                                    .into(mCardImage);                        
+                        }
+                    }
+                });
+            }
         }
     }
-
 }
