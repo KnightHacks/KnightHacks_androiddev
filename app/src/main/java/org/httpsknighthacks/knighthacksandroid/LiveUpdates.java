@@ -38,7 +38,7 @@ public class LiveUpdates extends AppCompatActivity {
     private TextView mNotLiveKnightHacks;
     private CountDownTimer mCountDownTimer;
     private boolean isCountDownLive;
-    private long startTime;
+    private long currentTimeInMillis;
 
     private ProgressBar mProgressBar;
 
@@ -75,8 +75,8 @@ public class LiveUpdates extends AppCompatActivity {
     private void setupCountDownTimer() {
         // Temporary dummy time that's always 24 hours ahead of start time.
         Date startDate = new Date();
-        startTime = startDate.getTime();
-        long endTimeMilli = startDate.getTime() + (24 * 60 * 60 * 1000);
+        currentTimeInMillis = startDate.getTime();
+        long targetTimeInMillis = startDate.getTime() + (24 * 60 * 60 * 1000);
 
         /*
         This is for when we get the actual date string for the hackathon end time.
@@ -90,7 +90,7 @@ public class LiveUpdates extends AppCompatActivity {
 
         try {
             endDate = formatter.parse(endTime);
-            endTimeMilli = endDate.getTime();
+            targetTimeInMillis = endDate.getTime();
 
         } catch (ParseException e) {
             // TODO Auto-generated catch block
@@ -100,21 +100,21 @@ public class LiveUpdates extends AppCompatActivity {
         startTime = startDate.getTime();
         */
 
-        if(startTime >= endTimeMilli)
+        if(currentTimeInMillis >= targetTimeInMillis)
             return;
 
-        mCountDownTimer = new CountDownTimer(endTimeMilli, 1000) {
+        mCountDownTimer = new CountDownTimer(targetTimeInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
 
-                startTime -= 1;
-                long serverUptimeSeconds =
-                        (millisUntilFinished - startTime) / 1000;
+                currentTimeInMillis -= 1;
+                long secondsTilEnd =
+                        (millisUntilFinished - currentTimeInMillis) / 1000;
 
-                int hoursLeft = (int) (serverUptimeSeconds / 3600);
-                int minutesLeft = (int) (serverUptimeSeconds  % 3600 / 60);
-                int secondsLeft = (int) (serverUptimeSeconds % 3600 % 60);
+                int hoursLeft = (int) (secondsTilEnd / 3600);
+                int minutesLeft = (int) (secondsTilEnd  % 3600 / 60);
+                int secondsLeft = (int) (secondsTilEnd % 3600 % 60);
 
                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d:%02d", hoursLeft, minutesLeft, secondsLeft);
                 mCountdown.setText(timeLeftFormatted);
