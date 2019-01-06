@@ -91,6 +91,6 @@ public class LiveUpdates extends AppCompatActivity {
         mHorizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
                         mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
-        recyclerView.setAdapter(mHorizontalSectionCardRecyclerViewAdapter);
+        mRecyclerView.setAdapter(mHorizontalSectionCardRecyclerViewAdapter);
     }
 }

@@ -61,6 +61,18 @@ public class DateTimeUtils {
         }
     }
 
+    public static boolean daysAreDifferent(String first, String second) {
+        try {
+            Date firstDate = DEFAULT_DATE_TIME_FORMAT.parse(first);
+            Date secondDate = DEFAULT_DATE_TIME_FORMAT.parse(second);
+            long differenceInSeconds = Math.abs(secondDate.getTime() - firstDate.getTime()) / 1000;
+
+            return getDaysFromSeconds(differenceInSeconds) > 0;
+        } catch (ParseException ex) {
+            return true;
+        }
+    }
+
     public static long getDaysFromSeconds(long seconds) {
         return seconds / (60 * 60 * 24);
     }
