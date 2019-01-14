@@ -83,7 +83,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         // values, I've decided this one produces the best result.
         PropertyValuesHolder scalePropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.25f);
         ObjectAnimator scaleFlamesAnimator = ObjectAnimator.ofPropertyValuesHolder(flames, scalePropertyValuesHolder);
-        scaleFlamesAnimator.setRepeatCount(30);
+        scaleFlamesAnimator.setRepeatCount(5);
         scaleFlamesAnimator.setRepeatMode(ValueAnimator.REVERSE);
         scaleFlamesAnimator.setDuration(450);
 
