@@ -61,29 +61,46 @@
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/splash_screen_flames"
-        android:layout_width="33dp"
-        android:layout_height="105dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@drawable/ic_rocket_flame" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <ImageView
-        android:id="@+id/splash_screen_rocket"
-        android:layout_width="386dp"
-        android:layout_height="221dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/rocket_no_flames"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
-        app:layout_constraintVertical_bias="0.163" />
+        <ImageView
+            android:id="@+id/splash_screen_flames"
+            android:layout_width="33dp"
+            android:layout_height="105dp"
+            android:visibility="visible"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/ic_rocket_flame"
+            android:layout_above="@+id/flame_position_helper"
+            />
+
+        <ImageView
+            android:id="@+id/splash_screen_rocket"
+            android:layout_width="386dp"
+            android:layout_height="221dp"
+            android:src="@drawable/rocket_no_flames"
+            android:paddingBottom="40dp"
+            />
+
+        <View
+            android:id="@+id/flame_position_helper"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@id/splash_screen_rocket"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/splash_screen_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/splash_screen_text"
+            android:textColor="#6b35f4"
+            android:layout_below="@+id/flame_position_helper"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/splash_screen_big_cloud"
@@ -95,31 +112,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="parent"/>
-
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".5"
-        app:layout_constraintGuide_end="491dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15068494" />
-
-    <TextView
-        android:id="@+id/splash_screen_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/splash_screen_text"
-        android:textColor="#6b35f4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_screen_flames"/>
 
 </android.support.constraint.ConstraintLayout>
