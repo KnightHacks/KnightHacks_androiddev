@@ -7,7 +7,7 @@ public enum SearchFilterTypes {
     DESIGN ("design"),
     TALK ("talk"),
     WORKSHOP ("workshop"),
-    FULL_TIME ("full time"),
+    FULL_TIME ("fulltime"),
     INTERNSHIP ("internship"),
     ALL ("all"),
     OTHER ("other");
