@@ -23,7 +23,7 @@ public class Sponsor {
         try {
             withName(jsonObject.getString(NAME_KEY));
             withLocation(jsonObject.getString(LOCATION_KEY));
-            withOfferrings(jsonObject.getJSONArray(OFFERINGS_KEY));
+            withOfferings(jsonObject.getJSONArray(OFFERINGS_KEY));
             withDescription(jsonObject.getString(DESCRIPTION_KEY));
             withPicture(jsonObject.getString(PICTURE_KEY));
         } catch (JSONException ex) {
@@ -43,7 +43,7 @@ public class Sponsor {
         this.mLocation = Optional.of(mLocation);
     }
 
-    public void withOfferrings(JSONArray mOfferings) {
+    public void withOfferings(JSONArray mOfferings) {
         int numOfferings = mOfferings.length();
         SearchFilterTypes[] offerings = new SearchFilterTypes[numOfferings];
 
@@ -74,7 +74,7 @@ public class Sponsor {
         return mLocation;
     }
 
-    public Optional<SearchFilterTypes[]> getOfferringsOptional() {
+    public Optional<SearchFilterTypes[]> getOfferingsOptional() {
         return mOfferings;
     }
 
@@ -84,6 +84,22 @@ public class Sponsor {
 
     public Optional<String> getPictureOptional() {
         return mPicture;
+    }
+
+    public String getInternship() {
+        if (SearchFilterTypes.hasTargetFilter(mOfferings.getValue(), SearchFilterTypes.INTERNSHIP)) {
+            return SearchFilterTypes.INTERNSHIP.toString();
+        }
+
+        return null;
+    }
+
+    public String getFullTime() {
+        if (SearchFilterTypes.hasTargetFilter(mOfferings.getValue(), SearchFilterTypes.FULL_TIME)) {
+            return SearchFilterTypes.FULL_TIME.toString();
+        }
+
+        return null;
     }
 
     public static boolean isValid(Sponsor sponsor) {

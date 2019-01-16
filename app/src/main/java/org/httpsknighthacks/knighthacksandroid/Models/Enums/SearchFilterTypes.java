@@ -7,7 +7,7 @@ public enum SearchFilterTypes {
     DESIGN ("design"),
     TALK ("talk"),
     WORKSHOP ("workshop"),
-    FULL_TIME ("full time"),
+    FULL_TIME ("fulltime"),
     INTERNSHIP ("internship"),
     ALL ("all"),
     OTHER ("other");
@@ -31,6 +31,16 @@ public enum SearchFilterTypes {
 
     public String getSearchFilterString() {
         return this.searchFilterString;
+    }
+
+    public static boolean hasTargetFilter(SearchFilterTypes types[], SearchFilterTypes target) {
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].equals(target)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

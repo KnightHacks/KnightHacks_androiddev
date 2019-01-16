@@ -195,13 +195,16 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
 
         public ContentViewHolder(View itemView) {
             super(itemView);
+
+            View gridLayout = itemView.findViewById(R.id.horizontal_section_grid_view);
+
             this.mCardView = itemView.findViewById(R.id.horizontal_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.horizontal_section_card_image);
             this.mCardTitle = itemView.findViewById(R.id.horizontal_section_card_title);
             this.mCardSideSubtitle = itemView.findViewById(R.id.horizontal_section_card_side_subtitle);
             this.mCardSubtitle = itemView.findViewById(R.id.horizontal_section_card_subtitle);
-            this.mCardFirstTextTagSubtitle = itemView.findViewById(R.id.horizontal_section_card_first_tag_subtitle);
-            this.mCardSecondTextTagSubtitle = itemView.findViewById(R.id.horizontal_section_card_second_tag_subtitle);
+            this.mCardFirstTextTagSubtitle = gridLayout.findViewById(R.id.horizontal_section_card_first_tag_subtitle);
+            this.mCardSecondTextTagSubtitle = gridLayout.findViewById(R.id.horizontal_section_card_second_tag_subtitle);
             this.mCardBody = itemView.findViewById(R.id.horizontal_section_card_body);
             this.mCardTimestamp = itemView.findViewById(R.id.horizontal_section_card_timestamp);
             this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);

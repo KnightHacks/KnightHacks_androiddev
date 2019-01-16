@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
-import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
@@ -167,8 +166,8 @@ public class Sponsors extends AppCompatActivity {
                 sponsor.getNameOptional().getValue(),
                 sponsor.getLocationOptional().getValue(),
                 null,
-                null,
-                null,
+                sponsor.getInternship(),
+                sponsor.getFullTime(),
                 sponsor.getDescriptionOptional().getValue(),
                 null,
                 null);
@@ -179,6 +178,8 @@ public class Sponsors extends AppCompatActivity {
         mCardImageList.clear();
         mCardTitleList.clear();
         mCardSideSubtitleList.clear();
+        mCardFirstTextTagList.clear();
+        mCardSecondTextTagList.clear();
         mCardBodyList.clear();
         horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -222,7 +223,7 @@ public class Sponsors extends AppCompatActivity {
         for (int i = 0; i < numSponsors; i++) {
             Sponsor sponsor = this.sponsors.get(i);
 
-            if (Arrays.asList(sponsor.getOfferringsOptional().getValue()).contains(type)) {
+            if (Arrays.asList(sponsor.getOfferingsOptional().getValue()).contains(type)) {
                 sponsors.add(sponsor);
             }
         }
