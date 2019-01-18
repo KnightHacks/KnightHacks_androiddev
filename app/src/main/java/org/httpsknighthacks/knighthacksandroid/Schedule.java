@@ -152,10 +152,11 @@ public class Schedule extends AppCompatActivity {
 
                     if (ScheduleEvent.isValid(currEvent)) {
 
-                        String currStartTime = currEvent.getStartTimeOptional().getValue();
+                        Optional<String> currStartTime = currEvent.getStartTimeOptional();
 
-                        if ((lastStartTime.isPresent() && !lastStartTime.getValue().equals(currStartTime)) || i == 0) {
-                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                        if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+                            lastStartTime = currStartTime;
                         }
 
                         addScheduleEventCard(currEvent);
@@ -248,10 +249,11 @@ public class Schedule extends AppCompatActivity {
 
         for (int i = 0; i < numEvents; i++) {
             ScheduleEvent currEvent = events.get(i);
-            String currStartTime = currEvent.getStartTimeOptional().getValue();
+            Optional<String> currStartTime = currEvent.getStartTimeOptional();
 
-            if ((lastStartTime.isPresent() && !lastStartTime.getValue().equals(currStartTime)) || i == 0) {
-                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
+                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+                lastStartTime = currStartTime;
             }
 
             addScheduleEventCard(currEvent);

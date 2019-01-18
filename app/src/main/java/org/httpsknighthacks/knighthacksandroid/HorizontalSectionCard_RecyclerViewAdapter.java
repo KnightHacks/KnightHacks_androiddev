@@ -172,8 +172,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
     }
 
-
-
     @Override
     public int getItemCount() {
         return mViewTypeList.size();
