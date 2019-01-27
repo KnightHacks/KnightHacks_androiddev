@@ -56,11 +56,13 @@ public class SponsorsTask extends AsyncTask<Void, Void, ArrayList<Sponsor>> {
                 }
 
                 mResponseListener.onSuccess(mSponsors);
+                mResponseListener.onComplete();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mResponseListener.onFailure();
+                mResponseListener.onComplete();
             }
         });
 
