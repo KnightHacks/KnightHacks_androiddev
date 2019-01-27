@@ -53,8 +53,6 @@ public class FAQs extends AppCompatActivity {
 
             @Override
             public void onSuccess(ArrayList<FAQ> response) {
-                mProgressBar.setVisibility(View.GONE);
-
                 int numFAQs = response.size();
                 for (int i = 0; i < numFAQs; i++) {
                     FAQ currFAQ = response.get(i);
@@ -70,8 +68,12 @@ public class FAQs extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-                mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete() {
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 
