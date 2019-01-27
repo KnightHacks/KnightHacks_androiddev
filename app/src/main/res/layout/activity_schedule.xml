@@ -23,7 +23,18 @@
             android:orientation="horizontal"
             android:layout_weight="22"
             >
+
         </android.support.v7.widget.RecyclerView>
+
+        <ProgressBar
+            android:id="@+id/schedule_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:paddingVertical="10dp"
+            android:progressTint="@color/colorHomePageCardPurple"
+            android:visibility="gone" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/schedule_horizontal_section_card_container"
