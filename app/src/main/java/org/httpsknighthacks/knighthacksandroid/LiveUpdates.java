@@ -66,17 +66,12 @@ public class LiveUpdates extends AppCompatActivity {
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
         mProgressBar.setVisibility(View.GONE);
 
-        try {
-            setupCountDownTimer();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        setupCountDownTimer();
         loadLiveUpdates();
         loadRecyclerView();
     }
 
-    private void setupCountDownTimer() throws ParseException {
+    private void setupCountDownTimer() {
         Calendar startDay = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
         startDay.setTime(new Date(0));
         startDay.set(Calendar.AM_PM, 1);
