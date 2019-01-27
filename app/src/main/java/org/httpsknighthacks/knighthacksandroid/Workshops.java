@@ -131,7 +131,7 @@ public class Workshops extends AppCompatActivity {
                 null,
                 null,
                 null,
-                workshop.getPrerequisitesOptional().getValue(),
+                workshop.getDescriptionOptional().getValue(),
                 DateTimeUtils.getTime(workshop.getStartTimeOptional().getValue()),
                 workshop.getSkillLevelOptional().getValue());
     }

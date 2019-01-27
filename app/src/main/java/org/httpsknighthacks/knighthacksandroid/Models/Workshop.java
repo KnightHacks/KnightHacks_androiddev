@@ -8,6 +8,7 @@ import org.json.JSONObject;
 public class Workshop {
 
     private Optional<String> mName;
+    private Optional<String> mDescription;
     private Optional<String> mSkillLevel;
     private Optional<String> mPicture;
     private SearchFilterTypes mWorkshopType;
@@ -16,6 +17,7 @@ public class Workshop {
     private Optional<String> mEndTime;
 
     public static final String NAME_KEY = "name";
+    public static final String DESCRIPTION_KEY = "description";
     public static final String SKILL_LEVEL_KEY = "skillLevel";
     public static final String PICTURE_KEY = "picture";
     public static final String WORKSHOP_TYPE_KEY = "workshopType";
@@ -26,6 +28,7 @@ public class Workshop {
     public Workshop(JSONObject jsonObject) {
         try {
             withName(jsonObject.getString(NAME_KEY));
+            withDescription(jsonObject.getString(DESCRIPTION_KEY));
             withSkillLevel(jsonObject.getString(SKILL_LEVEL_KEY));
             withPicture(jsonObject.getString(PICTURE_KEY));
             withWorkshopType(jsonObject.getString(WORKSHOP_TYPE_KEY));
@@ -45,6 +48,10 @@ public class Workshop {
 
     public void withName(String name) {
         this.mName = Optional.of(name);
+    }
+
+    public void withDescription(String description) {
+        this.mDescription = Optional.of(description);
     }
 
     public void withSkillLevel(String skillLevel) {
@@ -73,6 +80,10 @@ public class Workshop {
 
     public Optional<String> getNameOptional() {
         return mName;
+    }
+
+    public Optional<String> getDescriptionOptional() {
+        return mDescription;
     }
 
     public Optional<String> getSkillLevelOptional() {

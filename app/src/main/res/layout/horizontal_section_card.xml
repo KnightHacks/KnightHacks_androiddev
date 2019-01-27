@@ -97,11 +97,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/horizontal_section_card_title"
-                android:layout_centerHorizontal="true"
-                android:text="@string/horizontal_card_body_dummy"
-                android:textColor="@android:color/black"
+                android:layout_centerHorizontal="false"
                 android:layout_marginTop="25dp"
-                />
+                android:text="@string/horizontal_card_body_dummy"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/horizontal_section_card_timestamp"
