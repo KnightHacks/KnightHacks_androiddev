@@ -54,8 +54,6 @@ public class LiveUpdates extends AppCompatActivity {
 
             @Override
             public void onSuccess(ArrayList<LiveUpdate> response) {
-                mProgressBar.setVisibility(View.GONE);
-
                 int numUpdates = response.size();
                 for (int i = 0; i < numUpdates; i++) {
                     LiveUpdate currUpdate = response.get(i);
@@ -72,8 +70,12 @@ public class LiveUpdates extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-                mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete() {
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 
