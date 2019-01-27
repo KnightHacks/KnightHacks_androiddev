@@ -1,5 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid;
 
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.httpsknighthacks.knighthacksandroid.Models.LiveUpdate;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
@@ -17,8 +20,10 @@ import org.httpsknighthacks.knighthacksandroid.Tasks.LiveUpdatesTask;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class LiveUpdates extends AppCompatActivity {
 
@@ -37,15 +42,17 @@ public class LiveUpdates extends AppCompatActivity {
     private TextView mLiveKnightHacks;
     private TextView mNotLiveKnightHacks;
     private CountDownTimer mCountDownTimer;
-    private boolean isCountDownLive;
     private long currentTimeInMillis;
 
     private ProgressBar mProgressBar;
+    private ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_updates);
+
+        mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
 
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
@@ -59,51 +66,47 @@ public class LiveUpdates extends AppCompatActivity {
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
         mProgressBar.setVisibility(View.GONE);
 
-        isCountDownLive = true;
-
-        if(isCountDownLive) {
-            mNotLiveKnightHacks.setVisibility(View.INVISIBLE);
-            mLiveIndicator.setVisibility(View.VISIBLE);
-            mLiveKnightHacks.setVisibility(View.VISIBLE);
+        try {
             setupCountDownTimer();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         loadLiveUpdates();
         loadRecyclerView();
     }
 
-    private void setupCountDownTimer() {
-        // Temporary dummy time that's always 24 hours ahead of start time.
-        Date startDate = new Date();
-        currentTimeInMillis = startDate.getTime();
-        long targetTimeInMillis = startDate.getTime() + (24 * 60 * 60 * 1000);
+    private void setupCountDownTimer() throws ParseException {
+        Calendar startDay = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+        startDay.setTime(new Date(0));
+        startDay.set(Calendar.AM_PM, 1);
+        startDay.set(Calendar.HOUR_OF_DAY, 23);
+        startDay.set(Calendar.DAY_OF_MONTH, 3);
+        startDay.set(Calendar.MONTH, 2);
+        startDay.set(Calendar.YEAR, 2019);
 
-        /*
-        This is for when we get the actual date string for the hackathon end time.
+        Calendar endDay = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+        endDay.setTime(new Date(0));
+        endDay.set(Calendar.AM_PM, 0);
+        endDay.set(Calendar.HOUR_OF_DAY, 11);
+        endDay.set(Calendar.DAY_OF_MONTH, 1);
+        endDay.set(Calendar.MONTH, 2);
+        endDay.set(Calendar.YEAR, 2019);
 
-        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd.MM.yyyy, HH:mm:ss");
-        formatter.setLenient(false);
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
 
-        // Random date I chose when testing
-        String endTime = "23.12.2018, 01:40:00";
-        Date endDate;
+        if(today.getTimeInMillis() >= startDay.getTimeInMillis() && today.getTimeInMillis() <= endDay.getTimeInMillis()) {
+            mNotLiveKnightHacks.setVisibility(View.INVISIBLE);
+            mLiveIndicator.setVisibility(View.VISIBLE);
+            mLiveKnightHacks.setVisibility(View.VISIBLE);
 
-        try {
-            endDate = formatter.parse(endTime);
-            targetTimeInMillis = endDate.getTime();
-
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            long duration = endDay.getTimeInMillis() - today.getTimeInMillis();
+            startCountDownTimer(duration);
         }
+    }
 
-        startTime = startDate.getTime();
-        */
-
-        if(currentTimeInMillis >= targetTimeInMillis)
-            return;
-
-        mCountDownTimer = new CountDownTimer(targetTimeInMillis, 1000) {
+    private void startCountDownTimer(long duration) {
+        mCountDownTimer = new CountDownTimer(duration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -140,12 +143,21 @@ public class LiveUpdates extends AppCompatActivity {
         LiveUpdatesTask liveUpdatesTask = new LiveUpdatesTask(getApplicationContext(), new ResponseListener<LiveUpdate>() {
             @Override
             public void onStart() {
-                mProgressBar.setVisibility(View.VISIBLE);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                    mShimmerViewContainer.startShimmerAnimation();
+
+                else
+                    mProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onSuccess(ArrayList<LiveUpdate> response) {
                 mProgressBar.setVisibility(View.GONE);
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mShimmerViewContainer.setVisibility(View.GONE);
+                    mShimmerViewContainer.stopShimmerAnimation();
+                }
 
                 int numUpdates = response.size();
                 for (int i = 0; i < numUpdates; i++) {
@@ -164,6 +176,12 @@ public class LiveUpdates extends AppCompatActivity {
             @Override
             public void onFailure() {
                 mProgressBar.setVisibility(View.GONE);
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mShimmerViewContainer.setVisibility(View.GONE);
+                    mShimmerViewContainer.stopShimmerAnimation();
+                }
+
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
         });
