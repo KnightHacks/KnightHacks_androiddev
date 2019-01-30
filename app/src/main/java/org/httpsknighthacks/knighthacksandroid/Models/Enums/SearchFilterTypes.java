@@ -33,6 +33,16 @@ public enum SearchFilterTypes {
         return this.searchFilterString;
     }
 
+    public static boolean hasTargetFilter(SearchFilterTypes types[], SearchFilterTypes target) {
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].equals(target)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return searchFilterString;
