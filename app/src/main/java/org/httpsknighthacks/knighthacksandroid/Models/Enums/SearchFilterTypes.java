@@ -3,13 +3,19 @@ package org.httpsknighthacks.knighthacksandroid.Models.Enums;
 import java.util.HashMap;
 
 public enum SearchFilterTypes {
-    DEV ("dev"),
-    DESIGN ("design"),
-    TALK ("talk"),
-    WORKSHOP ("workshop"),
-    FULL_TIME ("fulltime"),
-    INTERNSHIP ("internship"),
-    ALL ("all"),
+    DEV ("Development"),
+    DESIGN ("Design"),
+    TALK ("Talks"),
+    HARDWARE ("Hardware"),
+    CAREER ("Career"),
+    WORKSHOP ("Workshop"),
+    FULL_TIME ("Full Time"),
+    INTERNSHIP ("Internships"),
+    ALL ("All"),
+    MAIN_EVENTS ("Main Event"),
+    FOOD ("Food"),
+    BEGINNER ("Beginner"),
+    ADVANCED ("Advanced"),
     OTHER ("other");
 
     private final String searchFilterString;
