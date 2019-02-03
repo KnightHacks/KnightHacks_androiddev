@@ -1,5 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid.Tasks;
 
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -9,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
-import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
+import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.json.JSONArray;
@@ -18,18 +19,18 @@ import org.json.JSONException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ScheduleEventsTask extends AsyncTask<Void, Void, ArrayList<ScheduleEvent>> {
+public class WorkshopsTask extends AsyncTask<Void, Void, ArrayList<Workshop>> {
 
-    public static final String TAG = ScheduleEventsTask.class.getSimpleName();
-    public static final String GET_SCHEDULE_ROUTE = "/api/get_schedule";
+    public static final String TAG = WorkshopsTask.class.getSimpleName();
+    public static final String GET_WORKSHOPS_ROUTE = "/api/get_workshops";
 
     private WeakReference<Context> mContext;
-    private ArrayList<ScheduleEvent> mScheduleEvents;
-    private ResponseListener<ScheduleEvent> mResponseListener;
+    private ArrayList<Workshop> mWorkshops;
+    private ResponseListener<Workshop> mResponseListener;
 
-    public ScheduleEventsTask(Context context, ResponseListener<ScheduleEvent> responseListener) {
+    public WorkshopsTask(Context context, ResponseListener<Workshop> responseListener) {
         this.mContext = new WeakReference<>(context);
-        this.mScheduleEvents = new ArrayList<>();
+        this.mWorkshops = new ArrayList<>();
         this.mResponseListener = responseListener;
     }
 
@@ -39,38 +40,40 @@ public class ScheduleEventsTask extends AsyncTask<Void, Void, ArrayList<Schedule
     }
 
     @Override
-    protected ArrayList<ScheduleEvent> doInBackground(Void... voids) {
-        String requestURL = RequestQueueSingleton.REQUEST_API_PREFIX_URL + GET_SCHEDULE_ROUTE;
+    protected ArrayList<Workshop> doInBackground(Void... voids) {
+        String requestURL = RequestQueueSingleton.REQUEST_API_PREFIX_URL + GET_WORKSHOPS_ROUTE;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, requestURL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                int numEvents = response.length();
+                int numWorkshops = response.length();
 
-                for (int i = 0; i < numEvents; i++) {
+                for (int i = 0; i < numWorkshops; i++) {
                     try {
-                        mScheduleEvents.add(new ScheduleEvent(response.getJSONObject(i)));
+                        mWorkshops.add(new Workshop(response.getJSONObject(i)));
                     } catch (JSONException ex) {
                         Toast.makeText(getContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
                     }
                 }
 
-                mResponseListener.onSuccess(mScheduleEvents);
+                mResponseListener.onSuccess(mWorkshops);
+                mResponseListener.onComplete();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mResponseListener.onFailure();
+                mResponseListener.onComplete();
             }
         });
 
         RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(request, TAG);
 
-        return mScheduleEvents;
+        return mWorkshops;
     }
 
     @Override
-    protected void onPostExecute(ArrayList<ScheduleEvent> scheduleEvents) {
+    protected void onPostExecute(ArrayList<Workshop> workshops) {
         mResponseListener.onComplete();
     }
 

@@ -60,48 +60,56 @@
                 android:layout_alignLeft="@+id/horizontal_section_card_body"
                 android:layout_alignStart="@+id/horizontal_section_card_body"
                 android:layout_below="@+id/horizontal_section_card_title"
-                android:textColor="@android:color/black"
                 android:text="@string/horizontal_card_subtitle_dummy"
-                />
+                android:textColor="@android:color/black" />
 
-            <TextView
-                android:id="@+id/horizontal_section_card_first_tag_subtitle"
-                android:layout_width="90dp"
-                android:layout_height="25dp"
-                android:layout_alignStart="@+id/horizontal_section_card_title"
-                android:layout_alignLeft="@+id/horizontal_section_card_title"
-                android:layout_below="@+id/horizontal_section_card_title"
-                android:text="@string/horizontal_card_first_text_tag_subtitle"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:background="@drawable/horizontal_section_card_text_view_round_border"
-                android:layout_marginRight="10dp"
-                />
+            <GridLayout
+                android:id="@+id/horizontal_section_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/horizontal_section_card_timestamp"
+                android:layout_alignRight="@+id/horizontal_section_card_timestamp"
+                android:layout_below="@+id/horizontal_section_card_subtitle"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/horizontal_section_card_second_tag_subtitle"
-                android:layout_width="90dp"
-                android:layout_height="25dp"
-                android:layout_below="@+id/horizontal_section_card_title"
-                android:layout_toEndOf="@+id/horizontal_section_card_first_tag_subtitle"
-                android:layout_toRightOf="@+id/horizontal_section_card_first_tag_subtitle"
-                android:text="@string/horizontal_card_second_text_tag_subtitle"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:background="@drawable/horizontal_section_card_text_view_round_border"
+                <TextView
+                    android:id="@+id/horizontal_section_card_first_tag_subtitle"
+                    android:layout_width="90dp"
+                    android:layout_height="25dp"
+                    android:layout_alignLeft="@+id/horizontal_section_card_title"
+                    android:layout_alignStart="@+id/horizontal_section_card_title"
+                    android:layout_below="@+id/horizontal_section_card_title"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/horizontal_section_card_text_view_round_border"
+                    android:gravity="center"
+                    android:text="@string/horizontal_card_first_text_tag_subtitle"
+                    android:textColor="@android:color/white" />
 
-                />
+                <TextView
+                    android:id="@+id/horizontal_section_card_second_tag_subtitle"
+                    android:layout_width="90dp"
+                    android:layout_height="25dp"
+                    android:layout_below="@+id/horizontal_section_card_title"
+                    android:layout_toEndOf="@+id/horizontal_section_card_first_tag_subtitle"
+                    android:layout_toRightOf="@+id/horizontal_section_card_first_tag_subtitle"
+                    android:layout_weight="1"
+                    android:background="@drawable/horizontal_section_card_text_view_round_border"
+                    android:gravity="center"
+                    android:text="@string/horizontal_card_second_text_tag_subtitle"
+
+                    android:textColor="@android:color/white" />
+            </GridLayout>
 
             <TextView
                 android:id="@+id/horizontal_section_card_body"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/horizontal_section_card_title"
-                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/horizontal_section_grid_view"
                 android:text="@string/horizontal_card_body_dummy"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="25dp"
-                />
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/horizontal_section_card_timestamp"
@@ -118,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/horizontal_section_card_body"
-                android:text="@string/horizontal_card_footer_dummy"/>
+                android:text="@string/horizontal_card_footer_dummy" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
