@@ -32,7 +32,7 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<Integer> mFilterSearchImageList;
     private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
 
     private LinearLayoutManager linearLayoutManager;
@@ -247,13 +247,13 @@ public class Sponsors extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
+        mFilterSearchImageList.add(R.drawable.ic_sponsors_full_time);
         mSearchFilterTypeList.add(SearchFilterTypes.FULL_TIME);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
+        mFilterSearchImageList.add(R.drawable.ic_sponsors_internships);
         mSearchFilterTypeList.add(SearchFilterTypes.INTERNSHIP);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
+        mFilterSearchImageList.add(R.drawable.ic_filter_all);
         mSearchFilterTypeList.add(SearchFilterTypes.ALL);
 
     }

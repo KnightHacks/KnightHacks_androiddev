@@ -15,8 +15,7 @@ public enum SearchFilterTypes {
     MAIN_EVENTS ("Main Event"),
     FOOD ("Food"),
     BEGINNER ("Beginner"),
-    ADVANCED ("Advanced"),
-    OTHER ("other");
+    ADVANCED ("Advanced");
 
     private final String searchFilterString;
     private static HashMap<String, SearchFilterTypes> lookupTable = new HashMap<>();
@@ -32,7 +31,7 @@ public enum SearchFilterTypes {
     }
 
     public static SearchFilterTypes getSearchFilterType(String searchFilterString) {
-        return lookupTable.containsKey(searchFilterString) ? lookupTable.get(searchFilterString) : OTHER;
+        return lookupTable.containsKey(searchFilterString) ? lookupTable.get(searchFilterString) : ALL;
     }
 
     public String getSearchFilterString() {

@@ -39,7 +39,7 @@ public class Workshop {
             this.mName = Optional.empty();
             this.mSkillLevel = Optional.empty();
             this.mPicture = Optional.empty();
-            this.mWorkshopType = SearchFilterTypes.OTHER;
+            this.mWorkshopType = SearchFilterTypes.ALL;
             this.mPrerequisites = Optional.empty();
             this.mStartTime = Optional.empty();
             this.mEndTime = Optional.empty();

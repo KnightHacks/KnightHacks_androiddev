@@ -33,7 +33,7 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<Integer> mFilterSearchImageList;
     private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
 
     private LinearLayoutManager linearLayoutManager;
@@ -264,16 +264,25 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
-        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
+        mFilterSearchImageList.add(R.drawable.ic_workshops_career);
+        mSearchFilterTypeList.add(SearchFilterTypes.CAREER);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
+        mFilterSearchImageList.add(R.drawable.ic_workshops_hardware);
+        mSearchFilterTypeList.add(SearchFilterTypes.HARDWARE);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_design);
         mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
-        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
+        mFilterSearchImageList.add(R.drawable.ic_workshops_dev);
+        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
+        mFilterSearchImageList.add(R.drawable.ic_workshops_advanced);
+        mSearchFilterTypeList.add(SearchFilterTypes.ADVANCED);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_beginner);
+        mSearchFilterTypeList.add(SearchFilterTypes.BEGINNER);
+
+        mFilterSearchImageList.add(R.drawable.ic_filter_all);
         mSearchFilterTypeList.add(SearchFilterTypes.ALL);
 
     }
