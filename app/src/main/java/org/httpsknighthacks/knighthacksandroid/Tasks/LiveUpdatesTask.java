@@ -70,7 +70,7 @@ public class LiveUpdatesTask extends AsyncTask<Void, Void, ArrayList<LiveUpdate>
 
     @Override
     protected void onPostExecute(ArrayList<LiveUpdate> liveUpdates) {
-        mResponseListener.onComplete();
+        mResponseListener.onComplete(liveUpdates);
     }
 
     public Context getContext() {

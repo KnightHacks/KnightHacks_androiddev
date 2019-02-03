@@ -56,18 +56,21 @@ public class FAQsTask extends AsyncTask<Void, Void, ArrayList<FAQ>> {
                 }
 
                 mResponseListener.onSuccess(mFAQs);
-                mResponseListener.onComplete();
             }
         }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse (VolleyError error){
                 mResponseListener.onFailure();
-                mResponseListener.onComplete();
             }
         });
 
         RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(request, TAG);
         return mFAQs;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<FAQ> faqs) {
+        mResponseListener.onComplete(faqs);
     }
 
     public Context getContext() {

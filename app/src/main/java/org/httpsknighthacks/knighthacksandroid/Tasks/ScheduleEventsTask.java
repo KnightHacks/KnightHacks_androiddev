@@ -71,7 +71,7 @@ public class ScheduleEventsTask extends AsyncTask<Void, Void, ArrayList<Schedule
 
     @Override
     protected void onPostExecute(ArrayList<ScheduleEvent> scheduleEvents) {
-        mResponseListener.onComplete();
+        mResponseListener.onComplete(scheduleEvents);
     }
 
     public Context getContext() {

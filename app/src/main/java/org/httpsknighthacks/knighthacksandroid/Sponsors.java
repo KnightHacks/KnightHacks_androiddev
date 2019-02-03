@@ -43,6 +43,7 @@ public class Sponsors extends AppCompatActivity {
     private SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
 
     private ArrayList<Sponsor> sponsors;
 
@@ -67,6 +68,7 @@ public class Sponsors extends AppCompatActivity {
         mSearchFilterTypeList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.sponsor_progress_bar);
+        mEmptyScreenView = findViewById(R.id.sponsors_empty_screen_view);
 
         sponsors = new ArrayList<>();
 
@@ -79,6 +81,7 @@ public class Sponsors extends AppCompatActivity {
         SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
             @Override
             public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
@@ -104,7 +107,11 @@ public class Sponsors extends AppCompatActivity {
             }
 
             @Override
-            public void onComplete() {
+            public void onComplete(ArrayList<Sponsor> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 mProgressBar.setVisibility(View.GONE);
             }
         });
@@ -233,6 +240,7 @@ public class Sponsors extends AppCompatActivity {
 
     private void filterSponsorsByOffering(SearchFilterTypes offerType) {
         mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyScreenView.setVisibility(View.GONE);
         clearSponsors();
 
         ArrayList<Sponsor> sponsors = getSponsorsByOfferType(offerType);
@@ -240,6 +248,10 @@ public class Sponsors extends AppCompatActivity {
 
         for (int i = 0; i < numSponsors; i++) {
             addSponsorCard(sponsors.get(i));
+        }
+
+        if (numSponsors == 0) {
+            mEmptyScreenView.setVisibility(View.VISIBLE);
         }
 
         mProgressBar.setVisibility(View.GONE);
