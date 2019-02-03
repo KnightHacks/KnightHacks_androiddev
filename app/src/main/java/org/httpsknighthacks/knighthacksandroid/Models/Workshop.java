@@ -112,6 +112,9 @@ public class Workshop {
 
     public static boolean isValid(Workshop workshop) {
         return workshop.getNameOptional().isPresent()
+                && workshop.getDescriptionOptional().isPresent()
+                && workshop.getSkillLevelOptional().isPresent()
+                && workshop.getPictureOptional().isPresent()
                 && workshop.getStartTimeOptional().isPresent()
                 && workshop.getEndTimeOptional().isPresent();
     }

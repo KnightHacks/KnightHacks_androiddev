@@ -104,6 +104,7 @@ public class Sponsor {
 
     public static boolean isValid(Sponsor sponsor) {
         return sponsor.getNameOptional().isPresent()
+                && sponsor.getLocationOptional().isPresent()
                 && sponsor.getDescriptionOptional().isPresent()
                 && sponsor.getPictureOptional().isPresent();
     }
