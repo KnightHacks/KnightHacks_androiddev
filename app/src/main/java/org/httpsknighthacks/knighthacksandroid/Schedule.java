@@ -44,6 +44,7 @@ public class Schedule extends AppCompatActivity {
     private SharedFilterSearchComponent_RecyclerViewAdapter searchFilterRecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+    private View emptyScreenView;
 
     private ArrayList<ScheduleEvent> scheduleEvents;
 
@@ -68,6 +69,7 @@ public class Schedule extends AppCompatActivity {
         mSearchFilterTypeList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.schedule_progress_bar);
+        emptyScreenView = findViewById(R.id.schedule_empty_screen_view);
 
         scheduleEvents = new ArrayList<>();
 
@@ -257,6 +259,12 @@ public class Schedule extends AppCompatActivity {
             }
 
             addScheduleEventCard(currEvent);
+        }
+
+        if (numEvents == 0) {
+            emptyScreenView.setVisibility(View.VISIBLE);
+        } else {
+            emptyScreenView.setVisibility(View.GONE);
         }
 
         mProgressBar.setVisibility(View.GONE);
