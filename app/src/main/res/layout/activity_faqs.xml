@@ -6,12 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".FAQs">
 
+    <TextView
+        android:id="@+id/faqs_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/faqs_progress_bar"
+        android:layout_centerVertical="false"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="10dp"
+        android:paddingTop="20dp"
+        android:text="Frequently Asked"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
     <ProgressBar
         android:id="@+id/faqs_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="73dp"
         android:paddingVertical="10dp"
         android:progressTint="@color/colorHomePageCardPurple"
         android:visibility="gone" />
@@ -19,5 +35,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/faqs_vertical_section_card_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/faqs_title"
+        android:background="@android:color/white" />
 </RelativeLayout>
