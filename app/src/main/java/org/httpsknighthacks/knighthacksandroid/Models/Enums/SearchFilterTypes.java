@@ -3,14 +3,19 @@ package org.httpsknighthacks.knighthacksandroid.Models.Enums;
 import java.util.HashMap;
 
 public enum SearchFilterTypes {
-    DEV ("dev"),
-    DESIGN ("design"),
-    TALK ("talk"),
-    WORKSHOP ("workshop"),
-    FULL_TIME ("fulltime"),
-    INTERNSHIP ("internship"),
-    ALL ("all"),
-    OTHER ("other");
+    DEV ("Development"),
+    DESIGN ("Design"),
+    TALK ("Talks"),
+    HARDWARE ("Hardware"),
+    CAREER ("Career"),
+    WORKSHOP ("Workshop"),
+    FULL_TIME ("Full Time"),
+    INTERNSHIP ("Internships"),
+    ALL ("All"),
+    MAIN_EVENTS ("Main Event"),
+    FOOD ("Food"),
+    BEGINNER ("Beginner"),
+    ADVANCED ("Advanced");
 
     private final String searchFilterString;
     private static HashMap<String, SearchFilterTypes> lookupTable = new HashMap<>();
@@ -26,7 +31,7 @@ public enum SearchFilterTypes {
     }
 
     public static SearchFilterTypes getSearchFilterType(String searchFilterString) {
-        return lookupTable.containsKey(searchFilterString) ? lookupTable.get(searchFilterString) : OTHER;
+        return lookupTable.containsKey(searchFilterString) ? lookupTable.get(searchFilterString) : ALL;
     }
 
     public String getSearchFilterString() {

@@ -33,7 +33,7 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<Integer> mFilterSearchImageList;
     private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
 
     private LinearLayoutManager scheduleEventsLinearLayoutManager;
@@ -264,19 +264,19 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
-        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
+        mFilterSearchImageList.add(R.drawable.ic_schedule_food);
+        mSearchFilterTypeList.add(SearchFilterTypes.FOOD);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
-        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
-
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_talk);
         mSearchFilterTypeList.add(SearchFilterTypes.TALK);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_workshop);
         mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
 
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_main_events);
+        mSearchFilterTypeList.add(SearchFilterTypes.MAIN_EVENTS);
+
+        mFilterSearchImageList.add(R.drawable.ic_filter_all);
         mSearchFilterTypeList.add(SearchFilterTypes.ALL);
     }
 }

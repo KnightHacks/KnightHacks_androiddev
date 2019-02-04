@@ -20,14 +20,14 @@ import java.util.ArrayList;
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
-    private ArrayList<String> mImageList = new ArrayList<>();
+    private ArrayList<Integer> mImageList = new ArrayList<>();
     private ArrayList<SearchFilterTypes> mSearchFilterTypes;
     private Context mContext;
     private ViewHolder previousHolder;
     private SearchFilterListener mListener;
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
-                                                           ArrayList<String> mImageList,
+                                                           ArrayList<Integer> mImageList,
                                                            ArrayList<SearchFilterTypes> mSearchFilterTypes,
                                                            SearchFilterListener mListener) {
         this.mContext = mContext;

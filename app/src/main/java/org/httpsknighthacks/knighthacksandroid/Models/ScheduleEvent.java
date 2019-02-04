@@ -29,7 +29,7 @@ public class ScheduleEvent {
             this.mTitle = Optional.empty();
             this.mStartTime = Optional.empty();
             this.mEndTime = Optional.empty();
-            this.mEventType = SearchFilterTypes.OTHER;
+            this.mEventType = SearchFilterTypes.ALL;
         }
     }
 
