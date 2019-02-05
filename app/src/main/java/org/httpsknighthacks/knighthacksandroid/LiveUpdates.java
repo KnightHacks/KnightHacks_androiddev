@@ -66,9 +66,9 @@ public class LiveUpdates extends AppCompatActivity {
                         mCardTitleList.add(currUpdate.getMessageOptional().getValue());
                         mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
                     }
-                }
 
-                mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                    mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
