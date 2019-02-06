@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import org.httpsknighthacks.knighthacksandroid.Models.FAQ;
+
 import java.util.ArrayList;
 
 public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapter<VerticalSectionCard_RecyclerViewAdapter.ViewHolder> {
@@ -52,7 +54,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                     .asBitmap()
                     .load(mCardImageList.get(position))
                     .into(holder.mCardImage);
-        } else {
+        } else if (!tag.equals(FAQs.TAG)) {
             holder.mCardImage.setVisibility(View.GONE);
         }
 
@@ -99,20 +101,25 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
 
             if(this.mTag.equals(FAQs.TAG)) {
                 this.mCardDetails.setVisibility(View.GONE);
+                Glide.with(mContext)
+                        .asDrawable()
+                        .load(R.drawable.ic_faq_plus)
+                        .into(mCardImage);
+
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (mCardDetails.getVisibility() == View.GONE) {
                             mCardDetails.setVisibility(View.VISIBLE);
                             Glide.with(mContext)
-                                    .asBitmap()
-                                    .load(mContext.getResources().getString(R.string.faq_minus_icon))
+                                    .asDrawable()
+                                    .load(R.drawable.ic_faq_minus)
                                     .into(mCardImage);
                         } else {
                             mCardDetails.setVisibility(View.GONE);
                             Glide.with(mContext)
-                                    .asBitmap()
-                                    .load(mContext.getResources().getString(R.string.faq_plus_icon))
+                                    .asDrawable()
+                                    .load(R.drawable.ic_faq_plus)
                                     .into(mCardImage);                        
                         }
                     }
