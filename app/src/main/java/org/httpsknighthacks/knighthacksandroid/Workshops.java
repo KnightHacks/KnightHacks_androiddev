@@ -27,8 +27,7 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSideSubtitleList;
     private ArrayList<String> mCardSubtitleList;
-    private ArrayList<String> mCardFirstTextTagList;
-    private ArrayList<String> mCardSecondTextTagList;
+    private ArrayList<String> mCardTagSubtitleList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
@@ -58,8 +57,7 @@ public class Workshops extends AppCompatActivity {
         mCardTitleList = new ArrayList<>();
         mCardSideSubtitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
-        mCardFirstTextTagList = new ArrayList<>();
-        mCardSecondTextTagList = new ArrayList<>();
+        mCardTagSubtitleList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
@@ -84,7 +82,7 @@ public class Workshops extends AppCompatActivity {
         }
     }
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardFirstTextTagSubtitle, String cardSecondTextTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -103,12 +101,8 @@ public class Workshops extends AppCompatActivity {
             mCardSubtitleList.add(cardSubtitle);
         }
 
-        if (cardFirstTextTagSubtitle != null && !cardFirstTextTagSubtitle.isEmpty()) {
-            mCardFirstTextTagList.add(cardFirstTextTagSubtitle);
-        }
-
-        if (cardSecondTextTagSubtitle != null && !cardSecondTextTagSubtitle.isEmpty()) {
-            mCardSecondTextTagList.add(cardSecondTextTagSubtitle);
+        if (cardTagSubtitle != null && !cardSubtitle.isEmpty()) {
+            mCardTagSubtitleList.add(cardTagSubtitle);
         }
 
         if (cardBody != null && !cardBody.isEmpty()) {
@@ -127,7 +121,6 @@ public class Workshops extends AppCompatActivity {
     private void addWorkshopCard(Workshop workshop) {
         addHorizontalSectionCard(workshop.getPictureOptional().getValue(),
                 workshop.getNameOptional().getValue(),
-                null,
                 null,
                 null,
                 null,
@@ -201,7 +194,7 @@ public class Workshops extends AppCompatActivity {
         horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
+                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
