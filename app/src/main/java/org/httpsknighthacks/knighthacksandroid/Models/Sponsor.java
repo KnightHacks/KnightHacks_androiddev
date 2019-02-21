@@ -86,6 +86,26 @@ public class Sponsor {
         return mPicture;
     }
 
+    public String getOfferings() {
+        String offerings = new String();
+        String internship = getInternship();
+        String fulltime =getFullTime();
+
+        if(internship != null) {
+            offerings = internship;
+
+            if(fulltime != null)
+                offerings += ", " + fulltime;
+        }
+
+        else {
+            if(fulltime != null)
+                offerings = fulltime;
+        }
+
+        return offerings;
+    }
+
     public String getInternship() {
         if (SearchFilterTypes.hasTargetFilter(mOfferings.getValue(), SearchFilterTypes.INTERNSHIP)) {
             return SearchFilterTypes.INTERNSHIP.toString();
