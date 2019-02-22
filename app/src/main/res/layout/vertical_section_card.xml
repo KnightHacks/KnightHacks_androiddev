@@ -27,13 +27,9 @@
                 android:id="@+id/vertical_section_card_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_centerVertical="false"
                 android:adjustViewBounds="true"
-                android:maxWidth="25dp"
-                android:minWidth="25dp"
-                android:scaleType="fitStart" />
+                android:maxWidth="30dp" />
 
             <TextView
                 android:id="@+id/vertical_section_card_title"

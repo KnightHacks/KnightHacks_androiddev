@@ -11,8 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
-
 import org.httpsknighthacks.knighthacksandroid.Models.LiveUpdate;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
@@ -45,15 +43,13 @@ public class LiveUpdates extends AppCompatActivity {
     private long currentTimeInMillis;
 
     private ProgressBar mProgressBar;
-    private ShimmerFrameLayout mShimmerViewContainer;
+    private View mEmptyScreenView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_updates);
-
-        mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-
+      
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
@@ -64,7 +60,7 @@ public class LiveUpdates extends AppCompatActivity {
         mLiveKnightHacks = findViewById(R.id.live_knighthacks);
         mNotLiveKnightHacks = findViewById(R.id.not_live_knighthacks);
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
-        mProgressBar.setVisibility(View.GONE);
+        mEmptyScreenView = findViewById(R.id.live_updates_empty_screen_view);
 
         setupCountDownTimer();
         loadLiveUpdates();
@@ -138,22 +134,12 @@ public class LiveUpdates extends AppCompatActivity {
         LiveUpdatesTask liveUpdatesTask = new LiveUpdatesTask(getApplicationContext(), new ResponseListener<LiveUpdate>() {
             @Override
             public void onStart() {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                    mShimmerViewContainer.startShimmerAnimation();
-
-                else
-                    mProgressBar.setVisibility(View.VISIBLE);
+                mEmptyScreenView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onSuccess(ArrayList<LiveUpdate> response) {
-                mProgressBar.setVisibility(View.GONE);
-
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    mShimmerViewContainer.stopShimmerAnimation();
-                }
-
                 int numUpdates = response.size();
                 for (int i = 0; i < numUpdates; i++) {
                     LiveUpdate currUpdate = response.get(i);
@@ -163,21 +149,23 @@ public class LiveUpdates extends AppCompatActivity {
                         mCardTitleList.add(currUpdate.getMessageOptional().getValue());
                         mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
                     }
-                }
 
-                mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                    mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onFailure() {
-                mProgressBar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
 
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    mShimmerViewContainer.stopShimmerAnimation();
+            @Override
+            public void onComplete(ArrayList<LiveUpdate> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
                 }
 
-                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 

@@ -4,6 +4,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import org.httpsknighthacks.knighthacksandroid.Models.FAQ;
+import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
+import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.FAQsTask;
 
 import java.util.ArrayList;
 
@@ -15,6 +23,13 @@ public class FAQs extends AppCompatActivity {
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
 
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter;
+
+    private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,26 +40,60 @@ public class FAQs extends AppCompatActivity {
         mCardSubtitleList = new ArrayList<>();
         mCardDetailsList = new ArrayList<>();
 
-        getCardComponents();
+        mProgressBar = findViewById(R.id.faqs_progress_bar);
+        mEmptyScreenView = findViewById(R.id.faqs_empty_screen_view);
+
+        loadFAQs();
         loadRecyclerView();
     }
 
-    private void getCardComponents() {
-        int tempNumCards = 5;
+    private void loadFAQs() {
+        FAQsTask faqsTask = new FAQsTask(getApplicationContext(), new ResponseListener<FAQ>() {
+            @Override
+            public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
 
-        for (int i = 0; i < tempNumCards; i++) {
-            mCardImageList.add(getResources().getString(R.string.faq_plus_icon));
-            mCardTitleList.add(getResources().getString(R.string.vertical_card_title_dummy));
-            mCardDetailsList.add(getResources().getString(R.string.vertical_card_details_dummy));
-        }
+            @Override
+            public void onSuccess(ArrayList<FAQ> response) {
+                int numFAQs = response.size();
+                for (int i = 0; i < numFAQs; i++) {
+                    FAQ currFAQ = response.get(i);
+
+                    if (FAQ.isValid(currFAQ)) {
+                        mCardTitleList.add(currFAQ.getQuestionOptional().getValue());
+                        mCardDetailsList.add(currFAQ.getAnswerOptional().getValue());
+                    }
+                }
+
+                horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete(ArrayList<FAQ> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+
+        faqsTask.execute();
     }
 
     private void loadRecyclerView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
+        horizontalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
                         mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);

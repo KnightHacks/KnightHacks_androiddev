@@ -11,22 +11,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+
 import java.util.ArrayList;
 
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
-    private ArrayList<String> mTextList = new ArrayList<>();
-    private ArrayList<String> mImageList = new ArrayList<>();
+    private ArrayList<Integer> mImageList = new ArrayList<>();
+    private ArrayList<SearchFilterTypes> mSearchFilterTypes;
     private Context mContext;
     private ViewHolder previousHolder;
+    private SearchFilterListener mListener;
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
-                                                           ArrayList<String> mTextList,
-                                                           ArrayList<String> mImageList) {
+                                                           ArrayList<Integer> mImageList,
+                                                           ArrayList<SearchFilterTypes> mSearchFilterTypes,
+                                                           SearchFilterListener mListener) {
         this.mContext = mContext;
-        this.mTextList = mTextList;
         this.mImageList = mImageList;
+        this.mSearchFilterTypes = mSearchFilterTypes;
+        this.mListener = mListener;
     }
 
     @NonNull
@@ -38,29 +45,39 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
                 parent, false));
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull final SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void setOnBindViewHolder(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position, View.OnClickListener onClickListener) {
         Glide.with(mContext)
                 .asBitmap()
                 .load(mImageList.get(position))
                 .into(holder.mImageView);
 
-        holder.mTextView.setText(mTextList.get(position));
+        SearchFilterTypes searchFilter = mSearchFilterTypes.get(position);
+
+        holder.mTextView.setText(searchFilter.getSearchFilterString());
+        holder.setEventType(searchFilter);
 
         if(position == (mImageList.size()-1)) {
             holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
             setPreviousHolder(holder);
         }
 
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+        holder.mCardView.setOnClickListener(onClickListener);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, final int position) {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 previousHolder.mImageView.setBackgroundResource(0);
                 holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
 
                 setPreviousHolder(holder);
+                mListener.setSearchFilters(holder, position);
             }
-        });
+        };
+
+        setOnBindViewHolder(holder, position, onClickListener);
     }
 
     @Override
@@ -68,17 +85,22 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         return mImageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mImageView;
         TextView mTextView;
         CardView mCardView;
+        SearchFilterTypes mSearchFilterType;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.shared_filter_search_img_view);
             mTextView = itemView.findViewById(R.id.shared_filter_search_text_view);
             mCardView = itemView.findViewById(R.id.shared_filter_search_parent_card_view_container);
+        }
+
+        public void setEventType(SearchFilterTypes type) {
+            mSearchFilterType = type;
         }
     }
 

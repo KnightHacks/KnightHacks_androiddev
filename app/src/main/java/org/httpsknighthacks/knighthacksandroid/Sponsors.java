@@ -4,8 +4,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
+import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
+import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.SponsorsTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Sponsors extends AppCompatActivity {
 
@@ -19,9 +30,22 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardSecondTextTagList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
-    private ArrayList<String> mFilterSearchTextList;
-    private ArrayList<String> mFilterSearchImageList;
     private ArrayList<String> mCardFooterList;
+
+    private ArrayList<Integer> mFilterSearchImageList;
+    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter;
+    private LinearLayoutManager mFilterSearchLinearLayoutManager;
+    private RecyclerView mFilterSearchRecyclerView;
+    private SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter;
+
+    private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
+
+    private ArrayList<Sponsor> sponsors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +62,61 @@ public class Sponsors extends AppCompatActivity {
         mCardSecondTextTagList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
-        mFilterSearchTextList = new ArrayList<>();
-        mFilterSearchImageList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
 
-        getCardComponents();
+        mFilterSearchImageList = new ArrayList<>();
+        mSearchFilterTypeList = new ArrayList<>();
+
+        mProgressBar = findViewById(R.id.sponsor_progress_bar);
+        mEmptyScreenView = findViewById(R.id.sponsors_empty_screen_view);
+
+        sponsors = new ArrayList<>();
+
+        loadSponsors();
         getFilterSearchComponents();
         loadRecyclerView();
+    }
+
+    private void loadSponsors() {
+        SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
+            @Override
+            public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onSuccess(ArrayList<Sponsor> response) {
+                int numSponsors = response.size();
+
+                for (int i = 0; i < numSponsors; i++) {
+                    Sponsor currSponsor = response.get(i);
+
+                    if (Sponsor.isValid(currSponsor)) {
+                        addSponsorCard(currSponsor);
+                        sponsors.add(currSponsor);
+                    }
+                }
+
+                horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete(ArrayList<Sponsor> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+
+        sponsorsTask.execute();
     }
 
     private void addSubSectionTitle(String title) {
@@ -96,69 +168,105 @@ public class Sponsors extends AppCompatActivity {
         }
     }
 
-    private void getCardComponents() {
-        int tempNumCards = 10;
+    private void addSponsorCard(Sponsor sponsor) {
+        addHorizontalSectionCard(sponsor.getPictureOptional().getValue(),
+                sponsor.getNameOptional().getValue(),
+                sponsor.getLocationOptional().getValue(),
+                null,
+                sponsor.getInternship(),
+                sponsor.getFullTime(),
+                sponsor.getDescriptionOptional().getValue(),
+                null,
+                null);
+    }
 
-        for (int i = 0; i < tempNumCards; i++) {
-            if (i == 0 || i == tempNumCards / 2) {
-                addSubSectionTitle(getResources().getString(R.string.horizontal_card_sub_section_title));
-            } else {
-                addHorizontalSectionCard(getResources().getString(R.string.horizontal_card_image_dummy),
-                        getResources().getString(R.string.horizontal_card_title_dummy),
-                        getResources().getString(R.string.horizontal_card_side_subtitle_dummy),
-                        null,
-                        getResources().getString(R.string.horizontal_card_first_text_tag_subtitle),
-                        getResources().getString(R.string.horizontal_card_second_text_tag_subtitle),
-                        getResources().getString(R.string.horizontal_card_body_dummy),
-                        null,
-                        null);
-            }
-        }
+    private void clearSponsors() {
+        mViewTypeList.clear();
+        mCardImageList.clear();
+        mCardTitleList.clear();
+        mCardSideSubtitleList.clear();
+        mCardFirstTextTagList.clear();
+        mCardSecondTextTagList.clear();
+        mCardBodyList.clear();
+        horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void loadRecyclerView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = findViewById(R.id.sponsors_horizontal_section_card_container);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView = findViewById(R.id.sponsors_horizontal_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
+        horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList mCardFooterList);
+                        mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
-        LinearLayoutManager mFilterSearchLinearLayoutManager =
+        mFilterSearchLinearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mFilterSearchLinearLayoutManager.setStackFromEnd(true);
-        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
+        mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
         mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
 
-        SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList);
+        sharedFilterSearchComponent_RecyclerViewAdapter =
+                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
+                    @Override
+                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+                        filterSponsorsByOffering(holder.mSearchFilterType);
+                    }
+                });
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
+    private ArrayList<Sponsor> getSponsorsByOfferType(SearchFilterTypes type) {
+        if (type.equals(SearchFilterTypes.ALL)) {
+            return sponsors;
+        }
+
+        ArrayList<Sponsor> sponsors = new ArrayList<>();
+        int numSponsors = this.sponsors.size();
+
+        for (int i = 0; i < numSponsors; i++) {
+            Sponsor sponsor = this.sponsors.get(i);
+
+            if (Arrays.asList(sponsor.getOfferingsOptional().getValue()).contains(type)) {
+                sponsors.add(sponsor);
+            }
+        }
+
+        return sponsors;
+    }
+
+    private void filterSponsorsByOffering(SearchFilterTypes offerType) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyScreenView.setVisibility(View.GONE);
+        clearSponsors();
+
+        ArrayList<Sponsor> sponsors = getSponsorsByOfferType(offerType);
+        int numSponsors = sponsors.size();
+
+        for (int i = 0; i < numSponsors; i++) {
+            addSponsorCard(sponsors.get(i));
+        }
+
+        if (numSponsors == 0) {
+            mEmptyScreenView.setVisibility(View.VISIBLE);
+        }
+
+        mProgressBar.setVisibility(View.GONE);
+        horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
     private void getFilterSearchComponents() {
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
+        mFilterSearchImageList.add(R.drawable.ic_sponsors_full_time);
+        mSearchFilterTypeList.add(SearchFilterTypes.FULL_TIME);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
+        mFilterSearchImageList.add(R.drawable.ic_sponsors_internships);
+        mSearchFilterTypeList.add(SearchFilterTypes.INTERNSHIP);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+        mFilterSearchImageList.add(R.drawable.ic_filter_all);
+        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
     }
 }

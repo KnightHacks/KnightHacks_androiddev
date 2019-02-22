@@ -4,6 +4,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Optional;
+import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
+import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
+import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
+import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.ScheduleEventsTask;
 
 import java.util.ArrayList;
 
@@ -19,9 +31,22 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardSecondTextTagList;
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
-    private ArrayList<String> mFilterSearchTextList;
-    private ArrayList<String> mFilterSearchImageList;
     private ArrayList<String> mCardFooterList;
+
+    private ArrayList<Integer> mFilterSearchImageList;
+    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+
+    private LinearLayoutManager scheduleEventsLinearLayoutManager;
+    private RecyclerView scheduleEventsRecyclerView;
+    private HorizontalSectionCard_RecyclerViewAdapter scheduleEventsRecyclerViewAdapter;
+    private LinearLayoutManager searchFilterLinearLayoutManager;
+    private RecyclerView searchFilterRecyclerView;
+    private SharedFilterSearchComponent_RecyclerViewAdapter searchFilterRecyclerViewAdapter;
+
+    private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
+
+    private ArrayList<ScheduleEvent> scheduleEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +63,17 @@ public class Schedule extends AppCompatActivity {
         mCardSecondTextTagList = new ArrayList<>();
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
-        mFilterSearchTextList = new ArrayList<>();
-        mFilterSearchImageList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
 
-        getCardComponents();
+        mFilterSearchImageList = new ArrayList<>();
+        mSearchFilterTypeList = new ArrayList<>();
+
+        mProgressBar = findViewById(R.id.schedule_progress_bar);
+        mEmptyScreenView = findViewById(R.id.schedule_empty_screen_view);
+
+        scheduleEvents = new ArrayList<>();
+
+        loadSchedule();
         getFilterSearchComponents();
         loadRecyclerView();
     }
@@ -94,70 +125,170 @@ public class Schedule extends AppCompatActivity {
         }
     }
 
-    private void getCardComponents() {
-        int tempNumCards = 10;
+    private void addScheduleEventCard(ScheduleEvent event) {
+        addHorizontalSectionCard(null,
+                event.getTitleOptional().getValue(),
+                null,
+                event.getLocationOptional().getValue(),
+                null,
+                null,
+                null,
+                DateTimeUtils.getTime(event.getStartTimeOptional().getValue()),
+                null);
+    }
 
-        for (int i = 0; i < tempNumCards; i++) {
-            if (i == 0 || i == tempNumCards / 2) {
-                addSubSectionTitle(getResources().getString(R.string.horizontal_card_sub_section_title));
-            } else {
-                addHorizontalSectionCard(null,
-                        getResources().getString(R.string.horizontal_card_title_dummy),
-                        null,
-                        getResources().getString(R.string.horizontal_card_subtitle_dummy),
-                        null,
-                        null,
-                        null,
-                        getResources().getString(R.string.horizontal_card_timestamp_dummy),
-                        null);
+    private void loadSchedule() {
+        ScheduleEventsTask scheduleEventsTask = new ScheduleEventsTask(getApplicationContext(), new ResponseListener<ScheduleEvent>() {
+            @Override
+            public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
             }
-        }
+
+            @Override
+            public void onSuccess(ArrayList<ScheduleEvent> response) {
+                Optional<String> lastStartTime = Optional.empty();
+                int numEvents = response.size();
+
+                for (int i = 0; i < numEvents; i++) {
+                    ScheduleEvent currEvent = response.get(i);
+
+                    if (ScheduleEvent.isValid(currEvent)) {
+
+                        Optional<String> currStartTime = currEvent.getStartTimeOptional();
+
+                        if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+                            lastStartTime = currStartTime;
+                        }
+
+                        addScheduleEventCard(currEvent);
+                        scheduleEvents.add(currEvent);
+                    }
+                }
+
+                scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete(ArrayList<ScheduleEvent> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
+                mProgressBar.setVisibility(View.GONE);
+            }
+        });
+
+        scheduleEventsTask.execute();
+    }
+
+    private void clearScheduleEvents() {
+        mViewTypeList.clear();
+        mSubSectionTitleList.clear();
+        mCardTitleList.clear();
+        mCardSubtitleList.clear();
+        mCardSideSubtitleList.clear();
+        mCardTimestampList.clear();
+        scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void loadRecyclerView() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = findViewById(R.id.schedule_horizontal_section_card_container);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        scheduleEventsLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        scheduleEventsRecyclerView = findViewById(R.id.schedule_horizontal_section_card_container);
+        scheduleEventsRecyclerView.setLayoutManager(scheduleEventsLinearLayoutManager);
 
-        HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter =
+        scheduleEventsRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
                         mCardSubtitleList, mCardFirstTextTagList, mCardSecondTextTagList, mCardBodyList, mCardTimestampList, mCardFooterList);
       
-        recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
+        scheduleEventsRecyclerView.setAdapter(scheduleEventsRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
-        LinearLayoutManager mFilterSearchLinearLayoutManager =
+        searchFilterLinearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mFilterSearchLinearLayoutManager.setStackFromEnd(true);
-        RecyclerView mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
-        mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
+        searchFilterLinearLayoutManager.setStackFromEnd(true);
+        searchFilterRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
+        searchFilterRecyclerView.setLayoutManager(searchFilterLinearLayoutManager);
 
-        SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchTextList, mFilterSearchImageList);
-        mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
+        searchFilterRecyclerViewAdapter  =
+                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
+                    @Override
+                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+                        filterScheduleEventsByType(holder.mSearchFilterType);
+                    }
+                });
+        searchFilterRecyclerView.setAdapter(searchFilterRecyclerViewAdapter);
+    }
+
+    private ArrayList<ScheduleEvent> getScheduleEventsByType(SearchFilterTypes type) {
+        if (type.equals(SearchFilterTypes.ALL)) {
+            return scheduleEvents;
+        }
+
+        ArrayList<ScheduleEvent> events = new ArrayList<>();
+        int numEvents = scheduleEvents.size();
+
+        for (int i = 0; i < numEvents; i++) {
+            ScheduleEvent event = scheduleEvents.get(i);
+
+            if (event.getEventType().equals(type)) {
+                events.add(event);
+            }
+        }
+
+        return events;
+    }
+
+    private void filterScheduleEventsByType(SearchFilterTypes eventType) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyScreenView.setVisibility(View.GONE);
+        clearScheduleEvents();
+
+        Optional<String> lastStartTime = Optional.empty();
+        ArrayList<ScheduleEvent> events = getScheduleEventsByType(eventType);
+        int numEvents = events.size();
+
+        for (int i = 0; i < numEvents; i++) {
+            ScheduleEvent currEvent = events.get(i);
+            Optional<String> currStartTime = currEvent.getStartTimeOptional();
+
+            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
+                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+                lastStartTime = currStartTime;
+            }
+
+            addScheduleEventCard(currEvent);
+        }
+
+        if (numEvents == 0) {
+            mEmptyScreenView.setVisibility(View.VISIBLE);
+        }
+
+        mProgressBar.setVisibility(View.GONE);
+        scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_full_time));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_full_time));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_food);
+        mSearchFilterTypeList.add(SearchFilterTypes.FOOD);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_internship));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_internships));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_talk);
+        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_dev));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_development));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_workshop);
+        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_design));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_design));
+        mFilterSearchImageList.add(R.drawable.ic_schedule_main_events);
+        mSearchFilterTypeList.add(SearchFilterTypes.MAIN_EVENTS);
 
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_talks));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_talks));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_workshops));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_workshops));
-
-        mFilterSearchTextList.add(getResources().getString(R.string.search_filter_all));
-        mFilterSearchImageList.add(getResources().getString(R.string.shared_filter_search_component_all));
+        mFilterSearchImageList.add(R.drawable.ic_filter_all);
+        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
     }
 }
