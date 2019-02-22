@@ -87,23 +87,22 @@ public class Sponsor {
     }
 
     public String getOfferings() {
-        String offerings = new String();
+        String fulltime = getFullTime();
         String internship = getInternship();
-        String fulltime =getFullTime();
 
-        if(internship != null) {
-            offerings = internship;
-
-            if(fulltime != null)
-                offerings += ", " + fulltime;
+        if (fulltime == null && internship == null) {
+            return null;
         }
 
-        else {
-            if(fulltime != null)
-                offerings = fulltime;
+        if (fulltime == null) {
+            return internship;
         }
 
-        return offerings;
+        if (internship == null) {
+            return fulltime;
+        }
+
+        return internship + ", " + fulltime;
     }
 
     public String getInternship() {
