@@ -21,6 +21,6 @@
         android:layout_below="@+id/empty_screen_rover"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Looks like a no man's land here."
+        android:text="Cannot find any signs of life."
         android:textColor="@color/colorPrimaryDark" />
 </RelativeLayout>
