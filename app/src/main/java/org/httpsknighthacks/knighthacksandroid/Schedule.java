@@ -44,6 +44,7 @@ public class Schedule extends AppCompatActivity {
     private SharedFilterSearchComponent_RecyclerViewAdapter searchFilterRecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
 
     private ArrayList<ScheduleEvent> scheduleEvents;
 
@@ -68,6 +69,7 @@ public class Schedule extends AppCompatActivity {
         mSearchFilterTypeList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.schedule_progress_bar);
+        mEmptyScreenView = findViewById(R.id.schedule_empty_screen_view);
 
         scheduleEvents = new ArrayList<>();
 
@@ -139,6 +141,7 @@ public class Schedule extends AppCompatActivity {
         ScheduleEventsTask scheduleEventsTask = new ScheduleEventsTask(getApplicationContext(), new ResponseListener<ScheduleEvent>() {
             @Override
             public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
@@ -173,7 +176,11 @@ public class Schedule extends AppCompatActivity {
             }
 
             @Override
-            public void onComplete() {
+            public void onComplete(ArrayList<ScheduleEvent> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 mProgressBar.setVisibility(View.GONE);
             }
         });
@@ -241,6 +248,7 @@ public class Schedule extends AppCompatActivity {
 
     private void filterScheduleEventsByType(SearchFilterTypes eventType) {
         mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyScreenView.setVisibility(View.GONE);
         clearScheduleEvents();
 
         Optional<String> lastStartTime = Optional.empty();
@@ -257,6 +265,10 @@ public class Schedule extends AppCompatActivity {
             }
 
             addScheduleEventCard(currEvent);
+        }
+
+        if (numEvents == 0) {
+            mEmptyScreenView.setVisibility(View.VISIBLE);
         }
 
         mProgressBar.setVisibility(View.GONE);

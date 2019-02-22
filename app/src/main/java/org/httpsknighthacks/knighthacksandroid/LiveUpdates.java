@@ -28,6 +28,7 @@ public class LiveUpdates extends AppCompatActivity {
     private VerticalSectionCard_RecyclerViewAdapter mHorizontalSectionCardRecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class LiveUpdates extends AppCompatActivity {
         mCardDetailsList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
+        mEmptyScreenView = findViewById(R.id.live_updates_empty_screen_view);
 
         loadLiveUpdates();
         loadRecyclerView();
@@ -49,6 +51,7 @@ public class LiveUpdates extends AppCompatActivity {
         LiveUpdatesTask liveUpdatesTask = new LiveUpdatesTask(getApplicationContext(), new ResponseListener<LiveUpdate>() {
             @Override
             public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
@@ -63,9 +66,9 @@ public class LiveUpdates extends AppCompatActivity {
                         mCardTitleList.add(currUpdate.getMessageOptional().getValue());
                         mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
                     }
-                }
 
-                mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                    mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -74,7 +77,11 @@ public class LiveUpdates extends AppCompatActivity {
             }
 
             @Override
-            public void onComplete() {
+            public void onComplete(ArrayList<LiveUpdate> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 mProgressBar.setVisibility(View.GONE);
             }
         });

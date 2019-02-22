@@ -57,13 +57,11 @@ public class WorkshopsTask extends AsyncTask<Void, Void, ArrayList<Workshop>> {
                 }
 
                 mResponseListener.onSuccess(mWorkshops);
-                mResponseListener.onComplete();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mResponseListener.onFailure();
-                mResponseListener.onComplete();
             }
         });
 
@@ -74,7 +72,7 @@ public class WorkshopsTask extends AsyncTask<Void, Void, ArrayList<Workshop>> {
 
     @Override
     protected void onPostExecute(ArrayList<Workshop> workshops) {
-        mResponseListener.onComplete();
+        mResponseListener.onComplete(workshops);
     }
 
     public Context getContext() {

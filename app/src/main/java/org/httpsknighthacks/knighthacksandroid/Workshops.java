@@ -44,6 +44,7 @@ public class Workshops extends AppCompatActivity {
     private SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
 
     private ArrayList<Workshop> workshops;
 
@@ -68,6 +69,7 @@ public class Workshops extends AppCompatActivity {
         mSearchFilterTypeList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.workshops_progress_bar);
+        mEmptyScreenView = findViewById(R.id.workshops_empty_screen_view);
 
         workshops = new ArrayList<>();
 
@@ -140,6 +142,7 @@ public class Workshops extends AppCompatActivity {
         WorkshopsTask workshopsTask = new WorkshopsTask(getApplicationContext(), new ResponseListener<Workshop>() {
             @Override
             public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
@@ -174,7 +177,11 @@ public class Workshops extends AppCompatActivity {
             }
 
             @Override
-            public void onComplete() {
+            public void onComplete(ArrayList<Workshop> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 mProgressBar.setVisibility(View.GONE);
             }
         });
@@ -242,6 +249,7 @@ public class Workshops extends AppCompatActivity {
 
     private void filterScheduleEventsByType(SearchFilterTypes workshopType) {
         mProgressBar.setVisibility(View.VISIBLE);
+        mEmptyScreenView.setVisibility(View.GONE);
         clearWorkshops();
 
         Optional<String> lastStartTime = Optional.empty();
@@ -260,7 +268,12 @@ public class Workshops extends AppCompatActivity {
             addWorkshopCard(currWorkshop);
         }
 
+        if (numWorkshops == 0) {
+            mEmptyScreenView.setVisibility(View.VISIBLE);
+        }
+
         mProgressBar.setVisibility(View.GONE);
+        horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void getFilterSearchComponents() {

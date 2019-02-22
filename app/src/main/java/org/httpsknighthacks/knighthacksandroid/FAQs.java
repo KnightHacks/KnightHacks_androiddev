@@ -28,6 +28,7 @@ public class FAQs extends AppCompatActivity {
     private VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
+    private View mEmptyScreenView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,10 @@ public class FAQs extends AppCompatActivity {
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
-        mProgressBar = findViewById(R.id.faqs_progress_bar);
         mCardDetailsList = new ArrayList<>();
+
+        mProgressBar = findViewById(R.id.faqs_progress_bar);
+        mEmptyScreenView = findViewById(R.id.faqs_empty_screen_view);
 
         loadFAQs();
         loadRecyclerView();
@@ -48,6 +51,7 @@ public class FAQs extends AppCompatActivity {
         FAQsTask faqsTask = new FAQsTask(getApplicationContext(), new ResponseListener<FAQ>() {
             @Override
             public void onStart() {
+                mEmptyScreenView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
@@ -72,7 +76,11 @@ public class FAQs extends AppCompatActivity {
             }
 
             @Override
-            public void onComplete() {
+            public void onComplete(ArrayList<FAQ> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 mProgressBar.setVisibility(View.GONE);
             }
         });
