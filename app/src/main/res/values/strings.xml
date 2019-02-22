@@ -14,9 +14,6 @@
     <string name="vertical_card_title_dummy">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
     <string name="vertical_card_subtitle_dummy">Quisque a egestas orci.</string>
     <string name="vertical_card_details_dummy">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-
-    <string name="faq_plus_icon">https://user-images.githubusercontent.com/38079769/47611865-a8d59100-da44-11e8-81b3-aeb2d494bdae.png</string>
-    <string name="faq_minus_icon">https://user-images.githubusercontent.com/38079769/47611859-72981180-da44-11e8-84d3-b0a551c4e849.png</string>
   
     <string name="horizontal_card_image_dummy">https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/challenge_photos/000/542/472/datas/full_width.png</string>
     <string name="horizontal_card_title_dummy">Title</string>
@@ -36,21 +33,5 @@
     <string name="home_screen_faqs_card_img">https://user-images.githubusercontent.com/32247767/45531067-df13c580-b7a2-11e8-8f8d-6858e98c8a63.png</string>
     <string name="home_screen_workshops_card_img">https://user-images.githubusercontent.com/32247767/45531089-e044f280-b7a2-11e8-8bf4-4c7684b185a9.png</string>
     <string name="home_screen_sponsors_card_img">https://user-images.githubusercontent.com/32247767/45531083-dfac5c00-b7a2-11e8-8413-b969cbcf94b3.png</string>
-
-    <string name="shared_filter_search_component_all">https://user-images.githubusercontent.com/32247767/45531058-de7b2f00-b7a2-11e8-8876-1881c18d5115.png</string>
-    <string name="shared_filter_search_component_workshops">https://user-images.githubusercontent.com/32247767/45531092-e044f280-b7a2-11e8-9ee9-bd56f1349a1f.png</string>
-    <string name="shared_filter_search_component_talks">https://user-images.githubusercontent.com/32247767/45531086-dfac5c00-b7a2-11e8-8b3c-41a54472230e.png</string>
-    <string name="shared_filter_search_component_development">https://user-images.githubusercontent.com/32247767/45531064-de7b2f00-b7a2-11e8-92f7-8489fbbf5c5f.png</string>
-    <string name="shared_filter_search_component_design">https://user-images.githubusercontent.com/32247767/45531061-de7b2f00-b7a2-11e8-933d-5530ac1c3569.png</string>
-    <string name="shared_filter_search_component_internships">https://user-images.githubusercontent.com/32247767/45531073-df13c580-b7a2-11e8-8547-8739c03e41ab.png</string>
-    <string name="shared_filter_search_component_full_time">https://user-images.githubusercontent.com/32247767/45531070-df13c580-b7a2-11e8-9f87-3996b17a3102.png</string>
-
-    <string name="search_filter_all">All</string>
-    <string name="search_filter_workshops">Workshops</string>
-    <string name="search_filter_talks">Talks</string>
-    <string name="search_filter_design">Design</string>
-    <string name="search_filter_dev">Dev</string>
-    <string name="search_filter_internship">Internship</string>
-    <string name="search_filter_full_time">Full time</string>
 
 </resources>
