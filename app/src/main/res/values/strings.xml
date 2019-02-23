@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KnightHacksAndroid</string>
+    <string name="app_name">Knight Hacks</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="schedule_card_title">Schedule</string>

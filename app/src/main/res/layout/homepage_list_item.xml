@@ -42,13 +42,12 @@
 
             <ImageView
                 android:id="@+id/homepage_list_item_img"
-                android:layout_width="120dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:padding ="15dp"
-                />
+                android:padding="15dp" />
 
         </RelativeLayout>
 
