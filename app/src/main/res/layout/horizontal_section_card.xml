@@ -83,7 +83,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/horizontal_card_first_text_tag_subtitle"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/holo_blue_light" />
 
             </GridLayout>
 
