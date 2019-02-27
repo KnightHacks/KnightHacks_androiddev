@@ -2,7 +2,7 @@ package org.httpsknighthacks.knighthacksandroid;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -21,7 +20,7 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
     // Properties:
     private ArrayList<String> mTextList = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
+    private ArrayList<Drawable> mImages = new ArrayList<>();
     private ArrayList<Integer> mBgColors = new ArrayList<>();
     private ArrayList<Class> activityList = new ArrayList<>();
 
@@ -29,12 +28,12 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
     public Homepage_RecyclerViewAdapter(Context mContext,
                                         ArrayList<String> mTexts,
-                                        ArrayList<String> mImageUrls,
+                                        ArrayList<Drawable> mImages,
                                         ArrayList<Integer> mBgColors,
                                         ArrayList<Class> activityList
                                         ) {
         this.mTextList = mTexts;
-        this.mImageUrls = mImageUrls;
+        this.mImages = mImages;
         this.mBgColors = mBgColors;
         this.mContext = mContext;
         this.activityList = activityList;
@@ -53,8 +52,8 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
         activityList.add(Schedule.class);
 
         Glide.with(mContext)
-                .asBitmap()
-                .load(mImageUrls.get(position))
+                .asDrawable()
+                .load(mImages.get(position))
                 .into(holder.mImageView);
 
         holder.mCardView.setCardBackgroundColor((mBgColors.get(position)));
@@ -71,7 +70,7 @@ public class Homepage_RecyclerViewAdapter extends RecyclerView.Adapter<Homepage_
 
     @Override
     public int getItemCount() {
-        return mImageUrls.size();
+        return mImages.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
