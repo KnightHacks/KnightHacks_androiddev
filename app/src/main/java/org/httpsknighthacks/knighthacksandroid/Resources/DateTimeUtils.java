@@ -8,10 +8,12 @@ import java.util.Locale;
 public class DateTimeUtils {
 
     public static final String DEFAULT_DATE_TIME_STRING_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String YEAR_MONTH_DAY_PATTERN = "yyyyMMdd";
     public static final String TIME_STRING_PATTERN = "hh:mma";
     public static final String DATE_WEEKDAY_PATTERN = "EEEE";
 
     public static final SimpleDateFormat DEFAULT_DATE_TIME_FORMAT = new SimpleDateFormat(DEFAULT_DATE_TIME_STRING_PATTERN, Locale.ENGLISH);
+    public static final SimpleDateFormat YEAR_MONTH_DAY_FORMAT = new SimpleDateFormat(YEAR_MONTH_DAY_PATTERN, Locale.ENGLISH);
     public static final SimpleDateFormat TIME_STRING_FORMAT = new SimpleDateFormat(TIME_STRING_PATTERN, Locale.ENGLISH);
     public static final SimpleDateFormat DATE_WEEKDAY_FORMAT = new SimpleDateFormat(DATE_WEEKDAY_PATTERN, Locale.ENGLISH);
 
@@ -65,10 +67,9 @@ public class DateTimeUtils {
         try {
             Date firstDate = DEFAULT_DATE_TIME_FORMAT.parse(first);
             Date secondDate = DEFAULT_DATE_TIME_FORMAT.parse(second);
-            long differenceInSeconds = Math.abs(secondDate.getTime() - firstDate.getTime()) / 1000;
 
-            return getDaysFromSeconds(differenceInSeconds) > 0;
-        } catch (ParseException ex) {
+            return !YEAR_MONTH_DAY_FORMAT.format(firstDate).equals(YEAR_MONTH_DAY_FORMAT.format(secondDate));
+        } catch (Exception ex) {
             return true;
         }
     }
