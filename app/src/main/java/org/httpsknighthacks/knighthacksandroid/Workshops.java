@@ -128,7 +128,7 @@ public class Workshops extends AppCompatActivity {
                 null,
                 workshop.getDescriptionOptional().getValue(),
                 DateTimeUtils.getTime(workshop.getStartTimeOptional().getValue()),
-                workshop.getSkillLevelOptional().getValue());
+                workshop.getSkillLevelOptional().getValue().toString());
     }
 
     private void loadWorkshops() {
@@ -227,12 +227,12 @@ public class Workshops extends AppCompatActivity {
         }
 
         ArrayList<Workshop> workshops = new ArrayList<>();
-        int numWorkshops = workshops.size();
+        int numWorkshops = this.workshops.size();
 
         for (int i = 0; i < numWorkshops; i++) {
-            Workshop workshop = workshops.get(i);
+            Workshop workshop = this.workshops.get(i);
 
-            if (workshop.getWorkshopType().equals(type)) {
+            if (workshop.getWorkshopType().equals(type) || workshop.getSkillLevelOptional().getValue().equals(type)) {
                 workshops.add(workshop);
             }
         }
