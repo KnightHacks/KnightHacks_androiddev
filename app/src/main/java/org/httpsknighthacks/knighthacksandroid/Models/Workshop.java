@@ -9,7 +9,7 @@ public class Workshop {
 
     private Optional<String> mName;
     private Optional<String> mDescription;
-    private Optional<String> mSkillLevel;
+    private Optional<SearchFilterTypes> mSkillLevel;
     private Optional<String> mPicture;
     private SearchFilterTypes mWorkshopType;
     private Optional<String> mPrerequisites;
@@ -55,7 +55,7 @@ public class Workshop {
     }
 
     public void withSkillLevel(String skillLevel) {
-        this.mSkillLevel = Optional.of(skillLevel);
+        this.mSkillLevel = Optional.of(SearchFilterTypes.getSearchFilterType(skillLevel));
     }
 
     public void withPicture(String picture) {
@@ -86,7 +86,7 @@ public class Workshop {
         return mDescription;
     }
 
-    public Optional<String> getSkillLevelOptional() {
+    public Optional<SearchFilterTypes> getSkillLevelOptional() {
         return mSkillLevel;
     }
 

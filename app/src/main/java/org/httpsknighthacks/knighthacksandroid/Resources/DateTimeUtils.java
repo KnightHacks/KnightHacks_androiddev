@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class DateTimeUtils {
 
@@ -20,6 +21,13 @@ public class DateTimeUtils {
     public static final String DAYS_AGO = "days ago";
     public static final String MINUTES_AGO = "mins ago";
     public static final String SECONDS_AGO = "secs ago";
+
+    static {
+        DEFAULT_DATE_TIME_FORMAT.setTimeZone(TimeZone.getDefault());
+        YEAR_MONTH_DAY_FORMAT.setTimeZone(TimeZone.getDefault());
+        TIME_STRING_FORMAT.setTimeZone(TimeZone.getDefault());
+        DATE_WEEKDAY_FORMAT.setTimeZone(TimeZone.getDefault());
+    }
 
     public static String getWeekDayString(String dateTime) {
         try {
