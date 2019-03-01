@@ -8,7 +8,7 @@ import java.util.TimeZone;
 
 public class DateTimeUtils {
 
-    public static final String DEFAULT_DATE_TIME_STRING_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String DEFAULT_DATE_TIME_STRING_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static final String YEAR_MONTH_DAY_PATTERN = "yyyyMMdd";
     public static final String TIME_STRING_PATTERN = "hh:mma";
     public static final String DATE_WEEKDAY_PATTERN = "EEEE";
@@ -21,13 +21,6 @@ public class DateTimeUtils {
     public static final String DAYS_AGO = "days ago";
     public static final String MINUTES_AGO = "mins ago";
     public static final String SECONDS_AGO = "secs ago";
-
-    static {
-        DEFAULT_DATE_TIME_FORMAT.setTimeZone(TimeZone.getDefault());
-        YEAR_MONTH_DAY_FORMAT.setTimeZone(TimeZone.getDefault());
-        TIME_STRING_FORMAT.setTimeZone(TimeZone.getDefault());
-        DATE_WEEKDAY_FORMAT.setTimeZone(TimeZone.getDefault());
-    }
 
     public static String getWeekDayString(String dateTime) {
         try {
