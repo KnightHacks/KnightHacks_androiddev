@@ -5,7 +5,7 @@ import java.util.HashMap;
 public enum SearchFilterTypes {
     DEV ("Development"),
     DESIGN ("Design"),
-    TALK ("Talks"),
+    TALK ("Talk"),
     HARDWARE ("Hardware"),
     CAREER ("Career"),
     WORKSHOP ("Workshop"),
