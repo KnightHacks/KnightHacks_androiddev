@@ -72,7 +72,7 @@ public class LiveUpdates extends AppCompatActivity {
         startDay.setTime(new Date(0));
         startDay.set(Calendar.AM_PM, 1);
         startDay.set(Calendar.HOUR_OF_DAY, 23);
-        startDay.set(Calendar.DAY_OF_MONTH, 3);
+        startDay.set(Calendar.DAY_OF_MONTH, 1);
         startDay.set(Calendar.MONTH, 2);
         startDay.set(Calendar.YEAR, 2019);
 
@@ -80,7 +80,7 @@ public class LiveUpdates extends AppCompatActivity {
         endDay.setTime(new Date(0));
         endDay.set(Calendar.AM_PM, 0);
         endDay.set(Calendar.HOUR_OF_DAY, 11);
-        endDay.set(Calendar.DAY_OF_MONTH, 1);
+        endDay.set(Calendar.DAY_OF_MONTH, 3);
         endDay.set(Calendar.MONTH, 2);
         endDay.set(Calendar.YEAR, 2019);
 
