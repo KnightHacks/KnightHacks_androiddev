@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Start of firebase notification code.
+
+        // This makes sure notifications are also received in the foreground.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel =
                     new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
@@ -67,31 +71,29 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
+        subscribeToTopic();
+
+        // End of firebase code.
+
         setContentView(R.layout.activity_main);
 
         mRequestQueueSingleton = new RequestQueueSingleton(getApplicationContext());
         getImageAndTitles();
+    }
 
-        // Shows the Token to the screen
-
-        /*FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+    private void subscribeToTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic("general")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Successful: Subscribed to General";
                         if (!task.isSuccessful()) {
-                            Log.w("MainActivity", "getInstanceId failed", task.getException());
-                            return;
+                            msg = "Failed";
                         }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("MainActivity", msg);
+                        Log.d("Subscription to general", msg);
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
     }
 
     // Get images and titles from the database

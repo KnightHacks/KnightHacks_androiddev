@@ -1,7 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.app.Notification;
-import android.os.Debug;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -24,15 +23,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-
-        /*if(remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }*/
 
         super.onMessageReceived(remoteMessage);
 
