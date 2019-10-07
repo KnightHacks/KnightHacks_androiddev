@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     public RequestQueueSingleton mRequestQueueSingleton;
 
+    private String topic = "ANNOUNCEMENTS";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
-        subscribeToTopic();
+        subscribeToTopic(topic);
 
         // End of firebase code.
 
@@ -81,16 +83,16 @@ public class MainActivity extends AppCompatActivity {
         getImageAndTitles();
     }
 
-    private void subscribeToTopic() {
-        FirebaseMessaging.getInstance().subscribeToTopic("general")
+    private void subscribeToTopic(final String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Successful: Subscribed to General";
+                        String msg = "Successful: Subscribed to " + topic;
                         if (!task.isSuccessful()) {
                             msg = "Failed";
                         }
-                        Log.d("Subscription to general", msg);
+                        Log.d("Subscription to " + topic, msg);
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
