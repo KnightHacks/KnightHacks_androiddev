@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="ExtraText,GoogleAppIndexingWarning">
 
         <activity
             android:name=".SplashScreenActivity"
@@ -38,6 +38,8 @@
         <activity android:name=".Workshops" />
         <activity android:name=".Sponsors" />
 
+        // START of firebase
+
         <service
             android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -52,13 +54,12 @@
             </intent-filter>
         </service>
 
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        // TODO(developer): Decide what icon we want here.
         <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:name="com.google.firebase.messaging.default_noti README(https://goo.gl/l4GJaQ) for more. -->fication_icon"
             android:resource="@drawable/rocket_no_flames" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+
+        // TODO(developer): Decide what color we want here.
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
@@ -73,6 +74,8 @@
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
+
+        // END of firebase
     </application>
 
 </manifest>
