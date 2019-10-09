@@ -1,9 +1,11 @@
 package org.httpsknighthacks.knighthacksandroid;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -51,7 +53,6 @@ public class Workshops extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshops);
-
         mViewTypeList = new ArrayList<>();
         mSubSectionTitleList = new ArrayList<>();
         mCardImageList = new ArrayList<>();
@@ -121,14 +122,14 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void addWorkshopCard(Workshop workshop) {
-        addHorizontalSectionCard(workshop.getPictureOptional().getValue(),
-                workshop.getNameOptional().getValue(),
+        addHorizontalSectionCard(workshop.getPicture(),
+                workshop.getName(),
                 null,
                 null,
                 null,
-                workshop.getDescriptionOptional().getValue(),
-                DateTimeUtils.getTime(workshop.getStartTimeOptional().getValue()),
-                workshop.getSkillLevelOptional().getValue().toString());
+                workshop.getDescription(),
+                DateTimeUtils.getTime(workshop.getStartTime().toString()),
+                workshop.getSkillLevel());
     }
 
     private void loadWorkshops() {
@@ -141,24 +142,20 @@ public class Workshops extends AppCompatActivity {
 
             @Override
             public void onSuccess(ArrayList<Workshop> response) {
-                Optional<String> lastStartTime = Optional.empty();
+                String lastStartTime = null;
                 int numWorkshops = response.size();
 
                 for (int i = 0; i < numWorkshops; i++) {
                     Workshop currWorkshop = response.get(i);
+                    String currStartTime = currWorkshop.getStartTime().toDate().toString();
 
-                    if (Workshop.isValid(currWorkshop)) {
-
-                        Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
-
-                        if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
-                            lastStartTime = currStartTime;
-                        }
-
-                        addWorkshopCard(currWorkshop);
-                        workshops.add(currWorkshop);
+                    if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                        addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                        lastStartTime = currStartTime;
                     }
+
+                    addWorkshopCard(currWorkshop);
+                    workshops.add(currWorkshop);
                 }
 
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
@@ -179,7 +176,7 @@ public class Workshops extends AppCompatActivity {
             }
         });
 
-        workshopsTask.execute();
+        workshopsTask.retrieveWorkshops();
     }
 
     private void clearWorkshops() {
@@ -194,7 +191,7 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void loadRecyclerView() {
-        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView = findViewById(R.id.workshops_horizontal_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -232,7 +229,7 @@ public class Workshops extends AppCompatActivity {
         for (int i = 0; i < numWorkshops; i++) {
             Workshop workshop = this.workshops.get(i);
 
-            if (workshop.getWorkshopType().equals(type) || workshop.getSkillLevelOptional().getValue().equals(type)) {
+            if (workshop.getWorkshopType().equals(type) || workshop.getSkillLevel().equals(type)) {
                 workshops.add(workshop);
             }
         }

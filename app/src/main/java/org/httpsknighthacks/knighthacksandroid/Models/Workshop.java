@@ -1,9 +1,14 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
+
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 public class Workshop {
 
@@ -16,6 +21,15 @@ public class Workshop {
     private Optional<String> mStartTime;
     private Optional<String> mEndTime;
 
+    private String name;
+    private String description;
+    private String skillLevel;
+    private String picture;
+    private String workshopType;
+    private String prerequisites;
+    private Timestamp startTime;
+    private Timestamp endTime;
+
     public static final String NAME_KEY = "name";
     public static final String DESCRIPTION_KEY = "description";
     public static final String SKILL_LEVEL_KEY = "skillLevel";
@@ -25,58 +39,7 @@ public class Workshop {
     public static final String START_TIME_KEY = "startTime";
     public static final String END_TIME_KEY = "endTime";
 
-    public Workshop(JSONObject jsonObject) {
-        try {
-            withName(jsonObject.getString(NAME_KEY));
-            withDescription(jsonObject.getString(DESCRIPTION_KEY));
-            withSkillLevel(jsonObject.getString(SKILL_LEVEL_KEY));
-            withPicture(jsonObject.getString(PICTURE_KEY));
-            withWorkshopType(jsonObject.getString(WORKSHOP_TYPE_KEY));
-            withPrerequisites(jsonObject.getString(PREREQUISITES_KEY));
-            withStartTime(jsonObject.getString(START_TIME_KEY));
-            withEndTime(jsonObject.getString(END_TIME_KEY));
-        } catch (JSONException ex) {
-            this.mName = Optional.empty();
-            this.mSkillLevel = Optional.empty();
-            this.mPicture = Optional.empty();
-            this.mWorkshopType = SearchFilterTypes.ALL;
-            this.mPrerequisites = Optional.empty();
-            this.mStartTime = Optional.empty();
-            this.mEndTime = Optional.empty();
-        }
-    }
-
-    public void withName(String name) {
-        this.mName = Optional.of(name);
-    }
-
-    public void withDescription(String description) {
-        this.mDescription = Optional.of(description);
-    }
-
-    public void withSkillLevel(String skillLevel) {
-        this.mSkillLevel = Optional.of(SearchFilterTypes.getSearchFilterType(skillLevel));
-    }
-
-    public void withPicture(String picture) {
-        this.mPicture = Optional.of(picture);
-    }
-
-    public void withWorkshopType(String workshopType) {
-        this.mWorkshopType = SearchFilterTypes.getSearchFilterType(workshopType);
-    }
-
-    public void withPrerequisites(String prerequisites) {
-        this.mPrerequisites = Optional.of(prerequisites);
-    }
-
-    public void withStartTime(String startTime) {
-        this.mStartTime = Optional.of(startTime);
-    }
-
-    public void withEndTime(String endTime) {
-        this.mEndTime = Optional.of(endTime);
-    }
+    public Workshop() { }
 
     public Optional<String> getNameOptional() {
         return mName;
@@ -86,16 +49,12 @@ public class Workshop {
         return mDescription;
     }
 
-    public Optional<SearchFilterTypes> getSkillLevelOptional() {
-        return mSkillLevel;
-    }
-
     public Optional<String> getPictureOptional() {
         return mPicture;
     }
 
-    public SearchFilterTypes getWorkshopType() {
-        return mWorkshopType;
+    public String getWorkshopType() {
+        return workshopType;
     }
 
     public Optional<String> getPrerequisitesOptional() {
@@ -110,12 +69,64 @@ public class Workshop {
         return mEndTime;
     }
 
-    public static boolean isValid(Workshop workshop) {
-        return workshop.getNameOptional().isPresent()
-                && workshop.getDescriptionOptional().isPresent()
-                && workshop.getSkillLevelOptional().isPresent()
-                && workshop.getPictureOptional().isPresent()
-                && workshop.getStartTimeOptional().isPresent()
-                && workshop.getEndTimeOptional().isPresent();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSkillLevel() {
+        return skillLevel;
+    }
+
+    public void setSkillLevel(String skillLevel) {
+        this.skillLevel = skillLevel;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public void setWorkshopType(String workshopType) {
+        this.workshopType = workshopType;
+    }
+
+    public String getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(String prerequisites) {
+        this.prerequisites = prerequisites;
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public Timestamp getEndtime() {
+        return endTime;
+    }
+
+    public void setEndtime(Timestamp endtime) {
+        this.endTime = endtime;
     }
 }
