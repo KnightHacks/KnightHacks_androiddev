@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Start of firebase notification code.
 
-        // This makes sure notifications are also received in the foreground.
+        // For notifications received in foreground
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel =
                     new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);

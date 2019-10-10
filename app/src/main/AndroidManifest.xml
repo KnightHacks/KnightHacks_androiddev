@@ -38,7 +38,7 @@
         <activity android:name=".Workshops" />
         <activity android:name=".Sponsors" />
 
-        // START of firebase
+        <!-- START of firebase -->
 
         <service
             android:name=".MyFirebaseMessagingService">
@@ -54,12 +54,12 @@
             </intent-filter>
         </service>
 
-        // TODO(developer): Decide what icon we want here.
+        <!-- TODO(developer): Decide what icon we want here.-->
         <meta-data
             android:name="com.google.firebase.messaging.default_noti README(https://goo.gl/l4GJaQ) for more. -->fication_icon"
             android:resource="@drawable/rocket_no_flames" />
 
-        // TODO(developer): Decide what color we want here.
+        <!-- TODO(developer): Decide what color we want here. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
@@ -75,7 +75,7 @@
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
 
-        // END of firebase
+        <!-- END of firebase -->
     </application>
 
 </manifest>
