@@ -11,12 +11,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
 import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.FiltersTask;
 import org.httpsknighthacks.knighthacksandroid.Tasks.WorkshopsTask;
 
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class Workshops extends AppCompatActivity {
     private View mEmptyScreenView;
 
     private ArrayList<Workshop> workshops;
+    private ArrayList<Filter> filters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +73,7 @@ public class Workshops extends AppCompatActivity {
         mProgressBar = findViewById(R.id.workshops_progress_bar);
         mEmptyScreenView = findViewById(R.id.workshops_empty_screen_view);
 
-        workshops = new ArrayList<>();
-
+        loadFilters();
         loadWorkshops();
         getFilterSearchComponents();
         loadRecyclerView();
@@ -132,6 +134,32 @@ public class Workshops extends AppCompatActivity {
                 workshop.getSkillLevel());
     }
 
+    private void loadFilters() {
+        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(ArrayList<Filter> response) {
+                filters = response;
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete(ArrayList<Filter> response) {
+
+            }
+        });
+
+        filtersTask.retrieveFilters();
+    }
+
     private void loadWorkshops() {
         WorkshopsTask workshopsTask = new WorkshopsTask(getApplicationContext(), new ResponseListener<Workshop>() {
             @Override
@@ -155,8 +183,9 @@ public class Workshops extends AppCompatActivity {
                     }
 
                     addWorkshopCard(currWorkshop);
-                    workshops.add(currWorkshop);
                 }
+
+                workshops = response;
 
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
             }
@@ -267,27 +296,6 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(R.drawable.ic_workshops_career);
-        mSearchFilterTypeList.add(SearchFilterTypes.CAREER);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_hardware);
-        mSearchFilterTypeList.add(SearchFilterTypes.HARDWARE);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_design);
-        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_dev);
-        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_advanced);
-        mSearchFilterTypeList.add(SearchFilterTypes.ADVANCED);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_beginner);
-        mSearchFilterTypeList.add(SearchFilterTypes.BEGINNER);
-
-        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
-
     }
 
 }

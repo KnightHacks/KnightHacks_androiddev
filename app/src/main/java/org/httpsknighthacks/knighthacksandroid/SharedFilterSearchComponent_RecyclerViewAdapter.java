@@ -22,6 +22,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     // Properties:
     private ArrayList<Integer> mImageList = new ArrayList<>();
     private ArrayList<SearchFilterTypes> mSearchFilterTypes;
+    private ArrayList<SearchFilterTypes> mSearchFilterNames;
     private Context mContext;
     private ViewHolder previousHolder;
     private SearchFilterListener mListener;

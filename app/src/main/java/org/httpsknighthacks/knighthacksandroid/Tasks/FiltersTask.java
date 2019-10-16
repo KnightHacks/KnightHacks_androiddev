@@ -1,7 +1,9 @@
 package org.httpsknighthacks.knighthacksandroid.Tasks;
 
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,12 +13,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
+import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
@@ -25,39 +30,40 @@ import org.json.JSONException;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
-public class SponsorsTask {
+public class FiltersTask {
 
-    public static final String WORKSHOPS_COLLECTION = "workshops";
+    public static final String FILTERS_COLLECTION = "filters";
 
     private WeakReference<Context> mContext;
-    private ResponseListener<Workshop> mResponseListener;
+    private ResponseListener<Filter> mResponseListener;
 
     private FirebaseFirestore mFirestore;
 
-    public SponsorsTask(Context context, ResponseListener<Workshop> responseListener) {
+    public FiltersTask(Context context, ResponseListener<Filter> responseListener) {
         this.mContext = new WeakReference<>(context);
         this.mResponseListener = responseListener;
         mFirestore = FirebaseFirestore.getInstance();
     }
 
-    public void retrieveSponsors() {
+    public void retrieveFilters() {
         showLoading();
-        mFirestore.collection(WORKSHOPS_COLLECTION).get()
+        mFirestore.collection(FILTERS_COLLECTION).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<Workshop> workshops = new ArrayList<>();
+                        ArrayList<Filter> filters = new ArrayList<>();
                         if (task.isSuccessful()) {
-                            workshops = new ArrayList<>();
+                            filters = new ArrayList<>();
                             for (DocumentSnapshot document : task.getResult()) {
-                                workshops.add(document.toObject(Workshop.class));
+                                filters.add(document.toObject(Filter.class));
                             }
-                            mResponseListener.onSuccess(workshops);
+                            mResponseListener.onSuccess(filters);
                         } else {
                             mResponseListener.onFailure();
                         }
-                        mResponseListener.onComplete(workshops);
+                        mResponseListener.onComplete(filters);
                     }
                 });
     }
