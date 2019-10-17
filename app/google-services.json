@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "986691609173",
+    "firebase_url": "https://prackn-bad9b.firebaseio.com",
+    "project_id": "prackn-bad9b",
+    "storage_bucket": "prackn-bad9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986691609173:android:2a8579f9932b4c68756adc",
+        "android_client_info": {
+          "package_name": "org.httpsknighthacks.knighthacksandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986691609173-uf2dfh4lt744lbpi216daanb0dl6r516.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb0gwGaD_2NRslPBfdtRCt3J8duKR0iHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986691609173-uf2dfh4lt744lbpi216daanb0dl6r516.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "986691609173-f6t4a6636r3fbe18a785u9h2tcs7j70j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "knighthacks.KnightHacks"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
