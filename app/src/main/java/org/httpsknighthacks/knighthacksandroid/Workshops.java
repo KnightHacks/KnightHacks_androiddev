@@ -36,8 +36,8 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<Integer> mFilterSearchImageList;
-    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mSearchFilterTypeList;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
@@ -49,8 +49,8 @@ public class Workshops extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Workshop> workshops;
-    private ArrayList<Filter> filters;
+    private ArrayList<Workshop> workshops = new ArrayList<>();
+    private ArrayList<Filter> filters = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,6 @@ public class Workshops extends AppCompatActivity {
 
         loadFilters();
         loadWorkshops();
-        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -144,6 +143,8 @@ public class Workshops extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
+                getFilterSearchComponents();
+                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -158,6 +159,7 @@ public class Workshops extends AppCompatActivity {
         });
 
         filtersTask.retrieveFilters();
+
     }
 
     private void loadWorkshops() {
@@ -247,9 +249,9 @@ public class Workshops extends AppCompatActivity {
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
-    private ArrayList<Workshop> getWorkshopsByType(SearchFilterTypes type) {
-        if (type.equals(SearchFilterTypes.ALL)) {
-             return workshops;
+    private ArrayList<Workshop> getWorkshopsByType(String type) {
+        if (type == "ALL") {
+            return workshops;
         }
 
         ArrayList<Workshop> workshops = new ArrayList<>();
@@ -266,7 +268,7 @@ public class Workshops extends AppCompatActivity {
         return workshops;
     }
 
-    private void filterScheduleEventsByType(SearchFilterTypes workshopType) {
+    private void filterScheduleEventsByType(String workshopType) {
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyScreenView.setVisibility(View.GONE);
         clearWorkshops();
@@ -277,12 +279,14 @@ public class Workshops extends AppCompatActivity {
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
 
-            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
-                lastStartTime = currStartTime;
-            }
+            // Todo: Fix this logic
+//            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
+//
+//            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
+//                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+//                lastStartTime = currStartTime;
+//            }
 
             addWorkshopCard(currWorkshop);
         }
@@ -296,6 +300,17 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-    }
+        for (int i = 0; i < filters.size(); i++) {
+            String filterType = filters.get(i).getName();
+            String picturePath = filters.get(i).getPicture();
 
+            mFilterSearchImageList.add(picturePath);
+            mSearchFilterTypeList.add(filterType);
+        }
+
+        // Todo: Add ALL filter's picture path
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add("ALL");
+    }
 }
+

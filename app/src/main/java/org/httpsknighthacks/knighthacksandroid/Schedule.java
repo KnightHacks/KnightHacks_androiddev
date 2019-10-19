@@ -32,8 +32,8 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<Integer> mFilterSearchImageList;
-    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mSearchFilterTypeList;
 
     private LinearLayoutManager scheduleEventsLinearLayoutManager;
     private RecyclerView scheduleEventsRecyclerView;
@@ -202,7 +202,7 @@ public class Schedule extends AppCompatActivity {
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
                         mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
-      
+
         scheduleEventsRecyclerView.setAdapter(scheduleEventsRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
@@ -222,8 +222,8 @@ public class Schedule extends AppCompatActivity {
         searchFilterRecyclerView.setAdapter(searchFilterRecyclerViewAdapter);
     }
 
-    private ArrayList<ScheduleEvent> getScheduleEventsByType(SearchFilterTypes type) {
-        if (type.equals(SearchFilterTypes.ALL)) {
+    private ArrayList<ScheduleEvent> getScheduleEventsByType(String type) {
+        if (type == "ALL") {
             return scheduleEvents;
         }
 
@@ -241,7 +241,7 @@ public class Schedule extends AppCompatActivity {
         return events;
     }
 
-    private void filterScheduleEventsByType(SearchFilterTypes eventType) {
+    private void filterScheduleEventsByType(String eventType) {
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyScreenView.setVisibility(View.GONE);
         clearScheduleEvents();
@@ -252,12 +252,14 @@ public class Schedule extends AppCompatActivity {
 
         for (int i = 0; i < numEvents; i++) {
             ScheduleEvent currEvent = events.get(i);
-            Optional<String> currStartTime = currEvent.getStartTimeOptional();
 
-            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
-                lastStartTime = currStartTime;
-            }
+            // Todo: handle timestamp
+//            Optional<String> currStartTime = currEvent.getStartTimeOptional();
+//
+//            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
+//                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+//                lastStartTime = currStartTime;
+//            }
 
             addScheduleEventCard(currEvent);
         }
@@ -271,19 +273,20 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(R.drawable.ic_schedule_food);
-        mSearchFilterTypeList.add(SearchFilterTypes.FOOD);
-
-        mFilterSearchImageList.add(R.drawable.ic_schedule_talk);
-        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
-
-        mFilterSearchImageList.add(R.drawable.ic_schedule_workshop);
-        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
-
-        mFilterSearchImageList.add(R.drawable.ic_schedule_main_events);
-        mSearchFilterTypeList.add(SearchFilterTypes.MAIN_EVENTS);
-
-        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
+//        mFilterSearchImageList.add(R.drawable.ic_schedule_food);
+//        mSearchFilterTypeList.add(SearchFilterTypes.FOOD);
+//
+//        mFilterSearchImageList.add(R.drawable.ic_schedule_talk);
+//        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
+//
+//        mFilterSearchImageList.add(R.drawable.ic_schedule_workshop);
+//        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
+//
+//        mFilterSearchImageList.add(R.drawable.ic_schedule_main_events);
+//        mSearchFilterTypeList.add(SearchFilterTypes.MAIN_EVENTS);
+//
+//        mFilterSearchImageList.add(R.drawable.ic_filter_all);
+//        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
     }
 }
+

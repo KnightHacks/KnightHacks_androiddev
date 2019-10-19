@@ -20,16 +20,16 @@ import java.util.ArrayList;
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
-    private ArrayList<Integer> mImageList = new ArrayList<>();
-    private ArrayList<SearchFilterTypes> mSearchFilterTypes;
-    private ArrayList<SearchFilterTypes> mSearchFilterNames;
+    private ArrayList<String> mImageList = new ArrayList<>();
+    private ArrayList<String> mSearchFilterTypes;
+    private ArrayList<String> mSearchFilterNames;
     private Context mContext;
     private ViewHolder previousHolder;
     private SearchFilterListener mListener;
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
-                                                           ArrayList<Integer> mImageList,
-                                                           ArrayList<SearchFilterTypes> mSearchFilterTypes,
+                                                           ArrayList<String> mImageList,
+                                                           ArrayList<String> mSearchFilterTypes,
                                                            SearchFilterListener mListener) {
         this.mContext = mContext;
         this.mImageList = mImageList;
@@ -52,9 +52,9 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
                 .load(mImageList.get(position))
                 .into(holder.mImageView);
 
-        SearchFilterTypes searchFilter = mSearchFilterTypes.get(position);
+        String searchFilter = mSearchFilterTypes.get(position);
 
-        holder.mTextView.setText(searchFilter.getSearchFilterString());
+        holder.mTextView.setText(searchFilter);
         holder.setEventType(searchFilter);
 
         if(position == (mImageList.size()-1)) {
@@ -91,7 +91,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         ImageView mImageView;
         TextView mTextView;
         CardView mCardView;
-        SearchFilterTypes mSearchFilterType;
+        String mSearchFilterType;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -100,7 +100,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             mCardView = itemView.findViewById(R.id.shared_filter_search_parent_card_view_container);
         }
 
-        public void setEventType(SearchFilterTypes type) {
+        public void setEventType(String type) {
             mSearchFilterType = type;
         }
     }
@@ -109,3 +109,4 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         this.previousHolder = previousHolder;
     }
 }
+
