@@ -9,10 +9,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.FiltersTask;
 import org.httpsknighthacks.knighthacksandroid.Tasks.SponsorsTask;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class Sponsors extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
+    private ArrayList<Filter> filters;
     private ArrayList<Sponsor> sponsors;
 
     @Override
@@ -70,10 +73,33 @@ public class Sponsors extends AppCompatActivity {
 
         sponsors = new ArrayList<>();
 
+        loadFilters();
         loadSponsors();
         getFilterSearchComponents();
         loadRecyclerView();
     }
+
+    private void loadFilters() {
+        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(ArrayList<Filter> response) {
+                filters = response;
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+
+        filtersTask.retrieveFilters();
+    }
+
 
     private void loadSponsors() {
         SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
@@ -87,34 +113,27 @@ public class Sponsors extends AppCompatActivity {
             public void onSuccess(ArrayList<Sponsor> response) {
                 int numSponsors = response.size();
 
+                if (numSponsors == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 for (int i = 0; i < numSponsors; i++) {
                     Sponsor currSponsor = response.get(i);
 
-                    if (Sponsor.isValid(currSponsor)) {
-                        addSponsorCard(currSponsor);
-                        sponsors.add(currSponsor);
-                    }
+                    addSponsorCard(currSponsor);
                 }
-
+                sponsors = response;
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onComplete(ArrayList<Sponsor> response) {
-                if (response.size() == 0) {
-                    mEmptyScreenView.setVisibility(View.VISIBLE);
-                }
-
-                mProgressBar.setVisibility(View.GONE);
-            }
         });
 
-        sponsorsTask.execute();
+        sponsorsTask.retrieveSponsors();
     }
 
     private void addSubSectionTitle(String title) {
@@ -126,7 +145,7 @@ public class Sponsors extends AppCompatActivity {
     }
 
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardFirstTextTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardTextTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -145,8 +164,8 @@ public class Sponsors extends AppCompatActivity {
             mCardSubtitleList.add(cardSubtitle);
         }
         
-        if (cardFirstTextTagSubtitle != null && !cardFirstTextTagSubtitle.isEmpty()) {
-            mCardTagSubtitleList.add(cardFirstTextTagSubtitle);
+        if (cardTextTagSubtitle != null) {
+            mCardTagSubtitleList.add(cardTextTagSubtitle);
         }
 
         if (cardBody != null && !cardBody.isEmpty()) {
@@ -163,12 +182,12 @@ public class Sponsors extends AppCompatActivity {
     }
 
     private void addSponsorCard(Sponsor sponsor) {
-        addHorizontalSectionCard(sponsor.getPictureOptional().getValue(),
-                sponsor.getNameOptional().getValue(),
-                sponsor.getLocationOptional().getValue(),
+        addHorizontalSectionCard(sponsor.getPicture(),
+                sponsor.getName(),
+                sponsor.getLocation(),
                 null,
                 sponsor.getOfferings(),
-                sponsor.getDescriptionOptional().getValue(),
+                sponsor.getDescription(),
                 null,
                 null);
     }

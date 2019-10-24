@@ -4,12 +4,20 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
+import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.json.JSONArray;
@@ -18,60 +26,46 @@ import org.json.JSONException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ScheduleEventsTask extends AsyncTask<Void, Void, ArrayList<ScheduleEvent>> {
+public class ScheduleEventsTask {
 
     public static final String TAG = ScheduleEventsTask.class.getSimpleName();
-    public static final String GET_SCHEDULE_ROUTE = "/api/get_schedule";
+    public static final String EVENTS_COLLECTION = "events";
 
     private WeakReference<Context> mContext;
     private ArrayList<ScheduleEvent> mScheduleEvents;
     private ResponseListener<ScheduleEvent> mResponseListener;
 
+    private DatabaseReference mReference;
+
     public ScheduleEventsTask(Context context, ResponseListener<ScheduleEvent> responseListener) {
         this.mContext = new WeakReference<>(context);
         this.mScheduleEvents = new ArrayList<>();
         this.mResponseListener = responseListener;
+        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
-    @Override
-    protected void onPreExecute() {
-        mResponseListener.onStart();
-    }
-
-    @Override
-    protected ArrayList<ScheduleEvent> doInBackground(Void... voids) {
-        String requestURL = RequestQueueSingleton.REQUEST_API_PREFIX_URL + GET_SCHEDULE_ROUTE;
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, requestURL, null, new Response.Listener<JSONArray>() {
+    public void retrieveScheduleEvents() {
+        showLoading();
+        mReference.child(EVENTS_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onResponse(JSONArray response) {
-                int numEvents = response.length();
-
-                for (int i = 0; i < numEvents; i++) {
-                    try {
-                        mScheduleEvents.add(new ScheduleEvent(response.getJSONObject(i)));
-                    } catch (JSONException ex) {
-                        Toast.makeText(getContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
-                    }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<ScheduleEvent> events = new ArrayList<>();
+                for (DataSnapshot workshopDataSnapshot : dataSnapshot.getChildren()) {
+                    ScheduleEvent event = workshopDataSnapshot.getValue(ScheduleEvent.class);
+                    events.add(event);
                 }
-
-                mResponseListener.onSuccess(mScheduleEvents);
+                mResponseListener.onSuccess(events);
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 mResponseListener.onFailure();
             }
         });
-
-        RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(request, TAG);
-
-        return mScheduleEvents;
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<ScheduleEvent> scheduleEvents) {
-        mResponseListener.onComplete(scheduleEvents);
+    public void showLoading() {
+        mResponseListener.onStart();
     }
 
     public Context getContext() {

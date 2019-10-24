@@ -12,6 +12,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,38 +33,37 @@ import java.util.ArrayList;
 
 public class SponsorsTask {
 
-    public static final String WORKSHOPS_COLLECTION = "workshops";
+    public static final String SPONSORS_COLLECTION = "sponsors";
 
     private WeakReference<Context> mContext;
-    private ResponseListener<Workshop> mResponseListener;
+    private ResponseListener<Sponsor> mResponseListener;
 
-    private FirebaseFirestore mFirestore;
+    private DatabaseReference mReference;
 
-    public SponsorsTask(Context context, ResponseListener<Workshop> responseListener) {
+    public SponsorsTask(Context context, ResponseListener<Sponsor> responseListener) {
         this.mContext = new WeakReference<>(context);
         this.mResponseListener = responseListener;
-        mFirestore = FirebaseFirestore.getInstance();
+        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
     public void retrieveSponsors() {
         showLoading();
-        mFirestore.collection(WORKSHOPS_COLLECTION).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<Workshop> workshops = new ArrayList<>();
-                        if (task.isSuccessful()) {
-                            workshops = new ArrayList<>();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                workshops.add(document.toObject(Workshop.class));
-                            }
-                            mResponseListener.onSuccess(workshops);
-                        } else {
-                            mResponseListener.onFailure();
-                        }
-                        mResponseListener.onComplete(workshops);
-                    }
-                });
+        mReference.child(SPONSORS_COLLECTION).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Sponsor> sponsors = new ArrayList<>();
+                for (DataSnapshot workshopDataSnapshot : dataSnapshot.getChildren()) {
+                    Sponsor sponsor = workshopDataSnapshot.getValue(Sponsor.class);
+                    sponsors.add(sponsor);
+                }
+                mResponseListener.onSuccess(sponsors);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                mResponseListener.onFailure();
+            }
+        });
     }
 
     private void showLoading() {

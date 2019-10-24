@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,33 +44,33 @@ public class FiltersTask {
     private WeakReference<Context> mContext;
     private ResponseListener<Filter> mResponseListener;
 
-    private FirebaseFirestore mFirestore;
+    private DatabaseReference mReference;
+
 
     public FiltersTask(Context context, ResponseListener<Filter> responseListener) {
         this.mContext = new WeakReference<>(context);
         this.mResponseListener = responseListener;
-        mFirestore = FirebaseFirestore.getInstance();
+        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
     public void retrieveFilters() {
         showLoading();
-        mFirestore.collection(FILTERS_COLLECTION).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<Filter> filters = new ArrayList<>();
-                        if (task.isSuccessful()) {
-                            filters = new ArrayList<>();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                filters.add(document.toObject(Filter.class));
-                            }
-                            mResponseListener.onSuccess(filters);
-                        } else {
-                            mResponseListener.onFailure();
-                        }
-                        mResponseListener.onComplete(filters);
-                    }
-                });
+        mReference.child(FILTERS_COLLECTION).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Filter> filters = new ArrayList<>();
+                for (DataSnapshot workshopDataSnapshot : dataSnapshot.getChildren()) {
+                    Filter filter = workshopDataSnapshot.getValue(Filter.class);
+                    filters.add(filter);
+                }
+                mResponseListener.onSuccess(filters);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                mResponseListener.onFailure();
+            }
+        });
     }
 
     private void showLoading() {
