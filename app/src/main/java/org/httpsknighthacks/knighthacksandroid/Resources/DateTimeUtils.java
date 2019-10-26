@@ -39,10 +39,11 @@ public class DateTimeUtils {
 
     public static String getTime(String dateTime) {
         try {
-            Date date = DEFAULT_DATE_TIME_FORMAT.parse(dateTime);
+            Date date = DATE_TIME_FORMAT.parse(dateTime);
 
             return TIME_STRING_FORMAT.format(date);
         } catch (ParseException ex) {
+            Log.d("KEVIN", ex.toString());
             return "00:00am";
         }
     }

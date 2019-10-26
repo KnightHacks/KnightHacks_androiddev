@@ -1,7 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
@@ -41,32 +40,12 @@ public class Workshop {
 
     public Workshop() { }
 
-    public Optional<String> getNameOptional() {
-        return mName;
-    }
-
-    public Optional<String> getDescriptionOptional() {
-        return mDescription;
-    }
-
-    public Optional<String> getPictureOptional() {
-        return mPicture;
-    }
-
     public String getWorkshopType() {
         return workshopType;
     }
 
-    public Optional<String> getPrerequisitesOptional() {
-        return mPrerequisites;
-    }
-
     public Optional<String> getStartTimeOptional() {
         return mStartTime;
-    }
-
-    public Optional<String> getEndTimeOptional() {
-        return mEndTime;
     }
 
 
@@ -122,11 +101,11 @@ public class Workshop {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndtime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndtime(Timestamp endtime) {
-        this.endTime = endtime;
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
     }
 }

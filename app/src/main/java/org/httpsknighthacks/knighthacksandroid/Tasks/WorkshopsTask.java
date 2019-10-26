@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,33 +43,33 @@ public class WorkshopsTask {
     private WeakReference<Context> mContext;
     private ResponseListener<Workshop> mResponseListener;
 
-    private FirebaseFirestore mFirestore;
+    private DatabaseReference mReference;
 
     public WorkshopsTask(Context context, ResponseListener<Workshop> responseListener) {
         this.mContext = new WeakReference<>(context);
         this.mResponseListener = responseListener;
-        mFirestore = FirebaseFirestore.getInstance();
+        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
     public void retrieveWorkshops() {
         showLoading();
-        mFirestore.collection(WORKSHOPS_COLLECTION).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<Workshop> workshops = new ArrayList<>();
-                        if (task.isSuccessful()) {
-                            workshops = new ArrayList<>();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                workshops.add(document.toObject(Workshop.class));
-                            }
-                            mResponseListener.onSuccess(workshops);
-                        } else {
-                            mResponseListener.onFailure();
-                        }
-                        mResponseListener.onComplete(workshops);
-                    }
-                });
+
+        mReference.child(WORKSHOPS_COLLECTION).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Workshop> workshops = new ArrayList<>();
+                for (DataSnapshot workshopDataSnapshot : dataSnapshot.getChildren()) {
+                    Workshop workshop = workshopDataSnapshot.getValue(Workshop.class);
+                    workshops.add(workshop);
+                }
+                mResponseListener.onSuccess(workshops);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                mResponseListener.onFailure();
+            }
+        });
     }
 
     private void showLoading() {

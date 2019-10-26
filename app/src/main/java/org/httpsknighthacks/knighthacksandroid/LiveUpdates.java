@@ -156,22 +156,11 @@ public class LiveUpdates extends AppCompatActivity {
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onComplete(ArrayList<LiveUpdate> response) {
-                if (response.size() == 0) {
-                    mEmptyScreenView.setVisibility(View.VISIBLE);
-                }
-
-                mProgressBar.setVisibility(View.GONE);
-            }
         });
-
-        liveUpdatesTask.execute();
     }
 
     private void loadRecyclerView() {
-        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mLinearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         mRecyclerView = findViewById(R.id.live_updates_vertical_section_card_container);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 

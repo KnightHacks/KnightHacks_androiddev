@@ -37,6 +37,16 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         this.mListener = mListener;
     }
 
+    public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
+                                                           ArrayList<String> mImageList,
+                                                           ArrayList<String> mSearchFilterTypes
+                                                           ) {
+        this.mContext = mContext;
+        this.mImageList = mImageList;
+        this.mSearchFilterTypes = mSearchFilterTypes;
+        this.mListener = mListener;
+    }
+
     @NonNull
     @Override
     public SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder

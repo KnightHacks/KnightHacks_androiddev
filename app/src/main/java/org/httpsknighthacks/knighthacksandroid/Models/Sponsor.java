@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class Sponsor {
 
     private Optional<String> mName;
@@ -13,57 +15,20 @@ public class Sponsor {
     private Optional<String> mDescription;
     private Optional<String> mPicture;
 
+    private String name;
+    private String location;
+    private String description;
+    private String picture;
+    private String offerings;
+
     public static final String NAME_KEY = "name";
     public static final String LOCATION_KEY = "location";
     public static final String OFFERINGS_KEY = "offerings";
     public static final String DESCRIPTION_KEY = "description";
     public static final String PICTURE_KEY = "picture";
 
-    public Sponsor(JSONObject jsonObject) {
-        try {
-            withName(jsonObject.getString(NAME_KEY));
-            withLocation(jsonObject.getString(LOCATION_KEY));
-            withOfferings(jsonObject.getJSONArray(OFFERINGS_KEY));
-            withDescription(jsonObject.getString(DESCRIPTION_KEY));
-            withPicture(jsonObject.getString(PICTURE_KEY));
-        } catch (JSONException ex) {
-            this.mName = Optional.empty();
-            this.mLocation = Optional.empty();
-            this.mOfferings = Optional.empty();
-            this.mDescription = Optional.empty();
-            this.mPicture = Optional.empty();
-        }
-    }
+    public Sponsor() {
 
-    public void withName(String mName) {
-        this.mName = Optional.of(mName);
-    }
-
-    public void withLocation(String mLocation) {
-        this.mLocation = Optional.of(mLocation);
-    }
-
-    public void withOfferings(JSONArray mOfferings) {
-        int numOfferings = mOfferings.length();
-        SearchFilterTypes[] offerings = new SearchFilterTypes[numOfferings];
-
-        try {
-            for (int i = 0; i < numOfferings; i++) {
-                offerings[i] = SearchFilterTypes.getSearchFilterType(mOfferings.getString(i));
-            }
-        } catch (JSONException ex) {
-            offerings = new SearchFilterTypes[numOfferings];
-        }
-
-        this.mOfferings = Optional.of(offerings);
-    }
-
-    public void withDescription(String mDescription) {
-        this.mDescription = Optional.of(mDescription);
-    }
-
-    public void withPicture(String mPicture) {
-        this.mPicture = Optional.of(mPicture);
     }
 
     public Optional<String> getNameOptional() {
@@ -106,17 +71,21 @@ public class Sponsor {
     }
 
     public String getInternship() {
-        if (SearchFilterTypes.hasTargetFilter(mOfferings.getValue(), SearchFilterTypes.INTERNSHIP)) {
+        /*
+        if (SearchFilterTypes.hasTargetFilter(offerings, SearchFilterTypes.INTERNSHIP)) {
             return SearchFilterTypes.INTERNSHIP.toString();
         }
+        */
 
         return null;
     }
 
     public String getFullTime() {
-        if (SearchFilterTypes.hasTargetFilter(mOfferings.getValue(), SearchFilterTypes.FULL_TIME)) {
+        /*
+        if (SearchFilterTypes.hasTargetFilter(offerings, SearchFilterTypes.FULL_TIME)) {
             return SearchFilterTypes.FULL_TIME.toString();
         }
+        */
 
         return null;
     }
@@ -126,5 +95,41 @@ public class Sponsor {
                 && sponsor.getLocationOptional().isPresent()
                 && sponsor.getDescriptionOptional().isPresent()
                 && sponsor.getPictureOptional().isPresent();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public void setOfferings(String offerings) {
+        this.offerings = offerings;
     }
 }

@@ -25,6 +25,8 @@ import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
 
+    private static final String TAG = "Workshops";
+
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
@@ -129,7 +131,7 @@ public class Workshops extends AppCompatActivity {
                 null,
                 null,
                 workshop.getDescription(),
-                DateTimeUtils.getTime(workshop.getStartTime().toString()),
+                DateTimeUtils.getTime(workshop.getStartTime().toDate().toString()),
                 workshop.getSkillLevel());
     }
 
@@ -149,11 +151,6 @@ public class Workshops extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-                Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onComplete(ArrayList<Filter> response) {
 
             }
         });
@@ -174,6 +171,9 @@ public class Workshops extends AppCompatActivity {
             public void onSuccess(ArrayList<Workshop> response) {
                 String lastStartTime = null;
                 int numWorkshops = response.size();
+                if (numWorkshops == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
 
                 for (int i = 0; i < numWorkshops; i++) {
                     Workshop currWorkshop = response.get(i);
@@ -188,22 +188,13 @@ public class Workshops extends AppCompatActivity {
                 }
 
                 workshops = response;
-
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onComplete(ArrayList<Workshop> response) {
-                if (response.size() == 0) {
-                    mEmptyScreenView.setVisibility(View.VISIBLE);
-                }
-
-                mProgressBar.setVisibility(View.GONE);
             }
         });
 
@@ -239,13 +230,19 @@ public class Workshops extends AppCompatActivity {
         mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
         mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
 
-        sharedFilterSearchComponent_RecyclerViewAdapter =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
+        if (filters == null)
+            sharedFilterSearchComponent_RecyclerViewAdapter =
+                    new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList);
+
+        else
+            sharedFilterSearchComponent_RecyclerViewAdapter =
+                    new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
                     @Override
                     public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
                         filterScheduleEventsByType(holder.mSearchFilterType);
-                    }
-                });
+                        }
+                    });
+
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
@@ -273,13 +270,12 @@ public class Workshops extends AppCompatActivity {
         mEmptyScreenView.setVisibility(View.GONE);
         clearWorkshops();
 
-        Optional<String> lastStartTime = Optional.empty();
+        String lastStartTime = null;
         ArrayList<Workshop> workshops = getWorkshopsByType(workshopType);
         int numWorkshops = workshops.size();
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-
             // Todo: Fix this logic
 //            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
 //
