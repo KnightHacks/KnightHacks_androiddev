@@ -1,9 +1,9 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import org.httpsknighthacks.knighthacksandroid.Models.FAQ;
 
 import java.util.ArrayList;
 
@@ -22,6 +20,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
+    private ArrayList<String> mCardOptionalImageList;
     private String tag;
     private Context mContext;
 
@@ -30,12 +29,14 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                                                      ArrayList<String> mCardTitleList,
                                                      ArrayList<String> mCardSubtitleList,
                                                      ArrayList<String> mCardDetailsList,
+                                                     ArrayList<String> mCardOptionalImageList,
                                                      String tag) {
         this.mContext = mContext;
         this.mCardImageList = mCardImageList;
         this.mCardTitleList = mCardTitleList;
         this.mCardSubtitleList = mCardSubtitleList;
         this.mCardDetailsList = mCardDetailsList;
+        this.mCardOptionalImageList = mCardOptionalImageList;
         this.tag = tag;
     }
 
@@ -75,6 +76,15 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         } else {
             holder.mCardDetails.setVisibility(View.GONE);
         }
+
+        if (position < mCardOptionalImageList.size()) {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(mCardOptionalImageList.get(position))
+                    .into(holder.mCardOptionalImage);
+        } else if (!tag.equals(FAQs.TAG)) {
+            holder.mCardOptionalImage.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -88,6 +98,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         TextView mCardTitle;
         TextView mCardSubtitle;
         TextView mCardDetails;
+        ImageView mCardOptionalImage;
         String mTag;
 
         public ViewHolder(View itemView, String tag) {
@@ -97,6 +108,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
             this.mCardTitle = itemView.findViewById(R.id.vertical_section_card_title);
             this.mCardSubtitle = itemView.findViewById(R.id.vertical_section_card_subtitle);
             this.mCardDetails = itemView.findViewById(R.id.vertical_section_card_detail);
+            this.mCardOptionalImage = itemView.findViewById(R.id.vertical_section_card_optional_image);
             this.mTag = tag;
 
             if(this.mTag.equals(FAQs.TAG)) {
@@ -105,6 +117,11 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                         .asDrawable()
                         .load(R.drawable.ic_faq_plus)
                         .into(mCardImage);
+
+                Glide.with(mContext)
+                        .asDrawable()
+                        .load(R.drawable.ic_faq_minus)
+                        .into(mCardOptionalImage);
 
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -120,7 +137,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                             Glide.with(mContext)
                                     .asDrawable()
                                     .load(R.drawable.ic_faq_plus)
-                                    .into(mCardImage);                        
+                                    .into(mCardImage);
                         }
                     }
                 });

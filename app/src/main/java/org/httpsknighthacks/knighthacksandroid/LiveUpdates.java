@@ -28,6 +28,7 @@ public class LiveUpdates extends AppCompatActivity {
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
+    private ArrayList<String> mCardOptionalImageList;
 
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
@@ -52,6 +53,7 @@ public class LiveUpdates extends AppCompatActivity {
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
         mCardDetailsList = new ArrayList<>();
+        mCardOptionalImageList = new ArrayList<>();
 
         mCountdown = findViewById(R.id.countdown_timer);
         mLiveIndicator = findViewById(R.id.live_indicator);
@@ -146,6 +148,7 @@ public class LiveUpdates extends AppCompatActivity {
                         mCardImageList.add(currUpdate.getPictureOptional().getValue());
                         mCardTitleList.add(currUpdate.getMessageOptional().getValue());
                         mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
+                        mCardOptionalImageList.add(currUpdate.getImageOptional().getValue());
                     }
 
                     mVerticalSectionCard_RecyclerViewAdapter.notifyDataSetChanged();
@@ -177,7 +180,7 @@ public class LiveUpdates extends AppCompatActivity {
 
         mVerticalSectionCard_RecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, mCardOptionalImageList, TAG);
         mRecyclerView.setAdapter(mVerticalSectionCard_RecyclerViewAdapter);
     }
 }
