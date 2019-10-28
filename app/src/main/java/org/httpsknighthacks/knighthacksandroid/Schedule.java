@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 public class Schedule extends AppCompatActivity {
 
+    private static final String TAG = "sponsor";
+
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
@@ -47,8 +49,8 @@ public class Schedule extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Filter> filters;
-    private ArrayList<ScheduleEvent> scheduleEvents;
+    private ArrayList<Filter> filters = new ArrayList<>();
+    private ArrayList<ScheduleEvent> scheduleEvents = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,6 @@ public class Schedule extends AppCompatActivity {
 
         loadFilters();
         loadSchedule();
-        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -146,6 +147,9 @@ public class Schedule extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
+                getFilterSearchComponents();
+                searchFilterRecyclerViewAdapter.notifyDataSetChanged();
+//                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -290,20 +294,19 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-//        mFilterSearchImageList.add(R.drawable.ic_schedule_food);
-//        mSearchFilterTypeList.add(SearchFilterTypes.FOOD);
-//
-//        mFilterSearchImageList.add(R.drawable.ic_schedule_talk);
-//        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
-//
-//        mFilterSearchImageList.add(R.drawable.ic_schedule_workshop);
-//        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
-//
-//        mFilterSearchImageList.add(R.drawable.ic_schedule_main_events);
-//        mSearchFilterTypeList.add(SearchFilterTypes.MAIN_EVENTS);
-//
-//        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-//        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
+        for (int i = 0; i < filters.size(); i++) {
+            if (filters.get(i).getType().equals(TAG)) {
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
+
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
+        }
+
+        // Todo: Add ALL filter's picture path
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add("ALL");
     }
 }
 

@@ -21,6 +21,8 @@ import java.util.Arrays;
 
 public class Sponsors extends AppCompatActivity {
 
+    private static final String TAG = "event";
+
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
@@ -45,8 +47,8 @@ public class Sponsors extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Filter> filters;
-    private ArrayList<Sponsor> sponsors;
+    private ArrayList<Filter> filters = new ArrayList<>();
+    private ArrayList<Sponsor> sponsors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,6 @@ public class Sponsors extends AppCompatActivity {
 
         loadFilters();
         loadSponsors();
-        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -88,6 +89,8 @@ public class Sponsors extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
+                getFilterSearchComponents();
+                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -270,15 +273,19 @@ public class Sponsors extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
+        for (int i = 0; i < filters.size(); i++) {
+            if (filters.get(i).getType().equals(TAG)) {
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
 
-//        mFilterSearchImageList.add(R.drawable.ic_sponsors_full_time);
-//        mSearchFilterTypeList.add(SearchFilterTypes.FULL_TIME);
-//
-//        mFilterSearchImageList.add(R.drawable.ic_sponsors_internships);
-//        mSearchFilterTypeList.add(SearchFilterTypes.INTERNSHIP);
-//
-//        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-//        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
+        }
+
+        // Todo: Add ALL filter's picture path
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add("ALL");
 
     }
 }

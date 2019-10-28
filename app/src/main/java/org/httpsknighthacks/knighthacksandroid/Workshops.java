@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
 
-    private static final String TAG = "Workshops";
+    private static final String TAG = "workshop";
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -276,7 +276,7 @@ public class Workshops extends AppCompatActivity {
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-            // Todo: Fix this logic
+            // Todo: Fix time stamp
 //            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
 //
 //            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
@@ -297,11 +297,12 @@ public class Workshops extends AppCompatActivity {
 
     private void getFilterSearchComponents() {
         for (int i = 0; i < filters.size(); i++) {
-            String filterType = filters.get(i).getName();
-            String picturePath = filters.get(i).getPicture();
-
-            mFilterSearchImageList.add(picturePath);
-            mSearchFilterTypeList.add(filterType);
+            if (filters.get(i).getType().equals(TAG)) {
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
         }
 
         // Todo: Add ALL filter's picture path
