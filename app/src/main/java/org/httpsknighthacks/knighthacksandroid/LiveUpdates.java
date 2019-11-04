@@ -139,14 +139,17 @@ public class LiveUpdates extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<LiveUpdate> response) {
                 int numUpdates = response.size();
+
+                if (numUpdates == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
                 for (int i = 0; i < numUpdates; i++) {
                     LiveUpdate currUpdate = response.get(i);
 
-                    if (LiveUpdate.isValid(currUpdate)) {
-                        mCardImageList.add(currUpdate.getPictureOptional().getValue());
-                        mCardTitleList.add(currUpdate.getMessageOptional().getValue());
-                        mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
-                    }
+                    mCardImageList.add(currUpdate.getPicture());
+                    mCardTitleList.add(currUpdate.getMessage());
+                    mCardSubtitleList.add(currUpdate.getTimeSent().toDate().toString());
 
                     mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
                 }
@@ -157,6 +160,7 @@ public class LiveUpdates extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
         });
+        liveUpdatesTask.retrieveUpdates();
     }
 
     private void loadRecyclerView() {

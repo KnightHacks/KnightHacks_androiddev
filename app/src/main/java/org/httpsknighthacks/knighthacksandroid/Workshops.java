@@ -293,6 +293,26 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
+        mFilterSearchImageList.add(R.drawable.ic_workshops_career);
+        mSearchFilterTypeList.add(SearchFilterTypes.CAREER);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_hardware);
+        mSearchFilterTypeList.add(SearchFilterTypes.HARDWARE);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_design);
+        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_dev);
+        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_advanced);
+        mSearchFilterTypeList.add(SearchFilterTypes.ADVANCED);
+
+        mFilterSearchImageList.add(R.drawable.ic_workshops_beginner);
+        mSearchFilterTypeList.add(SearchFilterTypes.BEGINNER);
+
+        mFilterSearchImageList.add(R.drawable.ic_filter_all);
+        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
     }
 
 }

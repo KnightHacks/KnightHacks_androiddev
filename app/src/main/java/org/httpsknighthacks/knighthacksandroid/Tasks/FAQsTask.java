@@ -63,7 +63,7 @@ public class FAQsTask {
     }
 
     public void showLoading() {
-
+        mResponseListener.onStart();
     }
 
     public Context getContext() {
