@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
@@ -57,6 +59,8 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     }
 
     public void setOnBindViewHolder(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position, View.OnClickListener onClickListener) {
+        StorageReference reference = FirebaseStorage.getInstance().getReference();
+
         Glide.with(mContext)
                 .asBitmap()
                 .load(mImageList.get(position))

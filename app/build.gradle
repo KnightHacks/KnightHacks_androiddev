@@ -35,17 +35,21 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
 
     // glide
-    implementation 'com.github.bumptech.glide:glide:4.4.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     // circle image view
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'androidx.annotation:annotation:1.0.0'
     implementation 'com.android.volley:volley:1.1.1'
 
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
-    implementation 'com.firebaseui:firebase-ui-firestore:6.0.2'
-    implementation 'com.google.firebase:firebase-database:19.1.0'
+    implementation "com.android.support:support-annotations:28.0.0"
+    annotationProcessor 'com.android.support:support-annotations:28.0.0'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.firebaseui:firebase-ui-storage:6.0.2'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

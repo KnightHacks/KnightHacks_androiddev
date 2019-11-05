@@ -1,7 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
 
-import com.google.firebase.firestore.ServerTimestamp;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.json.JSONException;

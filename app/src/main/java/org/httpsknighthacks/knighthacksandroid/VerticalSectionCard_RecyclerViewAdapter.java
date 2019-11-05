@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -46,11 +48,12 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         // Only load parts of the generic vertical card if needed
+        StorageReference reference = FirebaseStorage.getInstance().getReference();
 
         if (position < mCardImageList.size()) {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mCardImageList.get(position))
+                    .load(reference.child(mCardImageList.get(position)))
                     .into(holder.mCardImage);
         } else if (!tag.equals(FAQs.TAG)) {
             holder.mCardImage.setVisibility(View.GONE);
