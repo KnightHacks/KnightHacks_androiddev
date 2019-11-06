@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -18,10 +20,11 @@ import org.httpsknighthacks.knighthacksandroid.Tasks.SponsorsTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class Sponsors extends AppCompatActivity {
 
-    private static final String TAG = "event";
+    private static final String TAG = "sponsor";
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -244,7 +247,12 @@ public class Sponsors extends AppCompatActivity {
         for (int i = 0; i < numSponsors; i++) {
             Sponsor sponsor = this.sponsors.get(i);
 
-            if (Arrays.asList(sponsor.getOfferingsOptional().getValue()).contains(type)) {
+
+            if (sponsor.getOfferings() == "" || sponsor.getOfferings() == null) {
+                continue;
+            }
+
+            if (sponsor.getOfferings().toLowerCase().contains(type.toLowerCase())) {
                 sponsors.add(sponsor);
             }
         }
@@ -278,7 +286,7 @@ public class Sponsors extends AppCompatActivity {
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
 
-                mFilterSearchImageList.add(picturePath);
+                    mFilterSearchImageList.add(picturePath);
                 mSearchFilterTypeList.add(filterType);
             }
         }

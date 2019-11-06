@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class Schedule extends AppCompatActivity {
 
-    private static final String TAG = "sponsor";
+    private static final String TAG = "event";
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
