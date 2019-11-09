@@ -82,12 +82,12 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             public void onClick(View v) {
                 previousHolder.mImageView.setBackgroundResource(0);
                 holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
-
                 setPreviousHolder(holder);
                 mListener.setSearchFilters(holder, position);
+
             }
         };
-
+        holder.setIsRecyclable(false);
         setOnBindViewHolder(holder, position, onClickListener);
     }
 
