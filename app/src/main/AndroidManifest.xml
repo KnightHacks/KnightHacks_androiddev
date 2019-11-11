@@ -37,6 +37,7 @@
         <activity android:name=".FAQs" />
         <activity android:name=".Workshops" />
         <activity android:name=".Sponsors" />
+        <activity android:name=".Profile" />
 
         <!-- START of firebase -->
 

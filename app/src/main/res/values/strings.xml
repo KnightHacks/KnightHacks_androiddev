@@ -33,5 +33,10 @@
     <string name="home_screen_faqs_card_img">https://user-images.githubusercontent.com/32247767/45531067-df13c580-b7a2-11e8-8f8d-6858e98c8a63.png</string>
     <string name="home_screen_workshops_card_img">https://user-images.githubusercontent.com/32247767/45531089-e044f280-b7a2-11e8-8bf4-4c7684b185a9.png</string>
     <string name="home_screen_sponsors_card_img">https://user-images.githubusercontent.com/32247767/45531083-dfac5c00-b7a2-11e8-8413-b969cbcf94b3.png</string>
+    <!-- TODO : Add profile image -->
+    <string name="home_screen_profile_card_img"></string>
+    <string name="default_notification_channel_id">Default</string>
+    <string name="ScanQRCodeText">Scan this QR code to sign in, get food, and more.</string>
+    <string name="ScanQRButtonText">Scan QR Code</string>
 
 </resources>

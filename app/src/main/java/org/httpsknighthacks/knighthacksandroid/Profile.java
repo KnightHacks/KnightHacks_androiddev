@@ -1,0 +1,40 @@
+package org.httpsknighthacks.knighthacksandroid;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Profile extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_profile);
+
+        Button settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO setContentView(R.layout.activity_settings);
+
+                Toast.makeText(Profile.this, "No Settings page yet",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button scanQrCodeButton = findViewById(R.id.scan_qr_code_button);
+        scanQrCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : Add QR scan feature
+
+                Toast.makeText(Profile.this, "Not Successful",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}

@@ -19,8 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
@@ -127,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
         mTextList.add(getResources().getString(R.string.sponsors_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
         activityList.add(Sponsors.class);
+
+        // TODO : add the correct image
+        mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_sponsors));
+        mTextList.add("Profile");
+        // TODO : add the correct color
+        mBgColors.add(getResources().getColor(R.color.colorProfilePageCardBlack));
+        activityList.add(Profile.class);
 
         loadRecycleViewToHomepage();
     }
