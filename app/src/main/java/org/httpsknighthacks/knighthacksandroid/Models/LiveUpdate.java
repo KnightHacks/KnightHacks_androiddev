@@ -6,17 +6,12 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
-    public static final String MESSAGE_KEY = "message";
-    public static final String TIME_SENT_KEY = "timeSent";
-    public static final String PICTURE_KEY = "picture";
-
     private String message;
     private String picture;
+    private String optionalImage;
     private Timestamp timeSent;
 
-    public LiveUpdate() {
-
-    }
+    public LiveUpdate() { }
 
     public String getMessage() {
         return message;
@@ -25,7 +20,7 @@ public class LiveUpdate {
     public void setMessage(String message) {
         this.message = message;
     }
-
+  
     public String getPicture() {
         return picture;
     }
