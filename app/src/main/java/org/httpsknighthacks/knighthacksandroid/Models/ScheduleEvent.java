@@ -1,9 +1,5 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class ScheduleEvent {
 
     private String title;
@@ -54,4 +50,13 @@ public class ScheduleEvent {
     public void setEventType(String eventType) {
         this.eventType = eventType;
     }
+
+    public static boolean isValid(ScheduleEvent event) {
+        return event.getTitle() != null
+                && event.getLocation() != null
+                && event.getStartTime() != null
+                && event.getEndTime() != null
+                && event.getEventType() != null;
+    }
 }
+
