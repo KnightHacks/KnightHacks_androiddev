@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
 
-    private static final String TAG = "Workshops";
+    private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -74,6 +74,8 @@ public class Workshops extends AppCompatActivity {
 
         mProgressBar = findViewById(R.id.workshops_progress_bar);
         mEmptyScreenView = findViewById(R.id.workshops_empty_screen_view);
+
+        workshops = new ArrayList<>();
 
         loadFilters();
         loadWorkshops();
@@ -175,17 +177,20 @@ public class Workshops extends AppCompatActivity {
 
                 for (int i = 0; i < numWorkshops; i++) {
                     Workshop currWorkshop = response.get(i);
-                    String currStartTime = currWorkshop.getStartTime().toDate().toString();
 
-                    if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
-                        addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
-                        lastStartTime = currStartTime;
+                    if (Workshop.isValid(currWorkshop)) {
+                        String currStartTime = currWorkshop.getStartTime().toDate().toString();
+
+                        if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                            lastStartTime = currStartTime;
+                        }
+
+                        addWorkshopCard(currWorkshop);
+                        workshops.add(currWorkshop);
                     }
-
-                    addWorkshopCard(currWorkshop);
                 }
 
-                workshops = response;
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
                 mProgressBar.setVisibility(View.GONE);
             }
