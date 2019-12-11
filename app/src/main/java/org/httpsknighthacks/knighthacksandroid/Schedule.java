@@ -176,17 +176,20 @@ public class Schedule extends AppCompatActivity {
 
                 for (int i = 0; i < numEvents; i++) {
                     ScheduleEvent currEvent = response.get(i);
-                    String currStartTime = currEvent.getStartTime().toDate().toString();
 
-                    if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
-                        addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
-                        lastStartTime = currStartTime;
+                    if (ScheduleEvent.isValid(currEvent)) {
+                        String currStartTime = currEvent.getStartTime().toDate().toString();
+
+                        if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                            lastStartTime = currStartTime;
+                        }
+
+                        addScheduleEventCard(currEvent);
+                        scheduleEvents.add(currEvent);
                     }
-
-                    addScheduleEventCard(currEvent);
                 }
 
-                scheduleEvents = response;
                 scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
                 mProgressBar.setVisibility(View.GONE);
             }
