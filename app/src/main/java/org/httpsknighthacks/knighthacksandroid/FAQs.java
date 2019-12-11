@@ -57,14 +57,16 @@ public class FAQs extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
-            @Override
+             @Override
             public void onSuccess(ArrayList<FAQ> response) {
                 int numFAQs = response.size();
                 for (int i = 0; i < numFAQs; i++) {
                     FAQ currFAQ = response.get(i);
 
-                    mCardTitleList.add(currFAQ.getQuestion());
-                    mCardDetailsList.add(currFAQ.getAnswer());
+                    if (FAQ.isValid(currFAQ)) {
+                        mCardTitleList.add(currFAQ.getQuestion());
+                        mCardDetailsList.add(currFAQ.getAnswer());
+                    }
                 }
 
                 verticalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
