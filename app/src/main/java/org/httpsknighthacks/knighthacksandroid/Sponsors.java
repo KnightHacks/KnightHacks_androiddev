@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Sponsors extends AppCompatActivity {
+
+    private static final String TAG = Sponsors.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -100,27 +104,6 @@ public class Sponsors extends AppCompatActivity {
         filtersTask.retrieveFilters();
     }
 
-//    private void loadImages(ArrayList<String> pictures) {
-//        ImagesTask imagesTask = new ImagesTask(BASE_PATH, new ResponseListener<String>() {
-//            @Override
-//            public void onStart() {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(ArrayList<String> response) {
-//
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//
-//            }
-//        });
-//        imagesTask.retrieveImages(pictures);
-//    }
-
-
     private void loadSponsors() {
         SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
             @Override
@@ -139,10 +122,13 @@ public class Sponsors extends AppCompatActivity {
 
                 for (int i = 0; i < numSponsors; i++) {
                     Sponsor currSponsor = response.get(i);
-                    addSponsorCard(currSponsor);
+                    
+                    if (Sponsor.isValid(currSponsor)) {
+                        addSponsorCard(currSponsor);
+                        sponsors.add(currSponsor);
+                    }
                 }
 
-                sponsors = response;
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
                 mProgressBar.setVisibility(View.GONE);
             }
