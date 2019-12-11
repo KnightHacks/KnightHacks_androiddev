@@ -34,7 +34,7 @@ public class LiveUpdates extends AppCompatActivity {
 
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
-    private VerticalSectionCard_RecyclerViewAdapter mHorizontalSectionCardRecyclerViewAdapter;
+    private VerticalSectionCard_RecyclerViewAdapter mVerticalSectionCardRecyclerViewAdapter;
 
     private TextView mCountdown;
     private TextView mLiveIndicator;
@@ -156,7 +156,7 @@ public class LiveUpdates extends AppCompatActivity {
                         mCardSubtitleList.add(currUpdate.getTimeSent().toDate().toString());
                     }
 
-                    mHorizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                    mVerticalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -173,7 +173,7 @@ public class LiveUpdates extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.live_updates_vertical_section_card_container);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mHorizontalSectionCardRecyclerViewAdapter =
+        mVerticalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
                         mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
         mRecyclerView.setAdapter(mHorizontalSectionCardRecyclerViewAdapter);
