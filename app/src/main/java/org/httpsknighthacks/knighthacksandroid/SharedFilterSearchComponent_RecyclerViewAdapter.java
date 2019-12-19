@@ -73,7 +73,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         } else {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mImageList.get(position))
+                    .load(reference.child(mImageList.get(position)))
 //                    .load(R.drawable.ic_filter_all)
                     .into(holder.mImageView);
         }
