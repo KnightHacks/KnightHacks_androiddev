@@ -74,7 +74,6 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             Glide.with(mContext)
                     .asBitmap()
                     .load(reference.child(mImageList.get(position)))
-//                    .load(R.drawable.ic_filter_all)
                     .into(holder.mImageView);
         }
         String searchFilter = mSearchFilterTypes.get(position);

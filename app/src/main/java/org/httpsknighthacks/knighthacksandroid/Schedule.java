@@ -25,8 +25,8 @@ import java.util.ArrayList;
 
 public class Schedule extends AppCompatActivity {
 
-    private static final String allFILTER = "All";
-    private static final String filterType = "event";
+    private static final String ALLFILTER = "All";
+    private static final String FILTERTYPE = "event";
     private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
@@ -251,7 +251,7 @@ public class Schedule extends AppCompatActivity {
     }
 
     private ArrayList<ScheduleEvent> getScheduleEventsByType(String type) {
-        if (type.equals(allFILTER)) {
+        if (type.equals(ALLFILTER)) {
             return scheduleEvents;
         }
 
@@ -300,7 +300,7 @@ public class Schedule extends AppCompatActivity {
 
     private void getFilterSearchComponents() {
         for (int i = 0; i < filters.size(); i++) {
-            if (filters.get(i).getType().equals(filterType)) {
+            if (filters.get(i).getType().equals(FILTERTYPE)) {
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
                 mFilterSearchImageList.add(picturePath);
@@ -310,7 +310,7 @@ public class Schedule extends AppCompatActivity {
 
         // The Adapter handles the ALL filter image
         mFilterSearchImageList.add("");
-        mSearchFilterTypeList.add(allFILTER);
+        mSearchFilterTypeList.add(ALLFILTER);
     }
 }
 

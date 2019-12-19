@@ -78,12 +78,6 @@ public class Sponsor {
     }
 
     public String getFullTime() {
-        /*
-        if (SearchFilterTypes.hasTargetFilter(offerings, SearchFilterTypes.FULL_TIME)) {
-            return SearchFilterTypes.FULL_TIME.toString();
-        }
-        */
-
         return "Full-time";
     }
 

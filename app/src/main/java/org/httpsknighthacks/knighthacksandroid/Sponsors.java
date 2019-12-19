@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 public class Sponsors extends AppCompatActivity {
 
-    private static final String allFILTER = "All";
-    private static final String filterType= "sponsor";
+    private static final String ALLFILTER = "All";
+    private static final String FILTERTYPE= "sponsor";
     private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
@@ -241,7 +241,7 @@ public class Sponsors extends AppCompatActivity {
 
     private ArrayList<Sponsor> getSponsorsByOfferType(String type) {
 
-        if (type.equals(allFILTER)) {
+        if (type.equals(ALLFILTER)) {
             return sponsors;
         }
 
@@ -286,7 +286,7 @@ public class Sponsors extends AppCompatActivity {
 
     private void getFilterSearchComponents() {
         for (int i = 0; i < filters.size(); i++) {
-            if (filters.get(i).getType().equals(filterType)) {
+            if (filters.get(i).getType().equals(FILTERTYPE)) {
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
                 mFilterSearchImageList.add(picturePath);
@@ -296,7 +296,7 @@ public class Sponsors extends AppCompatActivity {
 
         // The Adapter handles the ALL filter image
         mFilterSearchImageList.add("");
-        mSearchFilterTypeList.add(allFILTER);
+        mSearchFilterTypeList.add(ALLFILTER);
     }
 }
 
