@@ -1,6 +1,7 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class Workshops extends AppCompatActivity {
 
     private static final String TAG = "workshop";
+    private static final String allFILTER = "ALL";
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -276,7 +277,6 @@ public class Workshops extends AppCompatActivity {
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-            // Todo: Fix time stamp
 //            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
 //
 //            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
@@ -305,9 +305,8 @@ public class Workshops extends AppCompatActivity {
             }
         }
 
-        // Todo: Add ALL filter's picture path
         mFilterSearchImageList.add("");
-        mSearchFilterTypeList.add("ALL");
+        mSearchFilterTypeList.add(allFILTER);
     }
 }
 

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class Schedule extends AppCompatActivity {
 
     private static final String TAG = "event";
+    private static final String allFILTER = "ALL";
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -274,7 +275,6 @@ public class Schedule extends AppCompatActivity {
         for (int i = 0; i < numEvents; i++) {
             ScheduleEvent currEvent = events.get(i);
 
-            // Todo: handle timestamp
 //            Optional<String> currStartTime = currEvent.getStartTimeOptional();
 //
 //            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
@@ -298,15 +298,13 @@ public class Schedule extends AppCompatActivity {
             if (filters.get(i).getType().equals(TAG)) {
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
-
                 mFilterSearchImageList.add(picturePath);
                 mSearchFilterTypeList.add(filterType);
             }
         }
 
-        // Todo: Add ALL filter's picture path
         mFilterSearchImageList.add("");
-        mSearchFilterTypeList.add("ALL");
+        mSearchFilterTypeList.add(allFILTER);
     }
 }
 

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 public class Sponsors extends AppCompatActivity {
 
     private static final String TAG = "sponsor";
+    private static final String allFILTER = "ALL";
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -285,16 +286,13 @@ public class Sponsors extends AppCompatActivity {
             if (filters.get(i).getType().equals(TAG)) {
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
-
-                    mFilterSearchImageList.add(picturePath);
+                mFilterSearchImageList.add(picturePath);
                 mSearchFilterTypeList.add(filterType);
             }
         }
 
-        // Todo: Add ALL filter's picture path
         mFilterSearchImageList.add("");
-        mSearchFilterTypeList.add("ALL");
-
+        mSearchFilterTypeList.add(allFILTER);
     }
 }
 

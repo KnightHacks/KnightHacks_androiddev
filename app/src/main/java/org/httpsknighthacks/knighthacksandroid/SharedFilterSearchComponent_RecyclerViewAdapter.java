@@ -57,21 +57,23 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     }
 
     public void setOnBindViewHolder(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position, View.OnClickListener onClickListener) {
-        Glide.with(mContext)
-                .asBitmap()
-                .load(mImageList.get(position))
-                .into(holder.mImageView);
-
+        if(position == (mImageList.size()-1)) {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(R.drawable.ic_filter_all)
+                    .into(holder.mImageView);
+            holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
+            setPreviousHolder(holder);
+        } else {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(mImageList.get(position))
+                    .into(holder.mImageView);
+        }
         String searchFilter = mSearchFilterTypes.get(position);
 
         holder.mTextView.setText(searchFilter);
         holder.setEventType(searchFilter);
-
-        if(position == (mImageList.size()-1)) {
-            holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
-            setPreviousHolder(holder);
-        }
-
         holder.mCardView.setOnClickListener(onClickListener);
     }
 
