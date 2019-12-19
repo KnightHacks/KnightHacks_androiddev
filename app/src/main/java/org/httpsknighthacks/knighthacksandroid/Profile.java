@@ -19,7 +19,7 @@ public class Profile extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO setContentView(R.layout.activity_settings);
+                // TODO add settings fragment and portion
 
                 Toast.makeText(Profile.this, "No Settings page yet",
                         Toast.LENGTH_SHORT).show();

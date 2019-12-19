@@ -101,6 +101,13 @@ public class MainActivity extends AppCompatActivity {
     // Get images and titles from the database
     private void getImageAndTitles()
     {
+        // TODO : add the correct image
+        mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_sponsors));
+        mTextList.add("Profile");
+        // TODO : add the correct color
+        mBgColors.add(getResources().getColor(R.color.colorProfilePageCardBlack));
+        activityList.add(Profile.class);
+
         mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_schedule));
         mTextList.add(getResources().getString(R.string.schedule_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardOrange));
@@ -125,13 +132,6 @@ public class MainActivity extends AppCompatActivity {
         mTextList.add(getResources().getString(R.string.sponsors_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
         activityList.add(Sponsors.class);
-
-        // TODO : add the correct image
-        mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_sponsors));
-        mTextList.add("Profile");
-        // TODO : add the correct color
-        mBgColors.add(getResources().getColor(R.color.colorProfilePageCardBlack));
-        activityList.add(Profile.class);
 
         loadRecycleViewToHomepage();
     }
