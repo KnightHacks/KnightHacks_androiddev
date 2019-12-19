@@ -1,6 +1,7 @@
 package org.httpsknighthacks.knighthacksandroid.Models.Enums;
 
 import java.util.HashMap;
+import java.util.List;
 
 public enum SearchFilterTypes {
     DEV ("Development"),
@@ -38,9 +39,9 @@ public enum SearchFilterTypes {
         return this.searchFilterString;
     }
 
-    public static boolean hasTargetFilter(SearchFilterTypes types[], SearchFilterTypes target) {
-        for (int i = 0; i < types.length; i++) {
-            if (types[i].equals(target)) {
+    public static boolean hasTargetFilter(List<String> types, SearchFilterTypes target) {
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i).equals(target)) {
                 return true;
             }
         }
