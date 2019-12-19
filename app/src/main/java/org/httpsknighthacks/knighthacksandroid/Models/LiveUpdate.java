@@ -6,66 +6,45 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
-    private Optional<String> mMessage;
-    private Optional<String> mTimeSent;
-    private Optional<String> mPicture;
-    private Optional<String> mOptionalImage;
-
     public static final String MESSAGE_KEY = "message";
     public static final String TIME_SENT_KEY = "timeSent";
     public static final String PICTURE_KEY = "picture";
-    public static final String OPTIONAL_IMAGE_KEY = "image";
 
-    public LiveUpdate(JSONObject jsonObject) {
-        try {
-            withMessage(jsonObject.getString(MESSAGE_KEY));
-            withTimeSent(DateTimeUtils.getTimeAndDurationSinceGiven(jsonObject.getString(TIME_SENT_KEY)));
-            withPicture(jsonObject.getString(PICTURE_KEY));
-            withOptionalImage(jsonObject.getString(OPTIONAL_IMAGE_KEY));
-        } catch (JSONException ex) {
-            this.mMessage = Optional.empty();
-            this.mTimeSent = Optional.empty();
-            this.mPicture = Optional.empty();
-            this.mOptionalImage = Optional.empty();
-        }
+    private String message;
+    private String picture;
+    private Timestamp timeSent;
+
+    public LiveUpdate() {
+
     }
 
-    public void withMessage(String message) {
-        this.mMessage = Optional.of(message);
+    public String getMessage() {
+        return message;
     }
 
-    public void withTimeSent(String timeSent) {
-        this.mTimeSent = Optional.of(timeSent);
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void withPicture(String picture) {
-        this.mPicture = Optional.of(picture);
+    public String getPicture() {
+        return picture;
     }
 
-    public void withOptionalImage(String imageView) {
-        this.mOptionalImage = Optional.of(imageView);
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
-    public Optional<String> getMessageOptional() {
-        return mMessage;
+    public Timestamp getTimeSent() {
+        return timeSent;
     }
 
-    public Optional<String> getTimeSentOptional() {
-        return mTimeSent;
-    }
-
-    public Optional<String> getPictureOptional() {
-        return mPicture;
-    }
-
-    public Optional<String> getImageOptional () {
-        return mOptionalImage;
+    public void setTimeSent(Timestamp timeSent) {
+        this.timeSent = timeSent;
     }
 
     public static boolean isValid(LiveUpdate update) {
-        return update.getMessageOptional().isPresent()
-                && update.getTimeSentOptional().isPresent()
-                && update.getPictureOptional().isPresent()
-                && update.getImageOptional().isPresent();
+        return update.getMessage() != null
+                && update.getTimeSent() != null
+                && update.getPicture() != null;
     }
 }

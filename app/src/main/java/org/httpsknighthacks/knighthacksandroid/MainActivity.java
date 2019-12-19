@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     // Add everything into the recycler view and recycler adapter
     private void loadRecycleViewToHomepage()
     {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         RecyclerView mRecyclerView = findViewById(R.id.homepage_list_container);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         Homepage_RecyclerViewAdapter homepage_recyclerViewAdapter =

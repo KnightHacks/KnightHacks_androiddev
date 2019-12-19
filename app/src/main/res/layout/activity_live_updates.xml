@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/live_updates_vertical_section_card_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/white">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </RelativeLayout>
 
