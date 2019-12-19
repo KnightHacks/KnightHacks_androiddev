@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -23,8 +25,9 @@ import java.util.ArrayList;
 
 public class Schedule extends AppCompatActivity {
 
-    private static final String TAG = "event";
     private static final String allFILTER = "ALL";
+    private static final String type = "event";
+    private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -50,8 +53,8 @@ public class Schedule extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Filter> filters = new ArrayList<>();
-    private ArrayList<ScheduleEvent> scheduleEvents = new ArrayList<>();
+    private ArrayList<Filter> filters;
+    private ArrayList<ScheduleEvent> scheduleEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class Schedule extends AppCompatActivity {
 
         loadFilters();
         loadSchedule();
+
         loadRecyclerView();
     }
 
@@ -149,8 +153,7 @@ public class Schedule extends AppCompatActivity {
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
                 getFilterSearchComponents();
-                searchFilterRecyclerViewAdapter.notifyDataSetChanged();
-//                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
+                scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -181,17 +184,20 @@ public class Schedule extends AppCompatActivity {
 
                 for (int i = 0; i < numEvents; i++) {
                     ScheduleEvent currEvent = response.get(i);
-                    String currStartTime = currEvent.getStartTime().toDate().toString();
 
-                    if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
-                        addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
-                        lastStartTime = currStartTime;
+                    if (ScheduleEvent.isValid(currEvent)) {
+                        String currStartTime = currEvent.getStartTime().toDate().toString();
+
+                        if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                            lastStartTime = currStartTime;
+                        }
+
+                        addScheduleEventCard(currEvent);
+                        scheduleEvents.add(currEvent);
                     }
-
-                    addScheduleEventCard(currEvent);
                 }
 
-                scheduleEvents = response;
                 scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
                 mProgressBar.setVisibility(View.GONE);
             }
@@ -245,7 +251,7 @@ public class Schedule extends AppCompatActivity {
     }
 
     private ArrayList<ScheduleEvent> getScheduleEventsByType(String type) {
-        if (type == "ALL") {
+        if (type.equals(allFILTER)) {
             return scheduleEvents;
         }
 
@@ -274,13 +280,12 @@ public class Schedule extends AppCompatActivity {
 
         for (int i = 0; i < numEvents; i++) {
             ScheduleEvent currEvent = events.get(i);
+            String currStartTime = currEvent.getStartTime().toDate().toString();
 
-//            Optional<String> currStartTime = currEvent.getStartTimeOptional();
-//
-//            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-//                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
-//                lastStartTime = currStartTime;
-//            }
+            if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                lastStartTime = currStartTime;
+            }
 
             addScheduleEventCard(currEvent);
         }
@@ -294,8 +299,9 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
+        Log.d("Hung", String.valueOf(filters.size()));
         for (int i = 0; i < filters.size(); i++) {
-            if (filters.get(i).getType().equals(TAG)) {
+            if (filters.get(i).getType().equals(type)) {
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
                 mFilterSearchImageList.add(picturePath);
@@ -307,4 +313,7 @@ public class Schedule extends AppCompatActivity {
         mSearchFilterTypeList.add(allFILTER);
     }
 }
+
+
+
 

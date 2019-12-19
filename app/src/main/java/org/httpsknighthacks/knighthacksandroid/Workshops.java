@@ -1,7 +1,6 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
@@ -25,8 +25,9 @@ import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
 
-    private static final String TAG = "workshop";
-    private static final String allFILTER = "ALL";
+    private static final String allFILTER = "All";
+    private static final String type = "workshop";
+    private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -52,8 +53,8 @@ public class Workshops extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Workshop> workshops = new ArrayList<>();
-    private ArrayList<Filter> filters = new ArrayList<>();
+    private ArrayList<Workshop> workshops;
+    private ArrayList<Filter> filters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,9 @@ public class Workshops extends AppCompatActivity {
 
         mProgressBar = findViewById(R.id.workshops_progress_bar);
         mEmptyScreenView = findViewById(R.id.workshops_empty_screen_view);
+
+        workshops = new ArrayList<>();
+        filters = new ArrayList<>();
 
         loadFilters();
         loadWorkshops();
@@ -157,7 +161,6 @@ public class Workshops extends AppCompatActivity {
         });
 
         filtersTask.retrieveFilters();
-
     }
 
     private void loadWorkshops() {
@@ -178,17 +181,20 @@ public class Workshops extends AppCompatActivity {
 
                 for (int i = 0; i < numWorkshops; i++) {
                     Workshop currWorkshop = response.get(i);
-                    String currStartTime = currWorkshop.getStartTime().toDate().toString();
 
-                    if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
-                        addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
-                        lastStartTime = currStartTime;
+                    if (Workshop.isValid(currWorkshop)) {
+                        String currStartTime = currWorkshop.getStartTime().toDate().toString();
+
+                        if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                            lastStartTime = currStartTime;
+                        }
+
+                        addWorkshopCard(currWorkshop);
+                        workshops.add(currWorkshop);
                     }
-
-                    addWorkshopCard(currWorkshop);
                 }
 
-                workshops = response;
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
                 mProgressBar.setVisibility(View.GONE);
             }
@@ -238,9 +244,9 @@ public class Workshops extends AppCompatActivity {
         else
             sharedFilterSearchComponent_RecyclerViewAdapter =
                     new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
-                    @Override
-                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
-                        filterScheduleEventsByType(holder.mSearchFilterType);
+                        @Override
+                        public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+                            filterScheduleEventsByType(holder.mSearchFilterType);
                         }
                     });
 
@@ -248,7 +254,7 @@ public class Workshops extends AppCompatActivity {
     }
 
     private ArrayList<Workshop> getWorkshopsByType(String type) {
-        if (type == "ALL") {
+        if (type.equals(allFILTER)) {
             return workshops;
         }
 
@@ -277,12 +283,12 @@ public class Workshops extends AppCompatActivity {
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-//            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
-//
-//            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-//                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
-//                lastStartTime = currStartTime;
-//            }
+            String currStartTime = currWorkshop.getStartTime().toDate().toString();
+
+            if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
+                lastStartTime = currStartTime;
+            }
 
             addWorkshopCard(currWorkshop);
         }
@@ -297,9 +303,11 @@ public class Workshops extends AppCompatActivity {
 
     private void getFilterSearchComponents() {
         for (int i = 0; i < filters.size(); i++) {
-            if (filters.get(i).getType().equals(TAG)) {
+            if (filters.get(i).getType().equals(type)) {
+
                 String filterType = filters.get(i).getName();
                 String picturePath = filters.get(i).getPicture();
+                Log.d("HUNG", picturePath);
                 mFilterSearchImageList.add(picturePath);
                 mSearchFilterTypeList.add(filterType);
             }
@@ -308,5 +316,8 @@ public class Workshops extends AppCompatActivity {
         mFilterSearchImageList.add("");
         mSearchFilterTypeList.add(allFILTER);
     }
+
 }
+
+
 

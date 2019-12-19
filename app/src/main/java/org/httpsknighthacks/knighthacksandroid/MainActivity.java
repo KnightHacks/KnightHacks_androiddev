@@ -1,14 +1,28 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.app.ActionBar;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 
@@ -23,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Class> activityList = new ArrayList<>();
 
     public RequestQueueSingleton mRequestQueueSingleton;
+
+    private String ANNOUNCEMENTS_TOPIC = "ANNOUNCEMENTS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +64,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Start of firebase notification code.
+
+        // For notifications received in foreground
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel =
+                    new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        subscribeToTopic(ANNOUNCEMENTS_TOPIC);
+
+        // End of firebase code.
+
+
         setContentView(R.layout.activity_main);
 
         mRequestQueueSingleton = new RequestQueueSingleton(getApplicationContext());
         getImageAndTitles();
+    }
+
+    private void subscribeToTopic(final String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Successful: Subscribed to " + topic;
+                        if (!task.isSuccessful()) {
+                            msg = "Failed";
+                        }
+                        Log.d("Subscription to " + topic, msg);
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     // Get images and titles from the database
@@ -88,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     // Add everything into the recycler view and recycler adapter
     private void loadRecycleViewToHomepage()
     {
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         RecyclerView mRecyclerView = findViewById(R.id.homepage_list_container);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         Homepage_RecyclerViewAdapter homepage_recyclerViewAdapter =

@@ -19,4 +19,8 @@ public class FAQ {
     public String getAnswer() {
         return answer;
     }
+
+    public static boolean isValid(FAQ faq) {
+        return faq.getQuestion() != null && faq.getAnswer() != null;
+    }
 }

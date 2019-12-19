@@ -73,11 +73,6 @@ public class Sponsor {
     }
 
     public String getInternship() {
-        /*
-        if (SearchFilterTypes.hasTargetFilter(offerings, SearchFilterTypes.INTERNSHIP)) {
-            return SearchFilterTypes.INTERNSHIP.toString();
-        }
-        */
 
         return "Internship";
     }
@@ -93,10 +88,10 @@ public class Sponsor {
     }
 
     public static boolean isValid(Sponsor sponsor) {
-        return sponsor.getNameOptional().isPresent()
-                && sponsor.getLocationOptional().isPresent()
-                && sponsor.getDescriptionOptional().isPresent()
-                && sponsor.getPictureOptional().isPresent();
+        return sponsor.getName() != null
+                && sponsor.getLocation() != null
+                && sponsor.getDescription() != null
+                && sponsor.getPicture() != null;
     }
 
     public String getName() {

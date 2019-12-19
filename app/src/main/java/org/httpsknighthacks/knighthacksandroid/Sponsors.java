@@ -24,8 +24,9 @@ import java.util.logging.Logger;
 
 public class Sponsors extends AppCompatActivity {
 
-    private static final String TAG = "sponsor";
     private static final String allFILTER = "ALL";
+    private static final String type = "sponsor";
+    private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -106,7 +107,6 @@ public class Sponsors extends AppCompatActivity {
         filtersTask.retrieveFilters();
     }
 
-
     private void loadSponsors() {
         SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
             @Override
@@ -125,10 +125,13 @@ public class Sponsors extends AppCompatActivity {
 
                 for (int i = 0; i < numSponsors; i++) {
                     Sponsor currSponsor = response.get(i);
-
-                    addSponsorCard(currSponsor);
+                    
+                    if (Sponsor.isValid(currSponsor)) {
+                        addSponsorCard(currSponsor);
+                        sponsors.add(currSponsor);
+                    }
                 }
-                sponsors = response;
+
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
                 mProgressBar.setVisibility(View.GONE);
             }
@@ -238,7 +241,7 @@ public class Sponsors extends AppCompatActivity {
 
     private ArrayList<Sponsor> getSponsorsByOfferType(String type) {
 
-        if (type == "ALL") {
+        if (type.equals(allFILTER)) {
             return sponsors;
         }
 

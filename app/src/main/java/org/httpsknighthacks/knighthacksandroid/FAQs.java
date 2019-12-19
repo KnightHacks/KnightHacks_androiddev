@@ -22,10 +22,11 @@ public class FAQs extends AppCompatActivity {
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
+    private ArrayList<String> mCardOptionalImageList;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
-    private VerticalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter;
+    private VerticalSectionCard_RecyclerViewAdapter verticalSectionCardRecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
@@ -39,6 +40,7 @@ public class FAQs extends AppCompatActivity {
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
         mCardDetailsList = new ArrayList<>();
+        mCardOptionalImageList = new ArrayList<>();
 
         mProgressBar = findViewById(R.id.faqs_progress_bar);
         mEmptyScreenView = findViewById(R.id.faqs_empty_screen_view);
@@ -55,17 +57,19 @@ public class FAQs extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
-            @Override
+             @Override
             public void onSuccess(ArrayList<FAQ> response) {
                 int numFAQs = response.size();
                 for (int i = 0; i < numFAQs; i++) {
                     FAQ currFAQ = response.get(i);
 
-                    mCardTitleList.add(currFAQ.getQuestion());
-                    mCardDetailsList.add(currFAQ.getAnswer());
+                    if (FAQ.isValid(currFAQ)) {
+                        mCardTitleList.add(currFAQ.getQuestion());
+                        mCardDetailsList.add(currFAQ.getAnswer());
+                    }
                 }
 
-                horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                verticalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -81,9 +85,9 @@ public class FAQs extends AppCompatActivity {
         recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        horizontalSectionCardRecyclerViewAdapter =
+        verticalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList, mCardDetailsList, TAG);
-        recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, mCardOptionalImageList, TAG);
+        recyclerView.setAdapter(verticalSectionCardRecyclerViewAdapter);
     }
 }

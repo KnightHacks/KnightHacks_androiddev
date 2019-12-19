@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
@@ -20,7 +24,7 @@ import java.util.ArrayList;
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
-    private ArrayList<String> mImageList = new ArrayList<>();
+    private ArrayList<String> mImageList;
     private ArrayList<String> mSearchFilterTypes;
     private ArrayList<String> mSearchFilterNames;
     private Context mContext;
@@ -57,6 +61,8 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     }
 
     public void setOnBindViewHolder(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position, View.OnClickListener onClickListener) {
+        StorageReference reference = FirebaseStorage.getInstance().getReference();
+
         if(position == (mImageList.size()-1)) {
             Glide.with(mContext)
                     .asBitmap()
@@ -68,6 +74,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             Glide.with(mContext)
                     .asBitmap()
                     .load(mImageList.get(position))
+//                    .load(R.drawable.ic_filter_all)
                     .into(holder.mImageView);
         }
         String searchFilter = mSearchFilterTypes.get(position);

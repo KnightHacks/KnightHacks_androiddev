@@ -20,7 +20,6 @@
         android:id="@+id/schedule_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_below="@+id/shared_horizontal_filter_search_component_container"
         android:layout_centerHorizontal="true"
         android:paddingVertical="10dp"

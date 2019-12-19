@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 
 public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapter<VerticalSectionCard_RecyclerViewAdapter.ViewHolder> {
@@ -20,6 +23,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
     private ArrayList<String> mCardDetailsList;
+    private ArrayList<String> mCardOptionalImageList;
     private String tag;
     private Context mContext;
 
@@ -28,12 +32,14 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                                                      ArrayList<String> mCardTitleList,
                                                      ArrayList<String> mCardSubtitleList,
                                                      ArrayList<String> mCardDetailsList,
+                                                     ArrayList<String> mCardOptionalImageList,
                                                      String tag) {
         this.mContext = mContext;
         this.mCardImageList = mCardImageList;
         this.mCardTitleList = mCardTitleList;
         this.mCardSubtitleList = mCardSubtitleList;
         this.mCardDetailsList = mCardDetailsList;
+        this.mCardOptionalImageList = mCardOptionalImageList;
         this.tag = tag;
     }
 
@@ -46,11 +52,12 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         // Only load parts of the generic vertical card if needed
+        StorageReference reference = FirebaseStorage.getInstance().getReference();
 
         if (position < mCardImageList.size()) {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mCardImageList.get(position))
+                    .load(reference.child(mCardImageList.get(position)))
                     .into(holder.mCardImage);
         } else if (!tag.equals(FAQs.TAG)) {
             holder.mCardImage.setVisibility(View.GONE);
@@ -73,6 +80,15 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         } else {
             holder.mCardDetails.setVisibility(View.GONE);
         }
+
+        if (position < mCardOptionalImageList.size()) {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(mCardOptionalImageList.get(position))
+                    .into(holder.mCardOptionalImage);
+        } else if (!tag.equals(FAQs.TAG)) {
+            holder.mCardOptionalImage.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -86,6 +102,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         TextView mCardTitle;
         TextView mCardSubtitle;
         TextView mCardDetails;
+        ImageView mCardOptionalImage;
         String mTag;
 
         public ViewHolder(View itemView, String tag) {
@@ -95,6 +112,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
             this.mCardTitle = itemView.findViewById(R.id.vertical_section_card_title);
             this.mCardSubtitle = itemView.findViewById(R.id.vertical_section_card_subtitle);
             this.mCardDetails = itemView.findViewById(R.id.vertical_section_card_detail);
+            this.mCardOptionalImage = itemView.findViewById(R.id.vertical_section_card_optional_image);
             this.mTag = tag;
 
             if(this.mTag.equals(FAQs.TAG)) {
@@ -103,6 +121,11 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                         .asDrawable()
                         .load(R.drawable.ic_faq_plus)
                         .into(mCardImage);
+
+                Glide.with(mContext)
+                        .asDrawable()
+                        .load(R.drawable.ic_faq_minus)
+                        .into(mCardOptionalImage);
 
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -118,7 +141,7 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                             Glide.with(mContext)
                                     .asDrawable()
                                     .load(R.drawable.ic_faq_plus)
-                                    .into(mCardImage);                        
+                                    .into(mCardImage);
                         }
                     }
                 });

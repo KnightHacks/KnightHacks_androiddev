@@ -1,8 +1,4 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
-
-
-import com.google.firebase.firestore.ServerTimestamp;
-
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,15 +24,6 @@ public class Workshop {
     private String prerequisites;
     private Timestamp startTime;
     private Timestamp endTime;
-
-    public static final String NAME_KEY = "name";
-    public static final String DESCRIPTION_KEY = "description";
-    public static final String SKILL_LEVEL_KEY = "skillLevel";
-    public static final String PICTURE_KEY = "picture";
-    public static final String WORKSHOP_TYPE_KEY = "workshopType";
-    public static final String PREREQUISITES_KEY = "prerequisites";
-    public static final String START_TIME_KEY = "startTime";
-    public static final String END_TIME_KEY = "endTime";
 
     public Workshop() { }
 
@@ -108,4 +95,16 @@ public class Workshop {
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
+
+    public static boolean isValid(Workshop workshop) {
+        return workshop.getName() != null
+                && workshop.getDescription() != null
+                && workshop.getSkillLevel() != null
+                && workshop.getPicture() != null
+                && workshop.getStartTime() != null
+                && workshop.getEndTime() != null
+                && workshop.getPrerequisites() != null
+                && workshop.getWorkshopType() != null;
+    }
 }
+
