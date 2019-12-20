@@ -1,6 +1,17 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
+import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+
 public class ScheduleEvent {
+
+    private Optional<String> mName;
+    private Optional<String> mDescription;
+    private Optional<SearchFilterTypes> mSkillLevel;
+    private Optional<String> mPicture;
+    private SearchFilterTypes mWorkshopType;
+    private Optional<String> mPrerequisites;
+    private Optional<String> mStartTime;
+    private Optional<String> mEndTime;
 
     private String title;
     private String location;
@@ -9,6 +20,10 @@ public class ScheduleEvent {
     private String eventType;
 
     public ScheduleEvent() {}
+
+    public Optional<String> getStartTimeOptional() {
+        return mStartTime;
+    }
 
     public String getTitle() {
         return title;

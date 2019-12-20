@@ -57,15 +57,15 @@ public class FAQs extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
-             @Override
+            @Override
             public void onSuccess(ArrayList<FAQ> response) {
                 int numFAQs = response.size();
                 for (int i = 0; i < numFAQs; i++) {
                     FAQ currFAQ = response.get(i);
 
                     if (FAQ.isValid(currFAQ)) {
-                        mCardTitleList.add(currFAQ.getQuestion());
-                        mCardDetailsList.add(currFAQ.getAnswer());
+                        mCardTitleList.add(currFAQ.getQuestionOptional().getValue());
+                        mCardDetailsList.add(currFAQ.getAnswerOptional().getValue());
                     }
                 }
 
@@ -76,12 +76,21 @@ public class FAQs extends AppCompatActivity {
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
+
+            public void onComplete(ArrayList<FAQ> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
+                mProgressBar.setVisibility(View.GONE);
+            }
         });
-        faqsTask.retrieveFAQs();
+
+        faqsTask.execute();
     }
 
     private void loadRecyclerView() {
-        linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView = findViewById(R.id.faqs_vertical_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 

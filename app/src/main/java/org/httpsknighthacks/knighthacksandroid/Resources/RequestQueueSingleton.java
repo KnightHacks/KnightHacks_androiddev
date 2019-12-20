@@ -12,7 +12,6 @@ import java.lang.ref.WeakReference;
 public class RequestQueueSingleton {
 
     public static final String TAG = RequestQueueSingleton.class.getSimpleName();
-    public static final String REQUEST_API_PREFIX_URL = "http://test-knight-hacks.appspot.com";
     public static final String REQUEST_ERROR_MESSAGE = "Oops! Something went wrong on our end -- please try again.";
 
     private static RequestQueueSingleton sInstance;

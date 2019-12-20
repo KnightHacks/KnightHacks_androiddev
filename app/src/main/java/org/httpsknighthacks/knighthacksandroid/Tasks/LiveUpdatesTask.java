@@ -4,17 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.httpsknighthacks.knighthacksandroid.Models.LiveUpdate;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
@@ -25,44 +18,59 @@ import org.json.JSONException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class LiveUpdatesTask {
+public class LiveUpdatesTask extends AsyncTask<Void, Void, ArrayList<LiveUpdate>> {
 
     public static final String TAG = LiveUpdatesTask.class.getSimpleName();
-    public static final String UPDATES_COLLECTION = "live_updates";
+    public static final String GET_LIVE_UPDATES_ROUTE = "/LiveUpdate";
 
     private WeakReference<Context> mContext;
+    private ArrayList<LiveUpdate> mLiveUpdates;
     private ResponseListener<LiveUpdate> mResponseListener;
 
-    private DatabaseReference mReference;
     public LiveUpdatesTask(Context context, ResponseListener<LiveUpdate> responseListener) {
         this.mContext = new WeakReference<>(context);
+        this.mLiveUpdates = new ArrayList<>();
         this.mResponseListener = responseListener;
-
-        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
-    public void retrieveUpdates() {
-        showLoading();
-        mReference.child(UPDATES_COLLECTION).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<LiveUpdate> updates = new ArrayList<>();
-                for (DataSnapshot liveUpdateDataSnapshot : dataSnapshot.getChildren()) {
-                    LiveUpdate event = liveUpdateDataSnapshot.getValue(LiveUpdate.class);
-                    updates.add(event);
-                }
-                mResponseListener.onSuccess(updates);
-            }
+    @Override
+    protected void onPreExecute() {
+        mResponseListener.onStart();
+    }
 
+    @Override
+    protected ArrayList<LiveUpdate> doInBackground(Void... voids) {
+        String requestURL = RequestQueueSingleton.REQUEST_API_PREFIX_URL + GET_LIVE_UPDATES_ROUTE;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, requestURL, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onResponse(JSONArray response) {
+                int numUpdates = response.length();
+
+                for (int i = 0; i < numUpdates; i++) {
+                    try {
+                        mLiveUpdates.add(new LiveUpdate(response.getJSONObject(i)));
+                    } catch (JSONException ex) {
+                        Toast.makeText(getContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                mResponseListener.onSuccess(mLiveUpdates);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
                 mResponseListener.onFailure();
             }
         });
+
+        RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(request, TAG);
+        return mLiveUpdates;
     }
 
-    private void showLoading() {
-        mResponseListener.onStart();
+    @Override
+    protected void onPostExecute(ArrayList<LiveUpdate> liveUpdates) {
+        mResponseListener.onComplete(liveUpdates);
     }
 
     public Context getContext() {

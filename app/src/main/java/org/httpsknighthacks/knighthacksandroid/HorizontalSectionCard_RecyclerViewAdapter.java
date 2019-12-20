@@ -4,8 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -32,6 +28,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private ArrayList<String> mCardFooterList;
 
     private Context mContext;
+
     public HorizontalSectionCard_RecyclerViewAdapter(Context mContext,
                                                      ArrayList<Integer> mViewTypeList,
                                                      ArrayList<String> mSubSectionTitleList,
@@ -114,11 +111,10 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private void setContentViewHolderAtPosition(ContentViewHolder holder, int position) {
         int numOfViewType = getNumOfViewTypeUntilPosition(ContentViewHolder.VIEW_TYPE, position);
 
-        StorageReference reference = FirebaseStorage.getInstance().getReference();
         if (numOfViewType < mCardImageList.size()) {
             Glide.with(mContext)
                     .asBitmap()
-                    .load(reference.child(mCardImageList.get(numOfViewType)))
+                    .load(mCardImageList.get(numOfViewType))
                     .into(holder.mCardImage);
         } else {
             holder.mCardImage.setVisibility(View.GONE);

@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import java.util.TimeZone;
 public class LiveUpdates extends AppCompatActivity {
 
     private static final String TAG = LiveUpdates.class.getSimpleName();
-
     private ArrayList<String> mCardImageList;
     private ArrayList<String> mCardTitleList;
     private ArrayList<String> mCardSubtitleList;
@@ -35,7 +32,7 @@ public class LiveUpdates extends AppCompatActivity {
 
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
-    private VerticalSectionCard_RecyclerViewAdapter mVerticalSectionCardRecyclerViewAdapter;
+    private VerticalSectionCard_RecyclerViewAdapter mVerticalSectionCard_RecyclerViewAdapter;
 
     private TextView mCountdown;
     private TextView mLiveIndicator;
@@ -51,7 +48,7 @@ public class LiveUpdates extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_updates);
-      
+
         mCardImageList = new ArrayList<>();
         mCardTitleList = new ArrayList<>();
         mCardSubtitleList = new ArrayList<>();
@@ -144,21 +141,17 @@ public class LiveUpdates extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<LiveUpdate> response) {
                 int numUpdates = response.size();
-
-                if (numUpdates == 0) {
-                    mEmptyScreenView.setVisibility(View.VISIBLE);
-                }
-
                 for (int i = 0; i < numUpdates; i++) {
                     LiveUpdate currUpdate = response.get(i);
 
                     if (LiveUpdate.isValid(currUpdate)) {
-                        mCardImageList.add(currUpdate.getPicture());
-                        mCardTitleList.add(currUpdate.getMessage());
-                        mCardSubtitleList.add(currUpdate.getTimeSent().toDate().toString());
+                        mCardImageList.add(currUpdate.getPictureOptional().getValue());
+                        mCardTitleList.add(currUpdate.getMessageOptional().getValue());
+                        mCardSubtitleList.add(currUpdate.getTimeSentOptional().getValue());
+                        mCardOptionalImageList.add(currUpdate.getImageOptional().getValue());
                     }
 
-                    mVerticalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                    mVerticalSectionCard_RecyclerViewAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -166,18 +159,28 @@ public class LiveUpdates extends AppCompatActivity {
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onComplete(ArrayList<LiveUpdate> response) {
+                if (response.size() == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
+
+                mProgressBar.setVisibility(View.GONE);
+            }
         });
-        liveUpdatesTask.retrieveUpdates();
+
+        liveUpdatesTask.execute();
     }
 
     private void loadRecyclerView() {
-        mLinearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView = findViewById(R.id.live_updates_vertical_section_card_container);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mVerticalSectionCardRecyclerViewAdapter =
+        mVerticalSectionCard_RecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList,mCardDetailsList,mCardOptionalImageList, TAG);
-        mRecyclerView.setAdapter(mVerticalSectionCardRecyclerViewAdapter);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, mCardOptionalImageList, TAG);
+        mRecyclerView.setAdapter(mVerticalSectionCard_RecyclerViewAdapter);
     }
 }

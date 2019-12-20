@@ -49,7 +49,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        app:srcCompat="@drawable/ic_qr_code_" />
+        app:srcCompat="@drawable/ic_qr_code" />
 
     <Button
         android:id="@+id/scan_qr_code_button"
