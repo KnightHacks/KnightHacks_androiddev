@@ -67,5 +67,6 @@ public class LiveUpdate {
                 && update.getTimeSentOptional().isPresent()
                 && update.getPictureOptional().isPresent()
                 && update.getImageOptional().isPresent();
+        // Fix
     }
 }
