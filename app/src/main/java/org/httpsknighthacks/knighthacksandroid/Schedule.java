@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -23,6 +25,10 @@ import java.util.ArrayList;
 
 public class Schedule extends AppCompatActivity {
 
+    private static final String ALLFILTER = "All";
+    private static final String FILTERTYPE = "event";
+    private static final String TAG = Workshops.class.getSimpleName();
+
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
     private ArrayList<String> mCardImageList;
@@ -34,8 +40,8 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<Integer> mFilterSearchImageList;
-    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mSearchFilterTypeList;
 
     private LinearLayoutManager scheduleEventsLinearLayoutManager;
     private RecyclerView scheduleEventsRecyclerView;
@@ -76,7 +82,7 @@ public class Schedule extends AppCompatActivity {
 
         loadFilters();
         loadSchedule();
-        getFilterSearchComponents();
+
         loadRecyclerView();
     }
 
@@ -146,6 +152,8 @@ public class Schedule extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
+                getFilterSearchComponents();
+                searchFilterRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -222,7 +230,7 @@ public class Schedule extends AppCompatActivity {
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
                         mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
-      
+
         scheduleEventsRecyclerView.setAdapter(scheduleEventsRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
@@ -242,8 +250,8 @@ public class Schedule extends AppCompatActivity {
         searchFilterRecyclerView.setAdapter(searchFilterRecyclerViewAdapter);
     }
 
-    private ArrayList<ScheduleEvent> getScheduleEventsByType(SearchFilterTypes type) {
-        if (type.equals(SearchFilterTypes.ALL)) {
+    private ArrayList<ScheduleEvent> getScheduleEventsByType(String type) {
+        if (type.equals(ALLFILTER)) {
             return scheduleEvents;
         }
 
@@ -261,7 +269,7 @@ public class Schedule extends AppCompatActivity {
         return events;
     }
 
-    private void filterScheduleEventsByType(SearchFilterTypes eventType) {
+    private void filterScheduleEventsByType(String eventType) {
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyScreenView.setVisibility(View.GONE);
         clearScheduleEvents();
@@ -291,19 +299,21 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(R.drawable.ic_schedule_food);
-        mSearchFilterTypeList.add(SearchFilterTypes.FOOD);
+        for (int i = 0; i < filters.size(); i++) {
+            if (filters.get(i).getType().equals(FILTERTYPE)) {
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
+        }
 
-        mFilterSearchImageList.add(R.drawable.ic_schedule_talk);
-        mSearchFilterTypeList.add(SearchFilterTypes.TALK);
-
-        mFilterSearchImageList.add(R.drawable.ic_schedule_workshop);
-        mSearchFilterTypeList.add(SearchFilterTypes.WORKSHOP);
-
-        mFilterSearchImageList.add(R.drawable.ic_schedule_main_events);
-        mSearchFilterTypeList.add(SearchFilterTypes.MAIN_EVENTS);
-
-        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
+        // The Adapter handles the ALL filter image
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add(ALLFILTER);
     }
 }
+
+
+
+

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
@@ -21,10 +20,13 @@ import org.httpsknighthacks.knighthacksandroid.Tasks.SponsorsTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class Sponsors extends AppCompatActivity {
 
-    private static final String TAG = Sponsors.class.getSimpleName();
+    private static final String ALLFILTER = "All";
+    private static final String FILTERTYPE= "sponsor";
+    private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -37,8 +39,8 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<Integer> mFilterSearchImageList;
-    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mSearchFilterTypeList;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
@@ -50,8 +52,8 @@ public class Sponsors extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Filter> filters;
-    private ArrayList<Sponsor> sponsors;
+    private ArrayList<Filter> filters = new ArrayList<>();
+    private ArrayList<Sponsor> sponsors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,6 @@ public class Sponsors extends AppCompatActivity {
 
         loadFilters();
         loadSponsors();
-        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -93,6 +94,8 @@ public class Sponsors extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
+                getFilterSearchComponents();
+                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -236,8 +239,9 @@ public class Sponsors extends AppCompatActivity {
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
-    private ArrayList<Sponsor> getSponsorsByOfferType(SearchFilterTypes type) {
-        if (type.equals(SearchFilterTypes.ALL)) {
+    private ArrayList<Sponsor> getSponsorsByOfferType(String type) {
+
+        if (type.equals(ALLFILTER)) {
             return sponsors;
         }
 
@@ -247,7 +251,12 @@ public class Sponsors extends AppCompatActivity {
         for (int i = 0; i < numSponsors; i++) {
             Sponsor sponsor = this.sponsors.get(i);
 
-            if (Arrays.asList(sponsor.getOfferingsOptional().getValue()).contains(type)) {
+
+            if (sponsor.getOfferings() == "" || sponsor.getOfferings() == null) {
+                continue;
+            }
+
+            if (sponsor.getOfferings().toLowerCase().contains(type.toLowerCase())) {
                 sponsors.add(sponsor);
             }
         }
@@ -255,7 +264,7 @@ public class Sponsors extends AppCompatActivity {
         return sponsors;
     }
 
-    private void filterSponsorsByOffering(SearchFilterTypes offerType) {
+    private void filterSponsorsByOffering(String offerType) {
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyScreenView.setVisibility(View.GONE);
         clearSponsors();
@@ -276,14 +285,18 @@ public class Sponsors extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(R.drawable.ic_sponsors_full_time);
-        mSearchFilterTypeList.add(SearchFilterTypes.FULL_TIME);
+        for (int i = 0; i < filters.size(); i++) {
+            if (filters.get(i).getType().equals(FILTERTYPE)) {
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
+        }
 
-        mFilterSearchImageList.add(R.drawable.ic_sponsors_internships);
-        mSearchFilterTypeList.add(SearchFilterTypes.INTERNSHIP);
-
-        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
-
+        // The Adapter handles the ALL filter image
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add(ALLFILTER);
     }
 }
+

@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +24,16 @@ import java.util.ArrayList;
 public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         RecyclerView.Adapter<SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder> {
     // Properties:
-    private ArrayList<Integer> mImageList = new ArrayList<>();
-    private ArrayList<SearchFilterTypes> mSearchFilterTypes;
-    private ArrayList<SearchFilterTypes> mSearchFilterNames;
+    private ArrayList<String> mImageList;
+    private ArrayList<String> mSearchFilterTypes;
+    private ArrayList<String> mSearchFilterNames;
     private Context mContext;
     private ViewHolder previousHolder;
     private SearchFilterListener mListener;
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
-                                                           ArrayList<Integer> mImageList,
-                                                           ArrayList<SearchFilterTypes> mSearchFilterTypes,
+                                                           ArrayList<String> mImageList,
+                                                           ArrayList<String> mSearchFilterTypes,
                                                            SearchFilterListener mListener) {
         this.mContext = mContext;
         this.mImageList = mImageList;
@@ -40,8 +42,8 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     }
 
     public SharedFilterSearchComponent_RecyclerViewAdapter(Context mContext,
-                                                           ArrayList<Integer> mImageList,
-                                                           ArrayList<SearchFilterTypes> mSearchFilterTypes
+                                                           ArrayList<String> mImageList,
+                                                           ArrayList<String> mSearchFilterTypes
                                                            ) {
         this.mContext = mContext;
         this.mImageList = mImageList;
@@ -61,21 +63,23 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
     public void setOnBindViewHolder(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position, View.OnClickListener onClickListener) {
         StorageReference reference = FirebaseStorage.getInstance().getReference();
 
-        Glide.with(mContext)
-                .asBitmap()
-                .load(mImageList.get(position))
-                .into(holder.mImageView);
-
-        SearchFilterTypes searchFilter = mSearchFilterTypes.get(position);
-
-        holder.mTextView.setText(searchFilter.getSearchFilterString());
-        holder.setEventType(searchFilter);
-
         if(position == (mImageList.size()-1)) {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(R.drawable.ic_filter_all)
+                    .into(holder.mImageView);
             holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
             setPreviousHolder(holder);
+        } else {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(reference.child(mImageList.get(position)))
+                    .into(holder.mImageView);
         }
+        String searchFilter = mSearchFilterTypes.get(position);
 
+        holder.mTextView.setText(searchFilter);
+        holder.setEventType(searchFilter);
         holder.mCardView.setOnClickListener(onClickListener);
     }
 
@@ -86,12 +90,12 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             public void onClick(View v) {
                 previousHolder.mImageView.setBackgroundResource(0);
                 holder.mImageView.setBackgroundResource(R.drawable.filter_search_component_list_item_round_border);
-
                 setPreviousHolder(holder);
                 mListener.setSearchFilters(holder, position);
+
             }
         };
-
+        holder.setIsRecyclable(false);
         setOnBindViewHolder(holder, position, onClickListener);
     }
 
@@ -105,7 +109,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         ImageView mImageView;
         TextView mTextView;
         CardView mCardView;
-        SearchFilterTypes mSearchFilterType;
+        String mSearchFilterType;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -114,7 +118,7 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
             mCardView = itemView.findViewById(R.id.shared_filter_search_parent_card_view_container);
         }
 
-        public void setEventType(SearchFilterTypes type) {
+        public void setEventType(String type) {
             mSearchFilterType = type;
         }
     }
@@ -123,3 +127,4 @@ public class SharedFilterSearchComponent_RecyclerViewAdapter extends
         this.previousHolder = previousHolder;
     }
 }
+

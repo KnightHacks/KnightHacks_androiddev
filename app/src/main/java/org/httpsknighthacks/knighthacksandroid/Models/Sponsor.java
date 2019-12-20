@@ -5,13 +5,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sponsor {
 
     private Optional<String> mName;
     private Optional<String> mLocation;
-    private Optional<SearchFilterTypes[]> mOfferings;
+    private Optional<ArrayList[]> mOfferings;
     private Optional<String> mDescription;
     private Optional<String> mPicture;
 
@@ -39,7 +41,7 @@ public class Sponsor {
         return mLocation;
     }
 
-    public Optional<SearchFilterTypes[]> getOfferingsOptional() {
+    public Optional<ArrayList[]> getOfferingsOptional() {
         return mOfferings;
     }
 
@@ -72,12 +74,11 @@ public class Sponsor {
 
     public String getInternship() {
 
-        return null;
+        return "Internship";
     }
 
     public String getFullTime() {
-        
-        return null;
+        return "Full-time";
     }
 
     public static boolean isValid(Sponsor sponsor) {

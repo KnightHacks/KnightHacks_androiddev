@@ -25,6 +25,8 @@ import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
 
+    private static final String ALLFILTER = "All";
+    private static final String FILTERTYPE = "workshop";
     private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
@@ -38,8 +40,8 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<Integer> mFilterSearchImageList;
-    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mSearchFilterTypeList;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
@@ -76,10 +78,10 @@ public class Workshops extends AppCompatActivity {
         mEmptyScreenView = findViewById(R.id.workshops_empty_screen_view);
 
         workshops = new ArrayList<>();
+        filters = new ArrayList<>();
 
         loadFilters();
         loadWorkshops();
-        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -148,6 +150,8 @@ public class Workshops extends AppCompatActivity {
             @Override
             public void onSuccess(ArrayList<Filter> response) {
                 filters = response;
+                getFilterSearchComponents();
+                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -240,18 +244,18 @@ public class Workshops extends AppCompatActivity {
         else
             sharedFilterSearchComponent_RecyclerViewAdapter =
                     new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
-                    @Override
-                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
-                        filterScheduleEventsByType(holder.mSearchFilterType);
+                        @Override
+                        public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+                            filterScheduleEventsByType(holder.mSearchFilterType);
                         }
                     });
 
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
-    private ArrayList<Workshop> getWorkshopsByType(SearchFilterTypes type) {
-        if (type.equals(SearchFilterTypes.ALL)) {
-             return workshops;
+    private ArrayList<Workshop> getWorkshopsByType(String type) {
+        if (type.equals(ALLFILTER)) {
+            return workshops;
         }
 
         ArrayList<Workshop> workshops = new ArrayList<>();
@@ -268,7 +272,7 @@ public class Workshops extends AppCompatActivity {
         return workshops;
     }
 
-    private void filterScheduleEventsByType(SearchFilterTypes workshopType) {
+    private void filterScheduleEventsByType(String workshopType) {
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyScreenView.setVisibility(View.GONE);
         clearWorkshops();
@@ -298,26 +302,22 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(R.drawable.ic_workshops_career);
-        mSearchFilterTypeList.add(SearchFilterTypes.CAREER);
+        for (int i = 0; i < filters.size(); i++) {
+            if (filters.get(i).getType().equals(FILTERTYPE)) {
 
-        mFilterSearchImageList.add(R.drawable.ic_workshops_hardware);
-        mSearchFilterTypeList.add(SearchFilterTypes.HARDWARE);
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
+        }
 
-        mFilterSearchImageList.add(R.drawable.ic_workshops_design);
-        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_dev);
-        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_advanced);
-        mSearchFilterTypeList.add(SearchFilterTypes.ADVANCED);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_beginner);
-        mSearchFilterTypeList.add(SearchFilterTypes.BEGINNER);
-
-        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
+        // The Adapter handles the ALL filter image
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add(ALLFILTER);
     }
 
 }
+
+
+
