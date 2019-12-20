@@ -9,13 +9,11 @@ public class LiveUpdate {
     private Optional<String> mMessage;
     private Optional<String> mTimeSent;
     private Optional<String> mPicture;
-    // fix
     private Optional<String> mOptionalImage;
 
     public static final String MESSAGE_KEY = "message";
     public static final String TIME_SENT_KEY = "timeSent";
     public static final String PICTURE_KEY = "picture";
-    // fix
     public static final String OPTIONAL_IMAGE_KEY = "image";
 
     public LiveUpdate(JSONObject jsonObject) {
@@ -28,7 +26,6 @@ public class LiveUpdate {
             this.mMessage = Optional.empty();
             this.mTimeSent = Optional.empty();
             this.mPicture = Optional.empty();
-            // fix
             this.mOptionalImage = Optional.empty();
         }
     }
@@ -61,7 +58,6 @@ public class LiveUpdate {
         return mPicture;
     }
 
-    // fix
 
     public Optional<String> getImageOptional () {
         return mOptionalImage;
@@ -72,6 +68,5 @@ public class LiveUpdate {
                 && update.getTimeSentOptional().isPresent()
                 && update.getPictureOptional().isPresent()
                 && update.getImageOptional().isPresent();
-        // Fix
     }
 }
