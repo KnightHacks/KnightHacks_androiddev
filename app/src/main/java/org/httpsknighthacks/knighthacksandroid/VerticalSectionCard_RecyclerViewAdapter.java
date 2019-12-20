@@ -118,11 +118,6 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
                         .load(R.drawable.ic_faq_plus)
                         .into(mCardImage);
 
-                Glide.with(mContext)
-                        .asDrawable()
-                        .load(R.drawable.ic_faq_minus)
-                        .into(mCardOptionalImage);
-
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
