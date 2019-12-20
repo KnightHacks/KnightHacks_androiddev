@@ -169,8 +169,6 @@ public class LiveUpdates extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-
-        liveUpdatesTask.execute();
     }
 
     private void loadRecyclerView() {

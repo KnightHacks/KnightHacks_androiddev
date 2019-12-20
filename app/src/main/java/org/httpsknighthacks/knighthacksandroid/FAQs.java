@@ -85,8 +85,6 @@ public class FAQs extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-
-        faqsTask.execute();
     }
 
     private void loadRecyclerView() {
