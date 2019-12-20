@@ -1,25 +1,33 @@
 package org.httpsknighthacks.knighthacksandroid;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
+import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
 import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
 import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
+import org.httpsknighthacks.knighthacksandroid.Tasks.FiltersTask;
 import org.httpsknighthacks.knighthacksandroid.Tasks.WorkshopsTask;
 
 import java.util.ArrayList;
 
 public class Workshops extends AppCompatActivity {
+
+    private static final String ALLFILTER = "All";
+    private static final String FILTERTYPE = "workshop";
+    private static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -32,8 +40,8 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
 
-    private ArrayList<Integer> mFilterSearchImageList;
-    private ArrayList<SearchFilterTypes> mSearchFilterTypeList;
+    private ArrayList<String> mFilterSearchImageList;
+    private ArrayList<String> mSearchFilterTypeList;
 
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
@@ -46,12 +54,12 @@ public class Workshops extends AppCompatActivity {
     private View mEmptyScreenView;
 
     private ArrayList<Workshop> workshops;
+    private ArrayList<Filter> filters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshops);
-
         mViewTypeList = new ArrayList<>();
         mSubSectionTitleList = new ArrayList<>();
         mCardImageList = new ArrayList<>();
@@ -70,9 +78,10 @@ public class Workshops extends AppCompatActivity {
         mEmptyScreenView = findViewById(R.id.workshops_empty_screen_view);
 
         workshops = new ArrayList<>();
+        filters = new ArrayList<>();
 
+        loadFilters();
         loadWorkshops();
-        getFilterSearchComponents();
         loadRecyclerView();
     }
 
@@ -121,14 +130,37 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void addWorkshopCard(Workshop workshop) {
-        addHorizontalSectionCard(workshop.getPictureOptional().getValue(),
-                workshop.getNameOptional().getValue(),
+        addHorizontalSectionCard(workshop.getPicture(),
+                workshop.getName(),
                 null,
                 null,
                 null,
-                workshop.getDescriptionOptional().getValue(),
-                DateTimeUtils.getTime(workshop.getStartTimeOptional().getValue()),
-                workshop.getSkillLevelOptional().getValue().toString());
+                workshop.getDescription(),
+                DateTimeUtils.getTime(workshop.getStartTime().toDate().toString()),
+                workshop.getSkillLevel());
+    }
+
+    private void loadFilters() {
+        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(ArrayList<Filter> response) {
+                filters = response;
+                getFilterSearchComponents();
+                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+
+        filtersTask.retrieveFilters();
     }
 
     private void loadWorkshops() {
@@ -141,18 +173,20 @@ public class Workshops extends AppCompatActivity {
 
             @Override
             public void onSuccess(ArrayList<Workshop> response) {
-                Optional<String> lastStartTime = Optional.empty();
+                String lastStartTime = null;
                 int numWorkshops = response.size();
+                if (numWorkshops == 0) {
+                    mEmptyScreenView.setVisibility(View.VISIBLE);
+                }
 
                 for (int i = 0; i < numWorkshops; i++) {
                     Workshop currWorkshop = response.get(i);
 
                     if (Workshop.isValid(currWorkshop)) {
+                        String currStartTime = currWorkshop.getStartTime().toDate().toString();
 
-                        Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
-
-                        if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+                        if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                            addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
                             lastStartTime = currStartTime;
                         }
 
@@ -162,24 +196,16 @@ public class Workshops extends AppCompatActivity {
                 }
 
                 horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure() {
                 Toast.makeText(getApplicationContext(), RequestQueueSingleton.REQUEST_ERROR_MESSAGE, Toast.LENGTH_LONG).show();
             }
-
-            @Override
-            public void onComplete(ArrayList<Workshop> response) {
-                if (response.size() == 0) {
-                    mEmptyScreenView.setVisibility(View.VISIBLE);
-                }
-
-                mProgressBar.setVisibility(View.GONE);
-            }
         });
 
-        workshopsTask.execute();
+        workshopsTask.retrieveWorkshops();
     }
 
     private void clearWorkshops() {
@@ -194,7 +220,7 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void loadRecyclerView() {
-        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView = findViewById(R.id.workshops_horizontal_section_card_container);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -211,19 +237,25 @@ public class Workshops extends AppCompatActivity {
         mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
         mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
 
-        sharedFilterSearchComponent_RecyclerViewAdapter =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
-                    @Override
-                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
-                        filterScheduleEventsByType(holder.mSearchFilterType);
-                    }
-                });
+        if (filters == null)
+            sharedFilterSearchComponent_RecyclerViewAdapter =
+                    new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList);
+
+        else
+            sharedFilterSearchComponent_RecyclerViewAdapter =
+                    new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
+                        @Override
+                        public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
+                            filterScheduleEventsByType(holder.mSearchFilterType);
+                        }
+                    });
+
         mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
-    private ArrayList<Workshop> getWorkshopsByType(SearchFilterTypes type) {
-        if (type.equals(SearchFilterTypes.ALL)) {
-             return workshops;
+    private ArrayList<Workshop> getWorkshopsByType(String type) {
+        if (type.equals(ALLFILTER)) {
+            return workshops;
         }
 
         ArrayList<Workshop> workshops = new ArrayList<>();
@@ -232,7 +264,7 @@ public class Workshops extends AppCompatActivity {
         for (int i = 0; i < numWorkshops; i++) {
             Workshop workshop = this.workshops.get(i);
 
-            if (workshop.getWorkshopType().equals(type) || workshop.getSkillLevelOptional().getValue().equals(type)) {
+            if (workshop.getWorkshopType().equals(type) || workshop.getSkillLevel().equals(type)) {
                 workshops.add(workshop);
             }
         }
@@ -240,21 +272,21 @@ public class Workshops extends AppCompatActivity {
         return workshops;
     }
 
-    private void filterScheduleEventsByType(SearchFilterTypes workshopType) {
+    private void filterScheduleEventsByType(String workshopType) {
         mProgressBar.setVisibility(View.VISIBLE);
         mEmptyScreenView.setVisibility(View.GONE);
         clearWorkshops();
 
-        Optional<String> lastStartTime = Optional.empty();
+        String lastStartTime = null;
         ArrayList<Workshop> workshops = getWorkshopsByType(workshopType);
         int numWorkshops = workshops.size();
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-            Optional<String> currStartTime = currWorkshop.getStartTimeOptional();
+            String currStartTime = currWorkshop.getStartTime().toDate().toString();
 
-            if (!lastStartTime.isPresent() || (lastStartTime.isPresent() && DateTimeUtils.daysAreDifferent(lastStartTime.getValue(), currStartTime.getValue()))) {
-                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime.getValue()));
+            if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
+                addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
                 lastStartTime = currStartTime;
             }
 
@@ -270,27 +302,22 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void getFilterSearchComponents() {
-        mFilterSearchImageList.add(R.drawable.ic_workshops_career);
-        mSearchFilterTypeList.add(SearchFilterTypes.CAREER);
+        for (int i = 0; i < filters.size(); i++) {
+            if (filters.get(i).getType().equals(FILTERTYPE)) {
 
-        mFilterSearchImageList.add(R.drawable.ic_workshops_hardware);
-        mSearchFilterTypeList.add(SearchFilterTypes.HARDWARE);
+                String filterType = filters.get(i).getName();
+                String picturePath = filters.get(i).getPicture();
+                mFilterSearchImageList.add(picturePath);
+                mSearchFilterTypeList.add(filterType);
+            }
+        }
 
-        mFilterSearchImageList.add(R.drawable.ic_workshops_design);
-        mSearchFilterTypeList.add(SearchFilterTypes.DESIGN);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_dev);
-        mSearchFilterTypeList.add(SearchFilterTypes.DEV);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_advanced);
-        mSearchFilterTypeList.add(SearchFilterTypes.ADVANCED);
-
-        mFilterSearchImageList.add(R.drawable.ic_workshops_beginner);
-        mSearchFilterTypeList.add(SearchFilterTypes.BEGINNER);
-
-        mFilterSearchImageList.add(R.drawable.ic_filter_all);
-        mSearchFilterTypeList.add(SearchFilterTypes.ALL);
-
+        // The Adapter handles the ALL filter image
+        mFilterSearchImageList.add("");
+        mSearchFilterTypeList.add(ALLFILTER);
     }
 
 }
+
+
+

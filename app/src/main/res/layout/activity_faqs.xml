@@ -42,7 +42,7 @@
         android:layout_below="@+id/faqs_title"
         android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/faqs_vertical_section_card_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

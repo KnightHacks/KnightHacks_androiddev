@@ -9,13 +9,11 @@ public class LiveUpdate {
     private Optional<String> mMessage;
     private Optional<String> mTimeSent;
     private Optional<String> mPicture;
-    // fix
     private Optional<String> mOptionalImage;
 
     public static final String MESSAGE_KEY = "message";
     public static final String TIME_SENT_KEY = "timeSent";
     public static final String PICTURE_KEY = "picture";
-    // fix
     public static final String OPTIONAL_IMAGE_KEY = "image";
 
     public LiveUpdate(JSONObject jsonObject) {
@@ -28,40 +26,9 @@ public class LiveUpdate {
             this.mMessage = Optional.empty();
             this.mTimeSent = Optional.empty();
             this.mPicture = Optional.empty();
-            // fix
             this.mOptionalImage = Optional.empty();
         }
     }
-
-    public void withMessage(String message) {
-        this.mMessage = Optional.of(message);
-    }
-
-    public void withTimeSent(String timeSent) {
-        this.mTimeSent = Optional.of(timeSent);
-    }
-
-    public void withPicture(String picture) {
-        this.mPicture = Optional.of(picture);
-    }
-
-    public void withOptionalImage(String imageView) {
-        this.mOptionalImage = Optional.of(imageView);
-    }
-
-    public Optional<String> getMessageOptional() {
-        return mMessage;
-    }
-
-    public Optional<String> getTimeSentOptional() {
-        return mTimeSent;
-    }
-
-    public Optional<String> getPictureOptional() {
-        return mPicture;
-    }
-
-    // fix
 
     public Optional<String> getImageOptional () {
         return mOptionalImage;
@@ -72,6 +39,5 @@ public class LiveUpdate {
                 && update.getTimeSentOptional().isPresent()
                 && update.getPictureOptional().isPresent()
                 && update.getImageOptional().isPresent();
-        // Fix
     }
 }

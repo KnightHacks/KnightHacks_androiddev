@@ -39,4 +39,6 @@
     <string name="ScanQRCodeText">Scan this QR code to sign in, get food, and more.</string>
     <string name="ScanQRButtonText">Scan QR Code</string>
 
+    <string name="default_notification_channel_id">Default</string>
+
 </resources>
