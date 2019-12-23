@@ -9,7 +9,7 @@ public class LiveUpdate {
     public static final String MESSAGE_KEY = "message";
     public static final String TIME_SENT_KEY = "timeSent";
     public static final String PICTURE_KEY = "picture";
-    public static final String Optional_Image_key = "image";
+    public static final String OPTIONAL_IMAGE_KEY = "image";
 
     private String message;
     private String picture;
