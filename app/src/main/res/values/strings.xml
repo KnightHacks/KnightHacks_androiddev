@@ -39,6 +39,15 @@
     <string name="ScanQRCodeText">Scan this QR code to sign in, get food, and more.</string>
     <string name="ScanQRButtonText">Scan QR Code</string>
 
-    <string name="default_notification_channel_id">Default</string>
+    <!-- LOGIN PAGE  -->
+    <string name="alternative_login">Alternative Login</string>
+    <string name="login_preference">org.httpsknighthacks.knighthacksandroid_login_preference</string>
+    <string name="login_status_preference">org.httpsknighthacks.knighthacksandroid_login_status_preference</string>
+
+    <!-- USER -->
+    <string name="uuid">org.httpsknighthacks.knighthacksandroid_uuid</string>
+
+    <!-- LOGOUT PAGE  -->
+    <string name="logout">Logout</string>
 
 </resources>

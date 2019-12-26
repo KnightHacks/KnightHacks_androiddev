@@ -49,7 +49,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="81dp"
         android:layout_marginRight="81dp"
-        app:srcCompat="@drawable/ic_qr_code_" />
+        app:srcCompat="@drawable/ic_qr_code" />
 
     <Button
         android:id="@+id/scan_qr_code_button"
@@ -81,6 +81,28 @@
         android:layout_centerInParent="true"
         android:background="#00FFFFFF"
         android:text="Settings"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/alternative_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_button"
+        android:layout_centerInParent="true"
+        android:background="#00FFFFFF"
+        android:text="@string/alternative_login"
+        android:textAllCaps="false"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alternative_login"
+        android:layout_centerInParent="true"
+        android:background="#00FFFFFF"
+        android:text="@string/logout"
         android:textAllCaps="false"
         android:textSize="25sp" />
 
