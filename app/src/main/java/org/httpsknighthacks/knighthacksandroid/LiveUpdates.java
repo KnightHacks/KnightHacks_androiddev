@@ -156,6 +156,7 @@ public class LiveUpdates extends AppCompatActivity {
                         mCardImageList.add(currUpdate.getPicture());
                         mCardTitleList.add(currUpdate.getMessage());
                         mCardSubtitleList.add(currUpdate.getTimeSent().toDate().toString());
+                        mCardOptionalImageList.add(currUpdate.getImage());
                     }
 
                     mVerticalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
@@ -177,7 +178,7 @@ public class LiveUpdates extends AppCompatActivity {
 
         mVerticalSectionCardRecyclerViewAdapter =
                 new VerticalSectionCard_RecyclerViewAdapter(this, mCardImageList,
-                        mCardTitleList, mCardSubtitleList,mCardDetailsList,mCardOptionalImageList, TAG);
+                        mCardTitleList, mCardSubtitleList, mCardDetailsList, mCardOptionalImageList, TAG);
         mRecyclerView.setAdapter(mVerticalSectionCardRecyclerViewAdapter);
     }
 }
