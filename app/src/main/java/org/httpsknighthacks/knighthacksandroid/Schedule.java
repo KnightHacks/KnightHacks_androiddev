@@ -27,7 +27,7 @@ public class Schedule extends AppCompatActivity {
 
     private static final String ALLFILTER = "All";
     private static final String FILTERTYPE = "event";
-    private static final String TAG = Sponsors.class.getSimpleName();
+    private static final String TAG = Schedule.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
