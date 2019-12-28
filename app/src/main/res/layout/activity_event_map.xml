@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="375dp"
+    android:layout_height="550dp"
+    android:layout_gravity="center"
+    android:background="#00000000"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/mapImage"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="Map of event."
+        android:maxWidth="350dp"
+        android:maxHeight="325dp" />
+
+    <Button
+        android:id="@+id/zoomBtn"
+        android:layout_width="170dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="-86dp"
+        android:background="#FFFFFF"
+        android:text="@string/zoomInBtnText"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/closeBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="170dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:background="#FFFFFF"
+        android:text="@string/closeBtnText"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

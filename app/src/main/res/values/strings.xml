@@ -38,5 +38,7 @@
     <string name="default_notification_channel_id">Default</string>
     <string name="ScanQRCodeText">Scan this QR code to sign in, get food, and more.</string>
     <string name="ScanQRButtonText">Scan QR Code</string>
+    <string name="zoomInBtnText">Zoom In</string>
+    <string name="closeBtnText">Close</string>
 
 </resources>

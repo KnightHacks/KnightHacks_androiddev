@@ -1,14 +1,17 @@
 package org.httpsknighthacks.knighthacksandroid;
 
+import android.app.Dialog;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +33,10 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
+    private ArrayList<String> mCardMapEventList;
+    private String tag;
+
+    Dialog mDialog;
 
     private Context mContext;
     public HorizontalSectionCard_RecyclerViewAdapter(Context mContext,
@@ -42,7 +49,9 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
                                                      ArrayList<String> mCardTagSubtitleList,
                                                      ArrayList<String> mCardBodyList,
                                                      ArrayList<String> mCardTimestampList,
-                                                     ArrayList<String> mCardFooterList) {
+                                                     ArrayList<String> mCardFooterList,
+                                                     ArrayList<String> mCardMapEventList,
+                                                     String tag) {
         this.mContext = mContext;
         this.mViewTypeList = mViewTypeList;
         this.mSubSectionTitleList = mSubSectionTitleList;
@@ -54,6 +63,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         this.mCardBodyList = mCardBodyList;
         this.mCardTimestampList = mCardTimestampList;
         this.mCardFooterList = mCardFooterList;
+        this.mCardMapEventList = mCardMapEventList;
+        this.tag = tag;
+
+        mDialog = new Dialog(mContext);
+        mDialog.setContentView(R.layout.activity_event_map);
     }
 
     @NonNull
@@ -61,11 +75,14 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ContentViewHolder.VIEW_TYPE:
-                return new ContentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_section_card, parent, false));
+                return new ContentViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.horizontal_section_card, parent, false), tag);
             case TitleViewHolder.VIEW_TYPE:
-                return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_section_title_card, parent, false));
+                return new TitleViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.sub_section_title_card, parent, false));
             default:
-                return new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_section_title_card, parent, false));
+                return new TitleViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.sub_section_title_card, parent, false));
         }
     }
 
@@ -165,6 +182,15 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         } else {
             holder.mCardFooter.setVisibility(View.GONE);
         }
+
+        if (numOfViewType < mCardMapEventList.size()) {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(reference.child(mCardMapEventList.get(numOfViewType)))
+                    .into(holder.mCardMapEvent);
+        } else {
+            holder.mCardMapEvent.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -175,6 +201,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     public class ContentViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
         ImageView mCardImage;
+        ImageView mCardMapEvent;
         TextView mCardTitle;
         TextView mCardSideSubtitle;
         TextView mCardSubtitle;
@@ -182,16 +209,18 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         TextView mCardBody;
         TextView mCardTimestamp;
         TextView mCardFooter;
+        String mTag;
 
         public static final int VIEW_TYPE = 1;
 
-        public ContentViewHolder(View itemView) {
+        public ContentViewHolder(View itemView, String tag) {
             super(itemView);
 
             View gridLayout = itemView.findViewById(R.id.horizontal_section_grid_view);
 
             this.mCardView = itemView.findViewById(R.id.horizontal_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.horizontal_section_card_image);
+            this.mCardMapEvent = mDialog.findViewById(R.id.mapImage);
             this.mCardTitle = itemView.findViewById(R.id.horizontal_section_card_title);
             this.mCardSideSubtitle = itemView.findViewById(R.id.horizontal_section_card_side_subtitle);
             this.mCardSubtitle = itemView.findViewById(R.id.horizontal_section_card_subtitle);
@@ -199,6 +228,16 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardBody = itemView.findViewById(R.id.horizontal_section_card_body);
             this.mCardTimestamp = itemView.findViewById(R.id.horizontal_section_card_timestamp);
             this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);
+            this.mTag = tag;
+
+            if (this.mTag.equals(Workshops.TAG)) {
+                mCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPopUpMapImage();
+                    }
+                });
+            }
         }
     }
 
@@ -213,5 +252,36 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardView = itemView.findViewById(R.id.sub_section_title_card_view);
             this.mTitle = itemView.findViewById(R.id.sub_section_title_card_title);
         }
+    }
+
+    private void showPopUpMapImage() {
+        Button closeBtn = mDialog.findViewById(R.id.closeBtn);
+        Button zoomBtn = mDialog.findViewById(R.id.zoomBtn);
+
+        final ImageView imgView = mDialog.findViewById(R.id.mapImage);
+
+        zoomBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float x = imgView.getScaleX();
+                float y = imgView.getScaleY();
+
+                imgView.setScaleX(x+.5f);
+                imgView.setScaleY(y+.5f);
+            }
+        });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imgView.setScaleX(1);
+                imgView.setScaleY(1);
+
+                mDialog.dismiss();
+            }
+        });
+
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mDialog.show();
     }
 }
