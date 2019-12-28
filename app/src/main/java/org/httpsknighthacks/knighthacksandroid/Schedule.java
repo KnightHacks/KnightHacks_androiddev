@@ -148,7 +148,7 @@ public class Schedule extends AppCompatActivity {
                 null,
                 DateTimeUtils.getTime(event.getStartTime().toDate().toString()),
                 null,
-                null);
+                event.getMapImage());
     }
 
     private void loadFilters() {

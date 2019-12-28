@@ -26,7 +26,7 @@ public class Sponsors extends AppCompatActivity {
 
     private static final String ALLFILTER = "All";
     private static final String FILTERTYPE= "sponsor";
-    private static final String TAG = Sponsors.class.getSimpleName();
+    public static final String TAG = Sponsors.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;

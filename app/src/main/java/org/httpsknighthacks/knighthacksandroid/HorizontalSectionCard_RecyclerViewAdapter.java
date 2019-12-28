@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
+
 import java.util.ArrayList;
 
 public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -230,7 +232,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);
             this.mTag = tag;
 
-            if (this.mTag.equals(Workshops.TAG)) {
+            if (!this.mTag.equals(Sponsors.TAG)) {
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
