@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
@@ -184,15 +185,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         } else {
             holder.mCardFooter.setVisibility(View.GONE);
         }
-
-        if (numOfViewType < mCardMapEventList.size()) {
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(reference.child(mCardMapEventList.get(numOfViewType)))
-                    .into(holder.mCardMapEvent);
-        } else {
-            holder.mCardMapEvent.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -215,7 +207,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
 
         public static final int VIEW_TYPE = 1;
 
-        public ContentViewHolder(View itemView, String tag) {
+        public ContentViewHolder(final View itemView, String tag) {
             super(itemView);
 
             View gridLayout = itemView.findViewById(R.id.horizontal_section_grid_view);
@@ -232,14 +224,59 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);
             this.mTag = tag;
 
+            final StorageReference reference = FirebaseStorage.getInstance().getReference();
+
             if (!this.mTag.equals(Sponsors.TAG)) {
                 mCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        int position = getAdapterPosition();
+
+                        if (position < mCardMapEventList.size()) {
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(reference.child(mCardMapEventList.get(position)))
+                                    .into(mCardMapEvent);
+                        } else {
+                            Toast.makeText(mContext, "No Map at the current moment.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         showPopUpMapImage();
                     }
                 });
             }
+        }
+
+        private void showPopUpMapImage() {
+            Button closeBtn = mDialog.findViewById(R.id.closeBtn);
+            Button zoomBtn = mDialog.findViewById(R.id.zoomBtn);
+
+            final ImageView imgView = mDialog.findViewById(R.id.mapImage);
+
+            zoomBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    float x = imgView.getScaleX();
+                    float y = imgView.getScaleY();
+
+                    imgView.setScaleX(x+.5f);
+                    imgView.setScaleY(y+.5f);
+                }
+            });
+
+            closeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    imgView.setScaleX(1);
+                    imgView.setScaleY(1);
+
+                    mDialog.dismiss();
+                }
+            });
+
+            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            mDialog.show();
         }
     }
 
@@ -254,36 +291,5 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardView = itemView.findViewById(R.id.sub_section_title_card_view);
             this.mTitle = itemView.findViewById(R.id.sub_section_title_card_title);
         }
-    }
-
-    private void showPopUpMapImage() {
-        Button closeBtn = mDialog.findViewById(R.id.closeBtn);
-        Button zoomBtn = mDialog.findViewById(R.id.zoomBtn);
-
-        final ImageView imgView = mDialog.findViewById(R.id.mapImage);
-
-        zoomBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                float x = imgView.getScaleX();
-                float y = imgView.getScaleY();
-
-                imgView.setScaleX(x+.5f);
-                imgView.setScaleY(y+.5f);
-            }
-        });
-
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imgView.setScaleX(1);
-                imgView.setScaleY(1);
-
-                mDialog.dismiss();
-            }
-        });
-
-        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mDialog.show();
     }
 }
