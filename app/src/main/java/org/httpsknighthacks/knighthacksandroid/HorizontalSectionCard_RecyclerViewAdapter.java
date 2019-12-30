@@ -131,10 +131,10 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
     }
 
-    private void setContentViewHolderAtPosition(ContentViewHolder holder, int position) {
+    private void setContentViewHolderAtPosition(final ContentViewHolder holder, int position) {
         int numOfViewType = getNumOfViewTypeUntilPosition(ContentViewHolder.VIEW_TYPE, position);
 
-        StorageReference reference = FirebaseStorage.getInstance().getReference();
+        final StorageReference reference = FirebaseStorage.getInstance().getReference();
         if (numOfViewType < mCardImageList.size()) {
             Glide.with(mContext)
                     .asBitmap()
@@ -185,6 +185,27 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         } else {
             holder.mCardFooter.setVisibility(View.GONE);
         }
+
+        if (!this.tag.equals(Sponsors.TAG)) {
+            holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+
+                    if (position < mCardMapEventList.size()) {
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(reference.child(mCardMapEventList.get(position)))
+                                .into(holder.mCardMapEvent);
+                    } else {
+                        Toast.makeText(mContext, "No Map at the current moment.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    holder.showPopUpMapImage();
+                }
+            });
+        }
     }
 
     @Override
@@ -223,29 +244,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardTimestamp = itemView.findViewById(R.id.horizontal_section_card_timestamp);
             this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);
             this.mTag = tag;
-
-            final StorageReference reference = FirebaseStorage.getInstance().getReference();
-
-            if (!this.mTag.equals(Sponsors.TAG)) {
-                mCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = getAdapterPosition();
-
-                        if (position < mCardMapEventList.size()) {
-                            Glide.with(mContext)
-                                    .asBitmap()
-                                    .load(reference.child(mCardMapEventList.get(position)))
-                                    .into(mCardMapEvent);
-                        } else {
-                            Toast.makeText(mContext, "No Map at the current moment.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        showPopUpMapImage();
-                    }
-                });
-            }
         }
 
         private void showPopUpMapImage() {
