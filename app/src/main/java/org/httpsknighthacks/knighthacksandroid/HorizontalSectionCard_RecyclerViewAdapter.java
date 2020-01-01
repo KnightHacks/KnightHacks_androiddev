@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,8 +18,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
 
 import java.util.ArrayList;
 
@@ -247,32 +244,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
 
         private void showPopUpMapImage() {
-            Button closeBtn = dialog.findViewById(R.id.closeBtn);
-            Button zoomBtn = dialog.findViewById(R.id.zoomBtn);
-
-            final ImageView imgView = dialog.findViewById(R.id.mapImage);
-
-            zoomBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    float x = imgView.getScaleX();
-                    float y = imgView.getScaleY();
-
-                    imgView.setScaleX(x+.5f);
-                    imgView.setScaleY(y+.5f);
-                }
-            });
-
-            closeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    imgView.setScaleX(1);
-                    imgView.setScaleY(1);
-
-                    dialog.dismiss();
-                }
-            });
-
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
         }
