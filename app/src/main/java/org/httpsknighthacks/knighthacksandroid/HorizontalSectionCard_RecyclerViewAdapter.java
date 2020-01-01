@@ -39,8 +39,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
     private ArrayList<String> mCardMapEventList;
     private String tag;
 
-    Dialog mDialog;
-
     private Context mContext;
     public HorizontalSectionCard_RecyclerViewAdapter(Context mContext,
                                                      ArrayList<Integer> mViewTypeList,
@@ -68,9 +66,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         this.mCardFooterList = mCardFooterList;
         this.mCardMapEventList = mCardMapEventList;
         this.tag = tag;
-
-        mDialog = new Dialog(mContext);
-        mDialog.setContentView(R.layout.activity_event_map);
     }
 
     @NonNull
@@ -224,7 +219,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         TextView mCardBody;
         TextView mCardTimestamp;
         TextView mCardFooter;
-        String mTag;
+        Dialog mDialog;
 
         public static final int VIEW_TYPE = 1;
 
@@ -232,6 +227,9 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             super(itemView);
 
             View gridLayout = itemView.findViewById(R.id.horizontal_section_grid_view);
+
+            mDialog = new Dialog(mContext);
+            mDialog.setContentView(R.layout.activity_event_map);
 
             this.mCardView = itemView.findViewById(R.id.horizontal_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.horizontal_section_card_image);
@@ -243,7 +241,6 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
             this.mCardBody = itemView.findViewById(R.id.horizontal_section_card_body);
             this.mCardTimestamp = itemView.findViewById(R.id.horizontal_section_card_timestamp);
             this.mCardFooter = itemView.findViewById(R.id.horizontal_section_card_footer);
-            this.mTag = tag;
         }
 
         private void showPopUpMapImage() {
