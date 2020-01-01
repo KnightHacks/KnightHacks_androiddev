@@ -74,7 +74,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         switch (viewType) {
             case ContentViewHolder.VIEW_TYPE:
                 return new ContentViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.horizontal_section_card, parent, false), tag);
+                        .inflate(R.layout.horizontal_section_card, parent, false));
             case TitleViewHolder.VIEW_TYPE:
                 return new TitleViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.sub_section_title_card, parent, false));
@@ -219,21 +219,24 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         TextView mCardBody;
         TextView mCardTimestamp;
         TextView mCardFooter;
-        Dialog mDialog;
+        Dialog dialog;
 
         public static final int VIEW_TYPE = 1;
 
-        public ContentViewHolder(final View itemView, String tag) {
+        public ContentViewHolder(final View itemView) {
             super(itemView);
 
             View gridLayout = itemView.findViewById(R.id.horizontal_section_grid_view);
 
-            mDialog = new Dialog(mContext);
-            mDialog.setContentView(R.layout.activity_event_map);
+            if (!tag.equals(Sponsors.TAG)) {
+                dialog = new Dialog(mContext);
+                dialog.setContentView(R.layout.activity_event_map);
+
+                this.mCardMapEvent = dialog.findViewById(R.id.mapImage);
+            }
 
             this.mCardView = itemView.findViewById(R.id.horizontal_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.horizontal_section_card_image);
-            this.mCardMapEvent = mDialog.findViewById(R.id.mapImage);
             this.mCardTitle = itemView.findViewById(R.id.horizontal_section_card_title);
             this.mCardSideSubtitle = itemView.findViewById(R.id.horizontal_section_card_side_subtitle);
             this.mCardSubtitle = itemView.findViewById(R.id.horizontal_section_card_subtitle);
@@ -244,10 +247,10 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
 
         private void showPopUpMapImage() {
-            Button closeBtn = mDialog.findViewById(R.id.closeBtn);
-            Button zoomBtn = mDialog.findViewById(R.id.zoomBtn);
+            Button closeBtn = dialog.findViewById(R.id.closeBtn);
+            Button zoomBtn = dialog.findViewById(R.id.zoomBtn);
 
-            final ImageView imgView = mDialog.findViewById(R.id.mapImage);
+            final ImageView imgView = dialog.findViewById(R.id.mapImage);
 
             zoomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -266,12 +269,12 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
                     imgView.setScaleX(1);
                     imgView.setScaleY(1);
 
-                    mDialog.dismiss();
+                    dialog.dismiss();
                 }
             });
 
-            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            mDialog.show();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
         }
     }
 
