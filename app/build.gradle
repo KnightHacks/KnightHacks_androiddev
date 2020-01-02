@@ -56,7 +56,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.0'
     implementation 'com.firebaseui:firebase-ui-storage:6.0.2'
 
+    // Zoom and Pan Feature
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    // Lottie Animation
+    implementation 'com.airbnb.android:lottie:3.3.1'
 
 }
 
