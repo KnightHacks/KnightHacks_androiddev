@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -244,6 +245,15 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
 
         private void showPopUpMapImage() {
+            Button closeMapBtn = dialog.findViewById(R.id.closeMapBtn);
+
+            closeMapBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
         }
