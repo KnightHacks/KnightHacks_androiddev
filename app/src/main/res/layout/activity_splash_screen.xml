@@ -6,17 +6,18 @@
     android:layout_height="match_parent"
     android:background="@color/colorSplashScreenBackground"
     tools:context=".MainActivity">
-    <!-- TODO: Decide the correct background color -->
 
     <!-- TODO: Decide which loading screen to use -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_rawRes="@raw/lightblue_loadingscreen" />
+        app:lottie_rawRes="@raw/lightblue_loadingscreen"
+        android:scaleX="1.5"
+        android:scaleY="1.5"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
