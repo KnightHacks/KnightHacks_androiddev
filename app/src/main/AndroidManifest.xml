@@ -4,6 +4,9 @@
     package="org.httpsknighthacks.knighthacksandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/title_activity_splash_screen"
@@ -24,7 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,45 +39,32 @@
         <activity android:name=".Workshops" />
         <activity android:name=".Sponsors" />
         <activity android:name=".Profile" />
-
-        <!-- START of firebase -->
-
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <activity android:name=".LiveBarcodeScanningActivity"/> <!-- START of firebase -->
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".MyFirebaseInstanceIdService">
+        <service android:name=".MyFirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </service>
-
-        <!-- TODO(developer): Decide what icon we want here.-->
+        </service> <!-- TODO(developer): Decide what icon we want here. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_noti README(https://goo.gl/l4GJaQ) for more. -->fication_icon"
-            android:resource="@drawable/rocket_no_flames" />
-
-        <!-- TODO(developer): Decide what color we want here. -->
+            android:resource="@drawable/rocket_no_flames" /> <!-- TODO(developer): Decide what color we want here. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
-
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
-
-        <!-- END of firebase -->
     </application>
 
 </manifest>
