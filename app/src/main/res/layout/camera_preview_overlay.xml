@@ -32,17 +32,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="bottom|center_horizontal">
-            <Button
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"
                 android:text="Alternative Login"
-                android:layout_gravity="bottom|center_horizontal" />
-            <Button
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="bottom|center_horizontal"
+                app:cornerRadius="14dp" />
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/close_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"
                 android:text="Cancel"
-                android:layout_gravity="bottom|center_horizontal" />
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="bottom|center_horizontal"
+                app:cornerRadius="14dp"/>
         </LinearLayout>
     </FrameLayout>
 </merge>
