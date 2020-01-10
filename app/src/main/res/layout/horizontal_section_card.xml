@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -27,7 +28,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:id="@+id/horizontal_section_card_schedule_map_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
 
             <TextView
                 android:id="@+id/horizontal_section_card_title"
@@ -114,6 +123,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/horizontal_section_card_body"
                 android:text="@string/horizontal_card_footer_dummy" />
+
+            <ImageView
+                android:id="@+id/horizontal_section_card_workshop_map_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/horizontal_section_card_timestamp"
+                android:layout_alignEnd="@+id/horizontal_section_card_side_subtitle"
+                android:layout_alignRight="@+id/horizontal_section_card_side_subtitle"
+                android:layout_marginTop="2dp" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

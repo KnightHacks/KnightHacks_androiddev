@@ -180,20 +180,21 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
 
         if (!this.tag.equals(Sponsors.TAG)) {
+            if (numOfViewType < mCardMapEventList.size())
+                Glide.with(mContext)
+                        .asDrawable()
+                        .load(R.mipmap.map_icon_foreground)
+                        .into(holder.mCardMapIcon);
+
             holder.mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
-
-                    if (position < mCardMapEventList.size()) {
+                    if (position < mCardMapEventList.size())
                         Glide.with(mContext)
                                 .asBitmap()
                                 .load(reference.child(mCardMapEventList.get(position)))
                                 .into(holder.mCardMapEvent);
-                    } else {
-                        Toast.makeText(mContext, "No Map at the current moment.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
 
                     holder.showPopUpMapImage();
                 }
@@ -210,6 +211,7 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         CardView mCardView;
         ImageView mCardImage;
         ImageView mCardMapEvent;
+        ImageView mCardMapIcon;
         TextView mCardTitle;
         TextView mCardSideSubtitle;
         TextView mCardSubtitle;
@@ -232,6 +234,11 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
 
                 this.mCardMapEvent = dialog.findViewById(R.id.mapImage);
             }
+
+            if (tag.equals(Workshops.TAG))
+                this.mCardMapIcon = itemView.findViewById(R.id.horizontal_section_card_workshop_map_icon);
+            else if (tag.equals(Schedule.TAG))
+                this.mCardMapIcon = itemView.findViewById(R.id.horizontal_section_card_schedule_map_icon);
 
             this.mCardView = itemView.findViewById(R.id.horizontal_section_card_view);
             this.mCardImage = itemView.findViewById(R.id.horizontal_section_card_image);

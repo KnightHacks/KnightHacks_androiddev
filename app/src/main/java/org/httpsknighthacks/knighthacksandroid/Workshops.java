@@ -30,7 +30,7 @@ public class Workshops extends AppCompatActivity {
 
     private static final String ALLFILTER = "All";
     private static final String FILTERTYPE = "workshop";
-    private static final String TAG = Workshops.class.getSimpleName();
+    public static final String TAG = Workshops.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
