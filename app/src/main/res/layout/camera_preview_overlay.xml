@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <org.httpsknighthacks.knighthacksandroid.BarcodeScanner.GraphicOverlay
+        android:id="@+id/camera_preview_graphic_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:id="@+id/static_overlay_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/bottom_prompt_chip"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_prompt_chip_margin_top"
+            android:layout_gravity="top|center_horizontal"
+            android:checkable="false"
+            android:clickable="false"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:textSize="@dimen/bottom_prompt_chip_text_size"
+            android:visibility="gone"
+            app:chipCornerRadius="@dimen/bottom_prompt_chip_corner_radius"
+            app:chipBackgroundColor="@color/dark"
+            app:closeIconVisible="false"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom|center_horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"
+                android:text="Alternative Login"
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="bottom|center_horizontal"
+                app:cornerRadius="14dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/close_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"
+                android:text="Cancel"
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="bottom|center_horizontal"
+                app:cornerRadius="14dp"/>
+        </LinearLayout>
+    </FrameLayout>
+</merge>
