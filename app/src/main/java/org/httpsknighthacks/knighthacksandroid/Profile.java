@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class Profile extends AppCompatActivity {
 
@@ -16,7 +20,32 @@ public class Profile extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
 
-        Button settingsButton = findViewById(R.id.settings_button);
+        CardView scanQrCodeButton = findViewById(R.id.scan_qr_code_button);
+        scanQrCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent newActivity = new Intent(view.getContext(), LiveBarcodeScanningActivity.class);
+                view.getContext().startActivity(newActivity);
+            }
+        });
+
+        CardView showQRCodeBtn = findViewById(R.id.show_qr_btn);
+        showQRCodeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        CardView myGroupsBtn = findViewById(R.id.my_groups_btn);
+        myGroupsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        CardView settingsButton = findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -27,12 +56,19 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        Button scanQrCodeButton = findViewById(R.id.scan_qr_code_button);
-        scanQrCodeButton.setOnClickListener(new View.OnClickListener() {
+        CardView loginEmailBtn = findViewById(R.id.email_login_btn);
+        loginEmailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent newActivity = new Intent(view.getContext(), LiveBarcodeScanningActivity.class);
-                view.getContext().startActivity(newActivity);
+
+            }
+        });
+
+        CardView logoutBtn = findViewById(R.id.logout_btn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
