@@ -24,36 +24,9 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <!--fragment
-            android:id="@+id/notSignedInFrag"
-            android:layout_width="375dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="150dp"
-            android:layout_centerHorizontal="true"
-            tools:layout="@layout/fragment_not_signed_in"
-            class="org.httpsknighthacks.knighthacksandroid.Fragments.NotSignedInFragment"
-            /-->
-
-        <!--fragment
-            android:id="@+id/signedInFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            tools:layout="@layout/fragment_signed_in"
-            class="org.httpsknighthacks.knighthacksandroid.Fragments.SignedInFragment"
-            /-->
-
-        <!--fragment
-            android:id="@+id/emailLoginFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="150dp"
-            tools:layout="@layout/fragment_email_login"
-            class="org.httpsknighthacks.knighthacksandroid.Fragments.EmailLoginFragment"
-            /-->
+        android:id="@+id/profileFragments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     </FrameLayout>
 

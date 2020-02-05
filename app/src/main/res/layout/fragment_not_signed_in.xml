@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,10 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/scan_qr_code_button"
+            android:id="@+id/profile_scan_qr_code_button"
             android:layout_width="380dp"
             android:layout_height="90dp"
             android:layout_gravity="center_horizontal"
@@ -45,14 +50,14 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/qr_btn_text"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="45dp"
+                    android:layout_marginLeft="65dp"
                     android:scaleX="2"
                     android:scaleY="2"
                     app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
@@ -60,7 +65,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/email_login_btn"
+            android:id="@+id/profile_email_login_btn"
             android:layout_width="380dp"
             android:layout_height="90dp"
             android:layout_gravity="center_horizontal"
@@ -91,14 +96,14 @@
                     android:layout_gravity="center"
                     android:text="@string/email_btn_text"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="40dp"
                     android:scaleX="2"
                     android:scaleY="2"
                     app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
@@ -106,7 +111,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/settings_button"
+            android:id="@+id/profile_settings_button"
             android:layout_width="380dp"
             android:layout_height="90dp"
             android:layout_gravity="center_horizontal"
@@ -137,14 +142,14 @@
                     android:layout_gravity="center"
                     android:text="@string/notif_settings_btn_text"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="50dp"
                     android:scaleX="2"
                     android:scaleY="2"
                     app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
@@ -153,4 +158,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
