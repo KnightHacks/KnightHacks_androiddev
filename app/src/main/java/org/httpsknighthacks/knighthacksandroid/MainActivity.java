@@ -22,7 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
+import org.httpsknighthacks.knighthacksandroid.Resources.*;
 
 import java.util.ArrayList;
 
@@ -102,11 +102,9 @@ public class MainActivity extends AppCompatActivity {
     // Get images and titles from the database
     private void getImageAndTitles()
     {
-        // TODO : add the correct image
-        mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_sponsors));
+        mImages.add(getResources().getDrawable(R.drawable.ic_profile_home_page));
         mTextList.add("Profile");
-        // TODO : add the correct color
-        mBgColors.add(getResources().getColor(R.color.colorProfilePageCardBlack));
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
         activityList.add(Profile.class);
 
         mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_schedule));
@@ -119,11 +117,6 @@ public class MainActivity extends AppCompatActivity {
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardBlue));
         activityList.add(LiveUpdates.class);
 
-        mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_faqs));
-        mTextList.add(getResources().getString(R.string.faqs_card_title));
-        mBgColors.add(getResources().getColor(R.color.colorHomePageCardGreen));
-        activityList.add(FAQs.class);
-
         mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_workshops));
         mTextList.add(getResources().getString(R.string.workshops_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardRed));
@@ -133,6 +126,11 @@ public class MainActivity extends AppCompatActivity {
         mTextList.add(getResources().getString(R.string.sponsors_card_title));
         mBgColors.add(getResources().getColor(R.color.colorHomePageCardPurple));
         activityList.add(Sponsors.class);
+
+        mImages.add(getResources().getDrawable(R.drawable.ic_home_screen_faqs));
+        mTextList.add(getResources().getString(R.string.faqs_card_title));
+        mBgColors.add(getResources().getColor(R.color.colorHomePageCardLightBlue));
+        activityList.add(FAQs.class);
 
         loadRecycleViewToHomepage();
     }
