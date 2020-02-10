@@ -93,10 +93,11 @@ public class BarcodeProcessor extends FrameProcessorBase<List<FirebaseVisionBarc
 
             } else {
                 // Barcode size in the camera view is sufficient.
-                if (!PreferenceUtils.shouldDelayLoadingBarcodeResult(graphicOverlay.getContext())) {
+                if (PreferenceUtils.shouldDelayLoadingBarcodeResult(graphicOverlay.getContext())) {
                     ValueAnimator loadingAnimator = createLoadingAnimator(graphicOverlay, barcodeInCenter);
                     loadingAnimator.start();
                     graphicOverlay.add(new BarcodeLoadingGraphic(graphicOverlay, loadingAnimator));
+                    workflowModel.detectedBarcode.setValue(barcodeInCenter);
                     workflowModel.setWorkflowState(WorkflowModel.WorkflowState.SEARCHING);
 
                 } else {

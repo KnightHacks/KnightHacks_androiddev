@@ -19,8 +19,6 @@ package org.httpsknighthacks.knighthacksandroid;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.content.Intent;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,18 +30,19 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.common.internal.Objects;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import org.httpsknighthacks.knighthacksandroid.BarcodeScanner.BarcodeProcessor;
 import org.httpsknighthacks.knighthacksandroid.BarcodeScanner.CameraSource;
 import org.httpsknighthacks.knighthacksandroid.BarcodeScanner.CameraSourcePreview;
 import org.httpsknighthacks.knighthacksandroid.BarcodeScanner.GraphicOverlay;
 import org.httpsknighthacks.knighthacksandroid.BarcodeScanner.WorkflowModel;
+import org.httpsknighthacks.knighthacksandroid.Tasks.LoginTask;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /** Demonstrates the barcode scanning workflow using camera preview. */
-public class LiveBarcodeScanningActivity extends AppCompatActivity implements OnClickListener {
+public class LiveBarcodeScanningActivity extends AppCompatActivity implements OnClickListener, LoginTask.ResponseListener {
 
     private static final String TAG = "LiveBarcodeActivity";
 
@@ -54,6 +53,7 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
     private AnimatorSet promptChipAnimator;
     private WorkflowModel workflowModel;
     private WorkflowModel.WorkflowState currentWorkflowState;
+    private FirebaseVisionBarcode firebaseVisionBarcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +109,17 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
         }
     }
 
+    @Override
+    public void onSuccess() {
+        onBackPressed();
+    }
+
+    @Override
+    public void onFailure() {
+        workflowModel.addUuid(firebaseVisionBarcode.getRawValue());
+        workflowModel.setWorkflowState(WorkflowModel.WorkflowState.INVALID);
+    }
+
     private void startCameraPreview() {
         if (!workflowModel.isCameraLive() && cameraSource != null) {
             try {
@@ -161,12 +172,23 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
                             promptChip.setVisibility(View.VISIBLE);
                             promptChip.setText("Logging in...");
                             stopCameraPreview();
+                            if (workflowModel.checkPreviousLoginAttempts(firebaseVisionBarcode.getRawValue())) {
+                                onFailure();
+                            }
+                            else {
+                                LoginTask loginTask = new LoginTask(this);
+                                loginTask.execute(firebaseVisionBarcode.getRawValue());
+                            }
+
                             break;
                         case DETECTED:
                         case SEARCHED:
                             promptChip.setVisibility(View.GONE);
                             stopCameraPreview();
                             break;
+                        case INVALID:
+                            promptChip.setText("Invalid login");
+                            startCameraPreview();
                         default:
                             promptChip.setVisibility(View.GONE);
                             break;
@@ -184,7 +206,7 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
                 barcode -> {
                     if (barcode != null) {
                         Toast.makeText(this, barcode.getRawValue(), Toast.LENGTH_SHORT).show();
-
+                        firebaseVisionBarcode = barcode;
                     }
                 });
     }

@@ -32,14 +32,12 @@ public class ScheduleEventsTask {
     public static final String EVENTS_COLLECTION = "events";
 
     private WeakReference<Context> mContext;
-    private ArrayList<ScheduleEvent> mScheduleEvents;
     private ResponseListener<ScheduleEvent> mResponseListener;
 
     private DatabaseReference mReference;
 
     public ScheduleEventsTask(Context context, ResponseListener<ScheduleEvent> responseListener) {
         this.mContext = new WeakReference<>(context);
-        this.mScheduleEvents = new ArrayList<>();
         this.mResponseListener = responseListener;
         mReference = FirebaseDatabase.getInstance().getReference();
     }

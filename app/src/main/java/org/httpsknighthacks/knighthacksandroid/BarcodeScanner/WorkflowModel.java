@@ -28,6 +28,7 @@ import java.util.Set;
 
 /** View model for handling application workflow based on camera preview. */
 public class WorkflowModel extends AndroidViewModel {
+    private HashSet<String> uuids;
 
     /**
      * State set of the application workflow.
@@ -39,7 +40,8 @@ public class WorkflowModel extends AndroidViewModel {
         CONFIRMING,
         CONFIRMED,
         SEARCHING,
-        SEARCHED
+        SEARCHED,
+        INVALID
     }
 
     public final MutableLiveData<WorkflowState> workflowState = new MutableLiveData<>();
@@ -65,6 +67,17 @@ public class WorkflowModel extends AndroidViewModel {
     public void markCameraLive() {
         isCameraLive = true;
         objectIdsToSearch.clear();
+    }
+
+    public boolean checkPreviousLoginAttempts(String uuid) {
+        if (uuids.contains(uuid))
+            return true;
+
+        return false;
+    }
+
+    public void addUuid(String uuid) {
+        uuids.add(uuid);
     }
 
     public void markCameraFrozen() {
