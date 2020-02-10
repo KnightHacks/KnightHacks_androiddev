@@ -27,7 +27,7 @@ public class Schedule extends AppCompatActivity {
 
     private static final String ALLFILTER = "All";
     private static final String FILTERTYPE = "event";
-    private static final String TAG = Workshops.class.getSimpleName();
+    private static final String TAG = Schedule.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -39,6 +39,7 @@ public class Schedule extends AppCompatActivity {
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
+    private ArrayList<String> mCardMapEventList;
 
     private ArrayList<String> mFilterSearchImageList;
     private ArrayList<String> mSearchFilterTypeList;
@@ -71,6 +72,7 @@ public class Schedule extends AppCompatActivity {
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
+        mCardMapEventList = new ArrayList<>();
 
         mFilterSearchImageList = new ArrayList<>();
         mSearchFilterTypeList = new ArrayList<>();
@@ -95,7 +97,9 @@ public class Schedule extends AppCompatActivity {
     }
 
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle,
+                                          String cardSubtitle, String cardTagSubtitle, String cardBody,
+                                          String cardTimestamp, String cardFooter, String cardMap) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -129,6 +133,10 @@ public class Schedule extends AppCompatActivity {
         if (cardFooter != null && !cardFooter.isEmpty()) {
             mCardFooterList.add(cardFooter);
         }
+
+        if (cardMap != null && !cardMap.isEmpty()) {
+            mCardMapEventList.add(cardMap);
+        }
     }
 
     private void addScheduleEventCard(ScheduleEvent event) {
@@ -139,7 +147,8 @@ public class Schedule extends AppCompatActivity {
                 null,
                 null,
                 DateTimeUtils.getTime(event.getStartTime().toDate().toString()),
-                null);
+                null,
+                event.getMapImage());
     }
 
     private void loadFilters() {
@@ -218,6 +227,7 @@ public class Schedule extends AppCompatActivity {
         mCardSubtitleList.clear();
         mCardSideSubtitleList.clear();
         mCardTimestampList.clear();
+        mCardMapEventList.clear();
         scheduleEventsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -229,7 +239,8 @@ public class Schedule extends AppCompatActivity {
         scheduleEventsRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
+                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList,
+                        mCardFooterList, mCardMapEventList, TAG);
 
         scheduleEventsRecyclerView.setAdapter(scheduleEventsRecyclerViewAdapter);
 

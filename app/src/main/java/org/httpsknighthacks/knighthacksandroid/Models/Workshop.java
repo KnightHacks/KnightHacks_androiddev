@@ -15,6 +15,7 @@ public class Workshop {
     private Optional<String> mPrerequisites;
     private Optional<String> mStartTime;
     private Optional<String> mEndTime;
+    private Optional<String> mMapImage;
 
     private String name;
     private String description;
@@ -22,6 +23,7 @@ public class Workshop {
     private String picture;
     private String workshopType;
     private String prerequisites;
+    private String mapImage;
     private Timestamp startTime;
     private Timestamp endTime;
 
@@ -80,6 +82,14 @@ public class Workshop {
         this.prerequisites = prerequisites;
     }
 
+    public String getMapEventImage() {
+        return mapImage;
+    }
+
+    public void setMapEventImage(String mapImage) {
+        this.mapImage = mapImage;
+    }
+
     public Timestamp getStartTime() {
         return startTime;
     }
@@ -104,7 +114,8 @@ public class Workshop {
                 && workshop.getStartTime() != null
                 && workshop.getEndTime() != null
                 && workshop.getPrerequisites() != null
-                && workshop.getWorkshopType() != null;
+                && workshop.getWorkshopType() != null
+                && workshop.getMapEventImage() != null;
     }
 }
 

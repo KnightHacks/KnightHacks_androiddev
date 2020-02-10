@@ -35,9 +35,20 @@
     <string name="home_screen_sponsors_card_img">https://user-images.githubusercontent.com/32247767/45531083-dfac5c00-b7a2-11e8-8413-b969cbcf94b3.png</string>
     <!-- TODO : Add profile image -->
     <string name="home_screen_profile_card_img"></string>
+
     <string name="default_notification_channel_id">Default</string>
-    <string name="ScanQRCodeText">Scan this QR code to sign in, get food, and more.</string>
-    <string name="ScanQRButtonText">Scan QR Code</string>
+
+    <!-- Profile Text -->
+    <string name="qr_btn_text">Scan QR Code to Login</string>
+    <string name="email_btn_text">Enter Email Code to Login</string>
+    <string name="notif_settings_btn_text">My Notification Settings</string>
+    <string name="closeMapBtnText">CLOSE</string>
+    <string name="logout_btn_txt">Logout</string>
+    <string name="show_qr_code">Show my QR Code</string>
+    <string name="my_group">My Group</string>
+    <string name="username_txt">Username</string>
+    <string name="points_txt">100 Points</string>
+    <string name="email_login_txt">Enter Email Code</string>
 
     <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
     <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
@@ -46,7 +57,8 @@
     <string name="pref_key_live_preview_object_detector_enable_multiple_objects" translatable="false">lpodemo</string>
     <string name="pref_key_still_image_object_detector_enable_multiple_objects" translatable="false">siodemo</string>
     <string name="pref_key_live_preview_object_detector_enable_classification" translatable="false">lpodec</string>
-    <string name="pref_key_still_image_object_detector_enable_classification" translatable="false">siodec</string>  <string name="prompt_searching">Searching&#8230;</string>
+    <string name="pref_key_still_image_object_detector_enable_classification" translatable="false">siodec</string>
+    <string name="prompt_searching">Searching&#8230;</string>
 
     <!-- Strings for barcode detection settings. -->
     <string name="pref_category_barcode_detection">Barcode detection</string>
@@ -65,7 +77,7 @@
     <string name="pref_key_delay_loading_barcode_result" translatable="false">barcode_dlbr</string>
     <string name="pref_title_delay_loading_barcode_result">Delay loading barcode result</string>
     <string name="pref_summary_delay_loading_barcode_result">Will show the loading spinner for 2s</string>
-    
+
     <string name="pref_entries_automl_models_local">Local</string>
     <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
     <string name="prompt_point_at_a_barcode">Point your camera at a barcode</string>

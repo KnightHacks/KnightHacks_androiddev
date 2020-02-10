@@ -7,6 +7,7 @@ public class ScheduleEvent {
     private Timestamp startTime;
     private Timestamp endTime;
     private String eventType;
+    private String mapImage;
 
     public ScheduleEvent() {}
 
@@ -46,6 +47,14 @@ public class ScheduleEvent {
         return eventType;
     }
 
+    public void setMapImage(String mapImage) {
+        this.mapImage = mapImage;
+    }
+
+    public String getMapImage() {
+        return mapImage;
+    }
+
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
@@ -56,7 +65,8 @@ public class ScheduleEvent {
                 && event.getLocation() != null
                 && event.getStartTime() != null
                 && event.getEndTime() != null
-                && event.getEventType() != null;
+                && event.getEventType() != null
+                && event.getMapImage() != null;
     }
 }
 

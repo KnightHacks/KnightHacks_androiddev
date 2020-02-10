@@ -1,12 +1,15 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Dialog;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class Workshops extends AppCompatActivity {
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
+    private ArrayList<String> mCardMapEventList;
 
     private ArrayList<String> mFilterSearchImageList;
     private ArrayList<String> mSearchFilterTypeList;
@@ -70,6 +74,7 @@ public class Workshops extends AppCompatActivity {
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
+        mCardMapEventList = new ArrayList<>();
 
         mFilterSearchImageList = new ArrayList<>();
         mSearchFilterTypeList = new ArrayList<>();
@@ -93,7 +98,9 @@ public class Workshops extends AppCompatActivity {
         }
     }
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle,
+                                          String cardSubtitle, String cardTagSubtitle, String cardBody,
+                                          String cardTimestamp, String cardFooter, String cardMap) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -127,6 +134,10 @@ public class Workshops extends AppCompatActivity {
         if (cardFooter != null && !cardFooter.isEmpty()) {
             mCardFooterList.add(cardFooter);
         }
+
+        if (cardMap != null && !cardMap.isEmpty()) {
+            mCardMapEventList.add(cardMap);
+        }
     }
 
     private void addWorkshopCard(Workshop workshop) {
@@ -137,7 +148,8 @@ public class Workshops extends AppCompatActivity {
                 null,
                 workshop.getDescription(),
                 DateTimeUtils.getTime(workshop.getStartTime().toDate().toString()),
-                workshop.getSkillLevel());
+                workshop.getSkillLevel(),
+                workshop.getMapEventImage());
     }
 
     private void loadFilters() {
@@ -216,6 +228,7 @@ public class Workshops extends AppCompatActivity {
         mCardBodyList.clear();
         mCardTimestampList.clear();
         mCardFooterList.clear();
+        mCardMapEventList.clear();
         horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -227,7 +240,7 @@ public class Workshops extends AppCompatActivity {
         horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
+                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList, mCardMapEventList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
@@ -316,7 +329,6 @@ public class Workshops extends AppCompatActivity {
         mFilterSearchImageList.add("");
         mSearchFilterTypeList.add(ALLFILTER);
     }
-
 }
 
 

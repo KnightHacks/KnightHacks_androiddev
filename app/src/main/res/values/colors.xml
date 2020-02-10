@@ -9,19 +9,16 @@
     <color name="colorHomePageCardRed">#fc3b32</color>
     <color name="colorHomePageCardPurple">#5653d5</color>
     <color name="colorHomePageCardPink">#FF4081</color>
-    <color name="colorHomePageCardBackgroundImage">#28c7f7</color>
+    <color name="colorHomePageCardLightBlue">#28c7f7</color>
     <color name="colorSplashScreenBackground">#250951</color>
     <color name="reticle_ripple">#9AFFFFFF</color>
     <color name="barcode_reticle_stroke">#40000000</color>
     <color name="barcode_reticle_background">#99000000</color>
 
-    <!-- TODO : Decide the color -->
-    <color name="colorProfilePageCardBlack">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="dark">#9A000000</color>
     <color name="black">#000000</color>
     <color name="black_overlay">#66000000</color>
     <color name="transparent">#00000000</color>
 
-    // will be removed
 </resources>

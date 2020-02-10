@@ -7,108 +7,17 @@
     android:background="@color/colorSplashScreenBackground"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/splash_screen_red_star"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="156dp"
-        android:src="@drawable/red_star"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.64"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/splash_screen_blue_star"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@null"
-        android:src="@drawable/blue_star"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/splash_screen_micro_cloud"
-        android:layout_width="48dp"
-        android:layout_height="33dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        app:srcCompat="@drawable/ic_micro_cloud"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.934"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="parent" />
-    <ImageView
-        android:id="@+id/splash_screen_mini_cloud"
-        android:layout_width="206dp"
-        android:layout_height="76dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:srcCompat="@drawable/ic_mini_cloud"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <RelativeLayout
+    <!-- TODO: Decide which loading screen to use -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:id="@+id/splash_screen_flames"
-            android:layout_width="wrap_content"
-            android:layout_height="105dp"
-            android:layout_above="@+id/flame_position_helper"
-            android:layout_centerHorizontal="true"
-            android:visibility="visible"
-            app:srcCompat="@drawable/ic_rocket_flame" />
-
-        <ImageView
-            android:id="@+id/splash_screen_rocket"
-            android:layout_width="match_parent"
-            android:layout_height="221dp"
-            android:paddingBottom="40dp"
-            android:src="@drawable/rocket_no_flames" />
-
-        <View
-            android:id="@+id/flame_position_helper"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_below="@id/splash_screen_rocket"
-            android:visibility="invisible"/>
-
-        <TextView
-            android:id="@+id/splash_screen_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/splash_screen_text"
-            android:textColor="#6b35f4"
-            android:layout_below="@+id/flame_position_helper"
-            android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/splash_screen_big_cloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_space_clouds"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/lightblue_loadingscreen"
+        android:scaleX="1.5"
+        android:scaleY="1.5"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,7 +26,7 @@ public class Sponsors extends AppCompatActivity {
 
     private static final String ALLFILTER = "All";
     private static final String FILTERTYPE= "sponsor";
-    private static final String TAG = Workshops.class.getSimpleName();
+    public static final String TAG = Sponsors.class.getSimpleName();
 
     private ArrayList<Integer> mViewTypeList;
     private ArrayList<String> mSubSectionTitleList;
@@ -38,6 +38,7 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardBodyList;
     private ArrayList<String> mCardTimestampList;
     private ArrayList<String> mCardFooterList;
+    private ArrayList<String> mCardMapEventList;
 
     private ArrayList<String> mFilterSearchImageList;
     private ArrayList<String> mSearchFilterTypeList;
@@ -70,6 +71,7 @@ public class Sponsors extends AppCompatActivity {
         mCardBodyList = new ArrayList<>();
         mCardTimestampList = new ArrayList<>();
         mCardFooterList = new ArrayList<>();
+        mCardMapEventList = new ArrayList<>();
 
         mFilterSearchImageList = new ArrayList<>();
         mSearchFilterTypeList = new ArrayList<>();
@@ -154,7 +156,9 @@ public class Sponsors extends AppCompatActivity {
     }
 
 
-    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle, String cardSubtitle, String cardTextTagSubtitle, String cardBody, String cardTimestamp, String cardFooter) {
+    private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle,
+                                          String cardSubtitle, String cardTextTagSubtitle, String cardBody,
+                                          String cardTimestamp, String cardFooter, String cardMap) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -188,6 +192,10 @@ public class Sponsors extends AppCompatActivity {
         if (cardFooter != null && !cardFooter.isEmpty()) {
             mCardFooterList.add(cardFooter);
         }
+
+        if (cardMap != null && !cardMap.isEmpty()) {
+            mCardMapEventList.add(cardMap);
+        }
     }
 
     private void addSponsorCard(Sponsor sponsor) {
@@ -197,6 +205,7 @@ public class Sponsors extends AppCompatActivity {
                 null,
                 sponsor.getOfferings(),
                 sponsor.getDescription(),
+                null,
                 null,
                 null);
     }
@@ -208,6 +217,7 @@ public class Sponsors extends AppCompatActivity {
         mCardSideSubtitleList.clear();
         mCardTagSubtitleList.clear();
         mCardBodyList.clear();
+        mCardMapEventList.clear();
         horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -219,7 +229,8 @@ public class Sponsors extends AppCompatActivity {
         horizontalSectionCardRecyclerViewAdapter =
                 new HorizontalSectionCard_RecyclerViewAdapter(this, mViewTypeList,
                         mSubSectionTitleList, mCardImageList, mCardTitleList, mCardSideSubtitleList,
-                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList, mCardFooterList);
+                        mCardSubtitleList, mCardTagSubtitleList, mCardBodyList, mCardTimestampList,
+                        mCardFooterList, mCardMapEventList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
         // Recycler Filter Search Bar
