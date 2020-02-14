@@ -1,18 +1,24 @@
 package org.httpsknighthacks.knighthacksandroid;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,22 +43,32 @@ public class Profile extends AppCompatActivity {
     private static final String MY_PREFERNCES = "MY_PREF";
     private static final String IMAGE_PROFILE = "image";
 
+    CardView mNotificationSettings;
+    CardView mGroupsActivity;
+
+    Dialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profile);
 
-        CardView scanQrCodeButton = findViewById(R.id.profile_scan_qr_code_button);
+        // The comments are need because they contain code to run features
+        // Uncomment them when their respective fragments are in use or will crash.
+
+        // TODO: Need to scan qr code
+        /*CardView scanQrCodeButton = findViewById(R.id.profile_scan_qr_code_button);
         scanQrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent newActivity = new Intent(view.getContext(), LiveBarcodeScanningActivity.class);
                 view.getContext().startActivity(newActivity);
             }
-        });
+        });*/
 
-        mCircleImageView = findViewById(R.id.profileImage);
+        // TODO: Needed to pick an image from the gallery
+        /*mCircleImageView = findViewById(R.id.profileImage);
 
         retrieveImage();
 
@@ -74,6 +90,64 @@ public class Profile extends AppCompatActivity {
                 else {
                     pickImageFromGallery();
                 }
+            }
+        });*/
+
+        // TODO: The comments below are buttons that help change the activity
+        /*mNotificationSettings = findViewById(R.id.profile_settings_button);
+        changeActivityBtn(mNotificationSettings, SettingsActivity.class);
+
+        mGroupsActivity = findViewById(R.id.my_groups_btn);
+        changeActivityBtn(mGroupsActivity, Groups.class);*/
+    }
+
+    // TODO: Set mDialog to the qr code popup and set the image with user qr
+    private void showQRCodePopup() {
+        ImageView imageView = findViewById(R.id.QRCloseBtn);
+
+        try {
+            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        catch (NullPointerException e){
+
+        }
+
+        mDialog.show();
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    // TODO: Set mDialog to the confirm logout popup
+    private void confirmLogoutPopup() {
+        Button button = findViewById(R.id.confirmLogoutBtn);
+
+        try {
+            mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        catch (NullPointerException e){
+
+        }
+
+        mDialog.show();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+    }
+
+    private void changeActivityBtn(CardView mCardView, Class activityClass) {
+        mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Profile.this, activityClass));
             }
         });
     }
