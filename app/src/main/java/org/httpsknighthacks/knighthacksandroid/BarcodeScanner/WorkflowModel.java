@@ -28,8 +28,6 @@ import java.util.Set;
 
 /** View model for handling application workflow based on camera preview. */
 public class WorkflowModel extends AndroidViewModel {
-    private HashSet<String> uuids;
-
     /**
      * State set of the application workflow.
      */
@@ -48,6 +46,7 @@ public class WorkflowModel extends AndroidViewModel {
     public final MutableLiveData<FirebaseVisionBarcode> detectedBarcode = new MutableLiveData<>();
 
     private final Set<Integer> objectIdsToSearch = new HashSet<>();
+    private HashSet<String> uuids = new HashSet<>();
 
     private boolean isCameraLive = false;
 

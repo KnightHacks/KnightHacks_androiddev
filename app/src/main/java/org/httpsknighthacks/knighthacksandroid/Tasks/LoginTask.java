@@ -22,6 +22,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class LoginTask extends AsyncTask<String, Void, Void> {
     private WeakReference<Context> mContext;
+    private SharedPreferences mPref;
 
     public interface ResponseListener {
         void onSuccess();
@@ -30,6 +31,7 @@ public class LoginTask extends AsyncTask<String, Void, Void> {
 
     public LoginTask(Context context) {
         mContext = new WeakReference<>(context);
+        mPref = mContext.get().getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -52,22 +54,28 @@ public class LoginTask extends AsyncTask<String, Void, Void> {
             String line;
             StringBuilder responseOutput = new StringBuilder();
 
-            if (connection.getResponseCode() != 200) {
-                ((ResponseListener) mContext).onFailure();
-                return null;
-            }
-
             while ((line = br.readLine()) != null) {
                 responseOutput.append(line);
             }
+            Log.d("KEVIN", "Response: " + responseOutput.toString());
             br.close();
             setAuthCode(parseResponse(responseOutput.toString()));
             setUuid(strings[0]);
-            ((ResponseListener) mContext).onSuccess();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        if (mPref.contains("authCode")) {
+            ((ResponseListener) mContext.get()).onSuccess();
+        }
+
+        else {
+            ((ResponseListener) mContext.get()).onFailure();
+        }
     }
 
     private static String parseResponse(String response) throws JSONException {
@@ -77,15 +85,13 @@ public class LoginTask extends AsyncTask<String, Void, Void> {
     }
 
     private void setAuthCode(String authCode) {
-        SharedPreferences pref = mContext.get().getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
+        SharedPreferences.Editor editor = mPref.edit();
         editor.putString("authCode", authCode);
         editor.apply();
     }
 
     private void setUuid(String uuid) {
-        SharedPreferences pref = mContext.get().getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
+        SharedPreferences.Editor editor = mPref.edit();
         editor.putString("publicUuid", uuid);
         editor.apply();
     }
