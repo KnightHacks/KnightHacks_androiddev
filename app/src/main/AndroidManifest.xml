@@ -10,6 +10,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
     <application
         android:allowBackup="true"
@@ -49,16 +50,14 @@
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".MyFirebaseInstanceIdService">
-            <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </service> <!-- TODO(developer): Decide what icon we want here. -->
+        </service>
+        <!-- TODO(developer): Decide what icon we want here. -->
         <meta-data
-            android:name="com.google.firebase.messaging.default_noti README(https://goo.gl/l4GJaQ) for more. -->fication_icon"
-            android:resource="@drawable/rocket_no_flames" /> <!-- TODO(developer): Decide what color we want here. -->
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_foreground"/>
+        <!-- TODO(developer): Decide what color we want here. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
