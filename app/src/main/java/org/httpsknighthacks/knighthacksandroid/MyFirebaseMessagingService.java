@@ -21,9 +21,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Intent fullScreenIntent = new Intent(this, MainActivity.class);
+        Intent [] activityIntent = new Intent[3];
+        activityIntent[0] = new Intent(this, MyFirebaseMessagingService.class);
+        activityIntent[1] = new Intent(this, LiveUpdates.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activityIntent[2] = new Intent(this, Schedule.class);
+
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                activityIntent[0], PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent actionIntent = PendingIntent.getActivity(this, 0,
+                activityIntent[1], PendingIntent.FLAG_ONE_SHOT);
 
         String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
@@ -39,7 +46,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.drawable.rover)
+                .addAction(R.mipmap.ic_launcher, "Live Updates", actionIntent)
+                .setContentIntent(actionIntent)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
+                .setCategory(Notification.CATEGORY_EVENT)
+                .setStyle(new NotificationCompat.InboxStyle())
                 .setAutoCancel(true);
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
@@ -55,7 +66,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("myFirebaseId", "Refreshed token: " + token);
 
         getApplicationContext().sendBroadcast(new Intent(TOKEN_BROADCAST));
-
-        // sendRegistrationToServer(token);
     }
 }

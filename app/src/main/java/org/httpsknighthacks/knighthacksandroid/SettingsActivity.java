@@ -24,13 +24,13 @@ public class SettingsActivity extends AppCompatActivity {
     Switch mFoodSwitch;
     Switch mEmergencySwitch;
 
-    private String GENERAL_TOPIC = "GENERAL";
+    private static final String GENERAL_TOPIC = "GENERAL";
     public Boolean GENERAL_NOTI = true;
 
-    private String FOOD_TOPIC = "FOOD";
+    private static final String FOOD_TOPIC = "FOOD";
     public Boolean FOOD_NOTI = true;
 
-    private String EMERGENCY_TOPIC = "EMERGENCY";
+    private static final String EMERGENCY_TOPIC = "EMERGENCY";
     public Boolean EMERGENCY_NOTI = true;
 
     private SharedPreferences mSharedPreferences;
