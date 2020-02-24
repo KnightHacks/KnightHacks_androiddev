@@ -23,12 +23,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Intent [] activityIntent = new Intent[3];
         activityIntent[0] = new Intent(this, MyFirebaseMessagingService.class);
+
+        // Actions intents for the notification
         activityIntent[1] = new Intent(this, LiveUpdates.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activityIntent[2] = new Intent(this, Schedule.class);
 
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
                 activityIntent[0], PendingIntent.FLAG_UPDATE_CURRENT);
+
         PendingIntent actionIntent = PendingIntent.getActivity(this, 0,
                 activityIntent[1], PendingIntent.FLAG_ONE_SHOT);
 
@@ -42,7 +45,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, "GENERAL")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.drawable.rover)
@@ -50,7 +53,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(actionIntent)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setCategory(Notification.CATEGORY_EVENT)
-                .setStyle(new NotificationCompat.InboxStyle())
                 .setAutoCancel(true);
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
