@@ -19,14 +19,12 @@
         android:textColor="#ffffff"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_centerHorizontal="true" />
 
     <FrameLayout
         android:id="@+id/profileFragments"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     </FrameLayout>
 

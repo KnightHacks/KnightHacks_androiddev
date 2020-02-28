@@ -3,6 +3,7 @@ package org.httpsknighthacks.knighthacksandroid;
 import android.app.ActionBar;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.httpsknighthacks.knighthacksandroid.Resources.*;
@@ -36,7 +39,18 @@ public class MainActivity extends AppCompatActivity {
 
     public RequestQueueSingleton mRequestQueueSingleton;
 
-    private String ANNOUNCEMENTS_TOPIC = "ANNOUNCEMENTS";
+    private static final String GENERAL_TOPIC = "GENERAL";
+    public Boolean GENERAL_NOTI = true;
+
+    private static final String FOOD_TOPIC = "FOOD";
+    public Boolean FOOD_NOTI = true;
+
+    private static final String EMERGENCY_TOPIC = "EMERGENCY";
+    public Boolean EMERGENCY_NOTI = true;
+
+    private static final String NOTIFICATIONS_ACTIVE = "noti active";
+    private SharedPreferences mSharedPreferences;
+    private static final String MY_PREFERNCES = "MY_PREF";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +76,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        mSharedPreferences = getSharedPreferences(MY_PREFERNCES, MODE_PRIVATE);
+
         // Start of firebase notification code.
 
         // For notifications received in foreground
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel =
-                    new NotificationChannel("MyNotifications", "MyNotifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel [] channel = new NotificationChannel[3];
+
+            channel[0] = new NotificationChannel("GENERAL", GENERAL_TOPIC, NotificationManager.IMPORTANCE_DEFAULT);
+            channel[1] = new NotificationChannel("FOOD", FOOD_TOPIC, NotificationManager.IMPORTANCE_DEFAULT);
+            channel[2] = new NotificationChannel("EMERGENCY", EMERGENCY_TOPIC, NotificationManager.IMPORTANCE_HIGH);
 
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+            for (NotificationChannel n : channel)
+                manager.createNotificationChannel(n);
         }
 
-        subscribeToTopic(ANNOUNCEMENTS_TOPIC);
+        if (!mSharedPreferences.contains(NOTIFICATIONS_ACTIVE)) {
+            subscribeToTopic(GENERAL_TOPIC);
+            subscribeToTopic(FOOD_TOPIC);
+            subscribeToTopic(EMERGENCY_TOPIC);
+
+            saveTopics();
+        }
 
         // End of firebase code.
 
@@ -82,6 +108,16 @@ public class MainActivity extends AppCompatActivity {
 
         mRequestQueueSingleton = new RequestQueueSingleton(getApplicationContext());
         getImageAndTitles();
+    }
+
+    private void saveTopics() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+
+        editor.putBoolean(NOTIFICATIONS_ACTIVE, true);
+        editor.putBoolean(GENERAL_TOPIC, GENERAL_NOTI);
+        editor.putBoolean(FOOD_TOPIC, FOOD_NOTI);
+        editor.putBoolean(EMERGENCY_TOPIC, EMERGENCY_NOTI);
+        editor.apply();
     }
 
     private void subscribeToTopic(final String topic) {
