@@ -40,20 +40,13 @@ public class Sponsors extends AppCompatActivity {
     private ArrayList<String> mCardFooterList;
     private ArrayList<String> mCardMapEventList;
 
-    private ArrayList<String> mFilterSearchImageList;
-    private ArrayList<String> mSearchFilterTypeList;
-
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
     private HorizontalSectionCard_RecyclerViewAdapter horizontalSectionCardRecyclerViewAdapter;
-    private LinearLayoutManager mFilterSearchLinearLayoutManager;
-    private RecyclerView mFilterSearchRecyclerView;
-    private SharedFilterSearchComponent_RecyclerViewAdapter sharedFilterSearchComponent_RecyclerViewAdapter;
 
     private ProgressBar mProgressBar;
     private View mEmptyScreenView;
 
-    private ArrayList<Filter> filters = new ArrayList<>();
     private ArrayList<Sponsor> sponsors = new ArrayList<>();
 
     @Override
@@ -73,41 +66,15 @@ public class Sponsors extends AppCompatActivity {
         mCardFooterList = new ArrayList<>();
         mCardMapEventList = new ArrayList<>();
 
-        mFilterSearchImageList = new ArrayList<>();
-        mSearchFilterTypeList = new ArrayList<>();
-
         mProgressBar = findViewById(R.id.sponsor_progress_bar);
         mEmptyScreenView = findViewById(R.id.sponsors_empty_screen_view);
 
         sponsors = new ArrayList<>();
 
-        loadFilters();
         loadSponsors();
         loadRecyclerView();
     }
 
-    private void loadFilters() {
-        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onSuccess(ArrayList<Filter> response) {
-                filters = response;
-                getFilterSearchComponents();
-                sharedFilterSearchComponent_RecyclerViewAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
-
-        filtersTask.retrieveFilters();
-    }
 
     private void loadSponsors() {
         SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
@@ -127,7 +94,7 @@ public class Sponsors extends AppCompatActivity {
 
                 for (int i = 0; i < numSponsors; i++) {
                     Sponsor currSponsor = response.get(i);
-                    
+
                     if (Sponsor.isValid(currSponsor)) {
                         addSponsorCard(currSponsor);
                         sponsors.add(currSponsor);
@@ -176,7 +143,7 @@ public class Sponsors extends AppCompatActivity {
         if (cardSubtitle != null && !cardSubtitle.isEmpty()) {
             mCardSubtitleList.add(cardSubtitle);
         }
-        
+
         if (cardTextTagSubtitle != null) {
             mCardTagSubtitleList.add(cardTextTagSubtitle);
         }
@@ -233,21 +200,6 @@ public class Sponsors extends AppCompatActivity {
                         mCardFooterList, mCardMapEventList, TAG);
         recyclerView.setAdapter(horizontalSectionCardRecyclerViewAdapter);
 
-        // Recycler Filter Search Bar
-        mFilterSearchLinearLayoutManager =
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mFilterSearchLinearLayoutManager.setStackFromEnd(true);
-        mFilterSearchRecyclerView = findViewById(R.id.shared_horizontal_filter_search_component_container);
-        mFilterSearchRecyclerView.setLayoutManager(mFilterSearchLinearLayoutManager);
-
-        sharedFilterSearchComponent_RecyclerViewAdapter =
-                new SharedFilterSearchComponent_RecyclerViewAdapter(this, mFilterSearchImageList, mSearchFilterTypeList, new SearchFilterListener() {
-                    @Override
-                    public void setSearchFilters(SharedFilterSearchComponent_RecyclerViewAdapter.ViewHolder holder, int position) {
-                        filterSponsorsByOffering(holder.mSearchFilterType);
-                    }
-                });
-        mFilterSearchRecyclerView.setAdapter(sharedFilterSearchComponent_RecyclerViewAdapter);
     }
 
     private ArrayList<Sponsor> getSponsorsByOfferType(String type) {
@@ -275,39 +227,5 @@ public class Sponsors extends AppCompatActivity {
         return sponsors;
     }
 
-    private void filterSponsorsByOffering(String offerType) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mEmptyScreenView.setVisibility(View.GONE);
-        clearSponsors();
-
-        ArrayList<Sponsor> sponsors = getSponsorsByOfferType(offerType);
-        int numSponsors = sponsors.size();
-
-        for (int i = 0; i < numSponsors; i++) {
-            addSponsorCard(sponsors.get(i));
-        }
-
-        if (numSponsors == 0) {
-            mEmptyScreenView.setVisibility(View.VISIBLE);
-        }
-
-        mProgressBar.setVisibility(View.GONE);
-        horizontalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    private void getFilterSearchComponents() {
-        for (int i = 0; i < filters.size(); i++) {
-            if (filters.get(i).getType().equals(FILTERTYPE)) {
-                String filterType = filters.get(i).getName();
-                String picturePath = filters.get(i).getPicture();
-                mFilterSearchImageList.add(picturePath);
-                mSearchFilterTypeList.add(filterType);
-            }
-        }
-
-        // The Adapter handles the ALL filter image
-        mFilterSearchImageList.add("");
-        mSearchFilterTypeList.add(ALLFILTER);
-    }
 }
 
