@@ -2,6 +2,7 @@ package org.httpsknighthacks.knighthacksandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 public class SignedOutFragment extends Fragment {
-    CardView mScannerCardView;
+    private CardView mScannerCardView;
+    private CardView mAlternateLoginCardview;
+    private OnFragmentInteractionListener mListener;
 
     @Nullable
     @Override
@@ -25,7 +28,23 @@ public class SignedOutFragment extends Fragment {
         mScannerCardView = view.findViewById(R.id.profile_scan_qr_code_button);
         mScannerCardView.setOnClickListener(v -> {
             Intent newActivity = new Intent(view.getContext(), LiveBarcodeScanningActivity.class);
-            view.getContext().startActivity(newActivity);
+            getActivity().startActivityForResult(newActivity, Profile.LOG_IN_TYPE_REQUEST);
         });
+
+        mAlternateLoginCardview = view.findViewById(R.id.profile_email_login_btn);
+        mAlternateLoginCardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onCardSelected(1);
+            }
+        });
+    }
+
+    public void setOnFragmentInteractionListener(OnFragmentInteractionListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onCardSelected(int position);
     }
 }

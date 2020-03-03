@@ -33,6 +33,7 @@
             android:orientation="vertical"
             android:layout_gravity="bottom|center_horizontal">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/alt_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="64dp"

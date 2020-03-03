@@ -10,18 +10,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Filter;
-import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.ScheduleEvent;
 import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.FiltersTask;
 import org.httpsknighthacks.knighthacksandroid.Tasks.ScheduleEventsTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 public class Schedule extends AppCompatActivity {
 
@@ -96,7 +96,6 @@ public class Schedule extends AppCompatActivity {
         }
     }
 
-
     private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle,
                                           String cardSubtitle, String cardTagSubtitle, String cardBody,
                                           String cardTimestamp, String cardFooter, String cardMap) {
@@ -146,13 +145,13 @@ public class Schedule extends AppCompatActivity {
                 event.getLocation(),
                 null,
                 null,
-                DateTimeUtils.getTime(event.getStartTime().toDate().toString()),
+                DateTimeUtils.getTime(getScheduleEventDate(event)),
                 null,
                 event.getMapImage());
     }
 
     private void loadFilters() {
-        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
+        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ListResponseListener<Filter>() {
             @Override
             public void onStart() {
 
@@ -175,7 +174,7 @@ public class Schedule extends AppCompatActivity {
     }
 
     private void loadSchedule() {
-        ScheduleEventsTask scheduleEventsTask = new ScheduleEventsTask(getApplicationContext(), new ResponseListener<ScheduleEvent>() {
+        ScheduleEventsTask scheduleEventsTask = new ScheduleEventsTask(getApplicationContext(), new ListResponseListener<ScheduleEvent>() {
             @Override
             public void onStart() {
                 mEmptyScreenView.setVisibility(View.GONE);
@@ -191,11 +190,13 @@ public class Schedule extends AppCompatActivity {
                     mEmptyScreenView.setVisibility(View.VISIBLE);
                 }
 
+                Collections.sort(response);
+
                 for (int i = 0; i < numEvents; i++) {
                     ScheduleEvent currEvent = response.get(i);
 
                     if (ScheduleEvent.isValid(currEvent)) {
-                        String currStartTime = currEvent.getStartTime().toDate().toString();
+                        String currStartTime = getScheduleEventDate(currEvent);
 
                         if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
                             addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
@@ -218,6 +219,13 @@ public class Schedule extends AppCompatActivity {
         });
 
         scheduleEventsTask.retrieveScheduleEvents();
+    }
+
+    private String getScheduleEventDate(ScheduleEvent event) {
+        String seconds = String.valueOf(event.getStartTime().get("seconds"));
+        Long sec = Long.parseLong(seconds);
+
+        return new Date(sec * 1000).toString();
     }
 
     private void clearScheduleEvents() {
@@ -291,7 +299,7 @@ public class Schedule extends AppCompatActivity {
 
         for (int i = 0; i < numEvents; i++) {
             ScheduleEvent currEvent = events.get(i);
-            String currStartTime = currEvent.getStartTime().toDate().toString();
+            String currStartTime = getScheduleEventDate(currEvent);
 
             if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
                 addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));

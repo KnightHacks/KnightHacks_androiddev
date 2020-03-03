@@ -21,7 +21,6 @@ public class Sponsor {
     private String location;
     private String description;
     private String picture;
-    private String offerings;
 
     public static final String NAME_KEY = "name";
     public static final String LOCATION_KEY = "location";
@@ -120,7 +119,4 @@ public class Sponsor {
         this.picture = picture;
     }
 
-    public void setOfferings(String offerings) {
-        this.offerings = offerings;
-    }
 }

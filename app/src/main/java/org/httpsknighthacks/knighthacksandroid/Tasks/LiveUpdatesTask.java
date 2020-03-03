@@ -1,15 +1,9 @@
 package org.httpsknighthacks.knighthacksandroid.Tasks;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,10 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.httpsknighthacks.knighthacksandroid.Models.LiveUpdate;
-import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -31,12 +22,12 @@ public class LiveUpdatesTask {
     public static final String UPDATES_COLLECTION = "live_updates";
 
     private WeakReference<Context> mContext;
-    private ResponseListener<LiveUpdate> mResponseListener;
+    private ListResponseListener<LiveUpdate> mListResponseListener;
 
     private DatabaseReference mReference;
-    public LiveUpdatesTask(Context context, ResponseListener<LiveUpdate> responseListener) {
+    public LiveUpdatesTask(Context context, ListResponseListener<LiveUpdate> listResponseListener) {
         this.mContext = new WeakReference<>(context);
-        this.mResponseListener = responseListener;
+        this.mListResponseListener = listResponseListener;
 
         mReference = FirebaseDatabase.getInstance().getReference();
     }
@@ -51,18 +42,18 @@ public class LiveUpdatesTask {
                     LiveUpdate event = liveUpdateDataSnapshot.getValue(LiveUpdate.class);
                     updates.add(event);
                 }
-                mResponseListener.onSuccess(updates);
+                mListResponseListener.onSuccess(updates);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                mResponseListener.onFailure();
+                mListResponseListener.onFailure();
             }
         });
     }
 
     private void showLoading() {
-        mResponseListener.onStart();
+        mListResponseListener.onStart();
     }
 
     public Context getContext() {

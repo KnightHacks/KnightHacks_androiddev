@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -180,23 +181,19 @@ public class HorizontalSectionCard_RecyclerViewAdapter extends RecyclerView.Adap
         }
 
         if (!this.tag.equals(Sponsors.TAG)) {
-            holder.mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = holder.getAdapterPosition();
+            holder.mCardView.setOnClickListener(v -> {
 
-                    if (position < mCardMapEventList.size()) {
-                        Glide.with(mContext)
-                                .asBitmap()
-                                .load(reference.child(mCardMapEventList.get(position)))
-                                .into(holder.mCardMapEvent);
-                    } else {
-                        Toast.makeText(mContext, "No Map at the current moment.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    holder.showPopUpMapImage();
+                if (mCardMapEventList.get(position) != null) {
+                    Glide.with(mContext)
+                            .asBitmap()
+                            .load(reference.child(mCardMapEventList.get(position)))
+                            .into(holder.mCardMapEvent);
+                } else {
+                    Toast.makeText(mContext, "No Map at the current moment.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                holder.showPopUpMapImage();
             });
         }
     }

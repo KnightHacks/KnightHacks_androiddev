@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -20,13 +20,13 @@ public class SponsorsTask {
     public static final String SPONSORS_COLLECTION = "sponsors";
 
     private WeakReference<Context> mContext;
-    private ResponseListener<Sponsor> mResponseListener;
+    private ListResponseListener<Sponsor> mListResponseListener;
 
     private DatabaseReference mReference;
 
-    public SponsorsTask(Context context, ResponseListener<Sponsor> responseListener) {
+    public SponsorsTask(Context context, ListResponseListener<Sponsor> listResponseListener) {
         this.mContext = new WeakReference<>(context);
-        this.mResponseListener = responseListener;
+        this.mListResponseListener = listResponseListener;
         mReference = FirebaseDatabase.getInstance().getReference();
     }
     public void retrieveSponsors() {
@@ -39,17 +39,17 @@ public class SponsorsTask {
                     Sponsor sponsor = workshopDataSnapshot.getValue(Sponsor.class);
                     sponsors.add(sponsor);
                 }
-                mResponseListener.onSuccess(sponsors);
+                mListResponseListener.onSuccess(sponsors);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                mResponseListener.onFailure();
+                mListResponseListener.onFailure();
             }
         });
     }
     private void showLoading() {
-        mResponseListener.onStart();
+        mListResponseListener.onStart();
     }
     public Context getContext() {
         return mContext.get();

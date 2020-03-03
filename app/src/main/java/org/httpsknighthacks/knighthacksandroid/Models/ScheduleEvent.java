@@ -1,11 +1,13 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
 
-public class ScheduleEvent {
+import java.util.Map;
+
+public class ScheduleEvent implements Comparable<ScheduleEvent> {
 
     private String title;
     private String location;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private Map<String, Object> startTime;
+    private Map<String, Object> endTime;
     private String eventType;
     private String mapImage;
 
@@ -27,19 +29,19 @@ public class ScheduleEvent {
         this.location = location;
     }
 
-    public Timestamp getStartTime() {
+    public Map<String, Object> getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(Map<String, Object> startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public Map<String, Object> getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(Map<String, Object> endTime) {
         this.endTime = endTime;
     }
 
@@ -65,8 +67,23 @@ public class ScheduleEvent {
                 && event.getLocation() != null
                 && event.getStartTime() != null
                 && event.getEndTime() != null
-                && event.getEventType() != null
-                && event.getMapImage() != null;
+                && event.getEventType() != null;
+    }
+
+    @Override
+    public int compareTo(ScheduleEvent o) {
+        String s1 = String.valueOf(this.startTime.get("seconds"));
+        String s2 = String.valueOf(o.startTime.get("seconds"));
+        Long l1 = Long.parseLong(s1);
+        Long l2 = Long.parseLong(s2);
+
+        if (l1 - l2 > 0)
+            return 1;
+
+        else if (l1 - l2 < 0)
+            return -1;
+
+        return 0;
     }
 }
 

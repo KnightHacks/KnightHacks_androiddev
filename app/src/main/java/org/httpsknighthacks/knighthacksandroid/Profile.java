@@ -1,36 +1,46 @@
 package org.httpsknighthacks.knighthacksandroid;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.Dialog;
+
 import android.content.Context;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-public class Profile extends AppCompatActivity {
-    SharedPreferences mSharedPreferences;
+import org.httpsknighthacks.knighthacksandroid.Tasks.LoginTask;
+import org.httpsknighthacks.knighthacksandroid.Tasks.LogoutTask;
 
+public class Profile extends AppCompatActivity implements LogoutBottomSheet.BottomSheetListener,
+        LogoutTask.OnLogoutListener, LoginTask.ResponseListener, SignedOutFragment.OnFragmentInteractionListener {
+    public static final int LOG_IN_TYPE_REQUEST = 1;
+    private SharedPreferences mSharedPreferences;
+    private LogInStatus logInStatus;
 
+    @Override
+    public void onCardSelected(int position) {
+        switch (position) {
+            case 0:
+                break;
+
+            case 1:
+                logInStatus = LogInStatus.ALTERNATE_LOG_IN;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.profileFragments, new AlternativeLogInFragment());
+                ft.addToBackStack(null);
+                ft.commit();
+                break;
+        }
+    }
+
+    public enum LogInStatus {
+        LOGGED_IN,
+        NOT_LOGGED_IN,
+        ALTERNATE_LOG_IN
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -48,13 +58,86 @@ public class Profile extends AppCompatActivity {
 
     private void addFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.profileFragments, mSharedPreferences.contains("authCode") ? new SignedInFragment() : new SignedOutFragment());
+
+        if (mSharedPreferences.contains("authCode")) {
+            ft.add(R.id.profileFragments, new SignedInFragment());
+            logInStatus = LogInStatus.LOGGED_IN;
+        }
+
+        else {
+            SignedOutFragment signedOutFragment = new SignedOutFragment();
+            signedOutFragment.setOnFragmentInteractionListener(this);
+            ft.add(R.id.profileFragments, signedOutFragment);
+
+            logInStatus = LogInStatus.NOT_LOGGED_IN;
+        }
+
         ft.commit();
     }
 
     private void replaceFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.profileFragments, mSharedPreferences.contains("authCode") ? new SignedInFragment() : new SignedOutFragment());
+
+        switch (logInStatus) {
+            case LOGGED_IN:
+                ft.replace(R.id.profileFragments, new SignedInFragment());
+                break;
+
+            case NOT_LOGGED_IN:
+                SignedOutFragment signedOutFragment = new SignedOutFragment();
+                signedOutFragment.setOnFragmentInteractionListener(this);
+                ft.replace(R.id.profileFragments, signedOutFragment);
+                break;
+
+            case ALTERNATE_LOG_IN:
+                ft.replace(R.id.profileFragments, new AlternativeLogInFragment());
+                break;
+        }
         ft.commit();
+    }
+
+    @Override
+    public void onButtonClicked() {
+        LogoutTask logoutTask = new LogoutTask(this);
+        logoutTask.execute();
+    }
+
+    @Override
+    public void onSuccess() {
+        logInStatus = LogInStatus.LOGGED_IN;
+        replaceFragment();
+    }
+
+    @Override
+    public void onFailure() {
+
+    }
+
+    @Override
+    public void onLogoutSuccess() {
+        finish();
+    }
+
+    @Override
+    public void onLogoutFailure() {
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == LOG_IN_TYPE_REQUEST) {
+            if (resultCode == RESULT_OK && mSharedPreferences.contains("authCode")) {
+                logInStatus = LogInStatus.LOGGED_IN;
+            }
+
+            else if (resultCode == RESULT_OK && !mSharedPreferences.contains("authCode")) {
+                logInStatus = LogInStatus.ALTERNATE_LOG_IN;
+            }
+
+            else if (resultCode == RESULT_CANCELED) {
+                logInStatus = LogInStatus.NOT_LOGGED_IN;
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -13,14 +12,12 @@ import android.widget.Toast;
 import org.httpsknighthacks.knighthacksandroid.Models.Filter;
 import org.httpsknighthacks.knighthacksandroid.Models.Sponsor;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.FiltersTask;
 import org.httpsknighthacks.knighthacksandroid.Tasks.SponsorsTask;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.Logger;
 
 public class Sponsors extends AppCompatActivity {
 
@@ -87,7 +84,7 @@ public class Sponsors extends AppCompatActivity {
     }
 
     private void loadFilters() {
-        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
+        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ListResponseListener<Filter>() {
             @Override
             public void onStart() {
 
@@ -110,7 +107,7 @@ public class Sponsors extends AppCompatActivity {
     }
 
     private void loadSponsors() {
-        SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ResponseListener<Sponsor>() {
+        SponsorsTask sponsorsTask = new SponsorsTask(getApplicationContext(), new ListResponseListener<Sponsor>() {
             @Override
             public void onStart() {
                 mEmptyScreenView.setVisibility(View.GONE);

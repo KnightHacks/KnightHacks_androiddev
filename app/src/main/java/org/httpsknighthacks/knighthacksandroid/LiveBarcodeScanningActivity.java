@@ -58,6 +58,7 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("KEVIN", "ONCREATE");
 
         setContentView(R.layout.activity_live_barcode);
         preview = findViewById(R.id.camera_preview);
@@ -71,6 +72,7 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
         promptChipAnimator.setTarget(promptChip);
 
         findViewById(R.id.close_button).setOnClickListener(this);
+        findViewById(R.id.alt_login).setOnClickListener(this);
 
         setUpWorkflowModel();
     }
@@ -79,6 +81,7 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
     protected void onResume() {
         super.onResume();
 
+        Log.d("KEVIN", "ONRESUME");
         workflowModel.markCameraFrozen();
         currentWorkflowState = WorkflowModel.WorkflowState.NOT_STARTED;
         cameraSource.setFrameProcessor(new BarcodeProcessor(graphicOverlay, workflowModel));
@@ -105,12 +108,19 @@ public class LiveBarcodeScanningActivity extends AppCompatActivity implements On
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.close_button) {
+            setResult(RESULT_CANCELED);
             onBackPressed();
+        }
+
+        if (id == R.id.alt_login) {
+            setResult(RESULT_OK);
+            finish();
         }
     }
 
     @Override
     public void onSuccess() {
+        setResult(RESULT_OK);
         onBackPressed();
     }
 

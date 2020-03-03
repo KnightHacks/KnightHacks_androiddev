@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import org.httpsknighthacks.knighthacksandroid.Models.FAQ;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.FAQsTask;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class FAQs extends AppCompatActivity {
     }
 
     private void loadFAQs() {
-        FAQsTask faqsTask = new FAQsTask(getApplicationContext(), new ResponseListener<FAQ>() {
+        FAQsTask faqsTask = new FAQsTask(getApplicationContext(), new ListResponseListener<FAQ>() {
             @Override
             public void onStart() {
                 mEmptyScreenView.setVisibility(View.GONE);

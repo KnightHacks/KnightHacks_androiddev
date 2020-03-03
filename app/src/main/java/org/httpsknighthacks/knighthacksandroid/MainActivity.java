@@ -3,6 +3,8 @@ package org.httpsknighthacks.knighthacksandroid;
 import android.app.ActionBar;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -19,11 +21,22 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.httpsknighthacks.knighthacksandroid.Resources.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     public RequestQueueSingleton mRequestQueueSingleton;
 
     private String ANNOUNCEMENTS_TOPIC = "ANNOUNCEMENTS";
+
+    private SharedPreferences mPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Start of firebase notification code.
-
         // For notifications received in foreground
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel =
@@ -74,28 +88,70 @@ public class MainActivity extends AppCompatActivity {
         }
 
         subscribeToTopic(ANNOUNCEMENTS_TOPIC);
-
-        // End of firebase code.
-
-
         setContentView(R.layout.activity_main);
 
+        mPref = getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         mRequestQueueSingleton = new RequestQueueSingleton(getApplicationContext());
+
         getImageAndTitles();
+        getEndTime();
+    }
+
+    private void getEndTime() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference endTimeRef = storageRef.child("config/eventEndTime.json");
+
+        try {
+            final File localFile = File.createTempFile("endTime", "json");
+            endTimeRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                try {
+                    FileReader fr = new FileReader(localFile);
+                    BufferedReader br = new BufferedReader(fr);
+                    String line;
+                    StringBuilder jsonString = new StringBuilder();
+
+                    while((line = br.readLine()) != null) {
+                        jsonString.append(line);
+                    }
+                    br.close();
+
+                    JSONObject jsonObject = new JSONObject(jsonString.toString());
+                    String time = jsonObject.getString("time");
+                    String format = jsonObject.getString("format");
+                    setEventEndTime(time);
+                    setEventEndTimeFormat(format);
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setEventEndTime(String value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putString("time", value);
+        editor.apply();
+    }
+
+    private void setEventEndTimeFormat(String value) {
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putString("format", value);
+        editor.apply();
     }
 
     private void subscribeToTopic(final String topic) {
         FirebaseMessaging.getInstance().subscribeToTopic(topic)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Successful: Subscribed to " + topic;
-                        if (!task.isSuccessful()) {
-                            msg = "Failed";
-                        }
-                        Log.d("Subscription to " + topic, msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(task -> {
+                    String msg = "Successful: Subscribed to " + topic;
+                    if (!task.isSuccessful()) {
+                        msg = "Failed";
                     }
+                    Log.d("Subscription to " + topic, msg);
+                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 });
     }
 

@@ -1,21 +1,9 @@
 package org.httpsknighthacks.knighthacksandroid.Models;
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Workshop {
-
-    private Optional<String> mName;
-    private Optional<String> mDescription;
-    private Optional<SearchFilterTypes> mSkillLevel;
-    private Optional<String> mPicture;
-    private SearchFilterTypes mWorkshopType;
-    private Optional<String> mPrerequisites;
-    private Optional<String> mStartTime;
-    private Optional<String> mEndTime;
-    private Optional<String> mMapImage;
+public class Workshop implements Comparable<Workshop> {
 
     private String name;
     private String description;
@@ -23,9 +11,9 @@ public class Workshop {
     private String picture;
     private String workshopType;
     private String prerequisites;
-    private String mapImage;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private Map<String, Object> startTime;
+    private Map<String, Object> endTime;
+    private String mapUrl;
 
     public Workshop() { }
 
@@ -33,17 +21,20 @@ public class Workshop {
         return workshopType;
     }
 
-    public Optional<String> getStartTimeOptional() {
-        return mStartTime;
-    }
-
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMapUrl() {
+        return mapUrl;
+    }
+
+    public void setMapUrl(String mapUrl) {
+        this.mapUrl = mapUrl;
     }
 
     public String getDescription() {
@@ -82,27 +73,19 @@ public class Workshop {
         this.prerequisites = prerequisites;
     }
 
-    public String getMapEventImage() {
-        return mapImage;
-    }
-
-    public void setMapEventImage(String mapImage) {
-        this.mapImage = mapImage;
-    }
-
-    public Timestamp getStartTime() {
+    public Map<String, Object> getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(Map<String, Object> startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public Map<String, Object> getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(Map<String, Object> endTime) {
         this.endTime = endTime;
     }
 
@@ -114,8 +97,22 @@ public class Workshop {
                 && workshop.getStartTime() != null
                 && workshop.getEndTime() != null
                 && workshop.getPrerequisites() != null
-                && workshop.getWorkshopType() != null
-                && workshop.getMapEventImage() != null;
+                && workshop.getWorkshopType() != null;
+    }
+
+    @Override
+    public int compareTo(Workshop o) {
+        String s1 = String.valueOf(this.startTime.get("seconds"));
+        String s2 = String.valueOf(o.startTime.get("seconds"));
+        Long l1 = Long.parseLong(s1);
+        Long l2 = Long.parseLong(s2);
+        if (l1 - l2 > 0)
+            return 1;
+
+        else if (l1 - l2 < 0)
+            return -1;
+
+        return 0;
     }
 }
 

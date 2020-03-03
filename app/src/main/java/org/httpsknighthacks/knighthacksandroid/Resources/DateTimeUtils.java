@@ -2,6 +2,7 @@ package org.httpsknighthacks.knighthacksandroid.Resources;
 
 import android.util.Log;
 
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,12 +41,15 @@ public class DateTimeUtils {
     public static String getTime(String dateTime) {
         try {
             Date date = DATE_TIME_FORMAT.parse(dateTime);
-
             return TIME_STRING_FORMAT.format(date);
         } catch (ParseException ex) {
-            Log.d("KEVIN", ex.toString());
             return "00:00am";
         }
+    }
+
+    public static String getTime2(Long time) {
+        Date date = new Date(time);
+        return DATE_TIME_FORMAT.format(date);
     }
 
     public static String getTimeAndDurationSinceGiven(String dateTime) {
@@ -72,6 +76,7 @@ public class DateTimeUtils {
 
     public static boolean daysAreDifferent(String first, String second) {
         try {
+
             Date firstDate = DATE_TIME_FORMAT.parse(first);
             Date secondDate = DATE_TIME_FORMAT.parse(second);
 

@@ -55,10 +55,21 @@ public class VerticalSectionCard_RecyclerViewAdapter extends RecyclerView.Adapte
         StorageReference reference = FirebaseStorage.getInstance().getReference();
 
         if (position < mCardImageList.size()) {
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(reference.child(mCardImageList.get(position)))
-                    .into(holder.mCardImage);
+            if (mCardImageList.get(position).equals("live-updates/kh-blue.png")) {
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(reference.child(mCardImageList.get(position)))
+                        .into(holder.mCardImage);
+                holder.mCardOptionalImage.setVisibility(View.GONE);
+            }
+
+            else {
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(reference.child(mCardImageList.get(position)))
+                        .into(holder.mCardOptionalImage);
+                holder.mCardImage.setVisibility(View.GONE);
+            }
         } else if (!tag.equals(FAQs.TAG)) {
             holder.mCardImage.setVisibility(View.GONE);
         }

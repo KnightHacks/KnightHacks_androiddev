@@ -4,6 +4,8 @@ import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class LiveUpdate {
 
     public static final String MESSAGE_KEY = "message";
@@ -13,8 +15,7 @@ public class LiveUpdate {
 
     private String message;
     private String picture;
-    private String image;
-    private Timestamp timeSent;
+    private Map<String, Object> timeSent;
 
     public LiveUpdate() {
 
@@ -36,26 +37,17 @@ public class LiveUpdate {
         this.picture = picture;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Timestamp getTimeSent() {
+    public Map<String, Object> getTimeSent() {
         return timeSent;
     }
 
-    public void setTimeSent(Timestamp timeSent) {
+    public void setTimeSent(Map<String, Object> timeSent) {
         this.timeSent = timeSent;
     }
 
     public static boolean isValid(LiveUpdate update) {
         return update.getMessage() != null
                 && update.getTimeSent() != null
-                && update.getPicture() != null
-                && update.getImage() != null;
+                && update.getPicture() != null;
     }
 }

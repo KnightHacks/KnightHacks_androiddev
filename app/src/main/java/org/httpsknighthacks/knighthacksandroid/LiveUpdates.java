@@ -1,5 +1,7 @@
 package org.httpsknighthacks.knighthacksandroid;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +14,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import org.httpsknighthacks.knighthacksandroid.Models.LiveUpdate;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.LiveUpdatesTask;
 
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,7 +73,8 @@ public class LiveUpdates extends AppCompatActivity {
         mProgressBar = findViewById(R.id.live_updates_progress_bar);
         mEmptyScreenView = findViewById(R.id.live_updates_empty_screen_view);
 
-        setupCountDownTimer();
+        //setupCountDownTimer();
+        setupTimer();
         loadLiveUpdates();
         loadRecyclerView();
     }
@@ -96,6 +105,37 @@ public class LiveUpdates extends AppCompatActivity {
 
             long duration = endDay.getTimeInMillis() - today.getTimeInMillis();
             startCountDownTimer(duration);
+        }
+    }
+
+    private void setupTimer() {
+        Calendar startDay = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+        startDay.setTime(new Date(0));
+        startDay.set(Calendar.AM_PM, 1);
+        startDay.set(Calendar.HOUR_OF_DAY, 22);
+        startDay.set(Calendar.MINUTE, 30);
+        startDay.set(Calendar.DAY_OF_MONTH, 27);
+        startDay.set(Calendar.MONTH, 2);
+        startDay.set(Calendar.YEAR, 2020);
+
+        try {
+            SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+            String format = preferences.getString("format", null);
+            String time = preferences.getString("time", null);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+            Date endDate = simpleDateFormat.parse(time);
+            Date currentDate = new Date();
+
+            if (currentDate.getTime() >= startDay.getTimeInMillis() && currentDate.getTime() <= endDate.getTime()) {
+                mNotLiveKnightHacks.setVisibility(View.INVISIBLE);
+                mLiveIndicator.setVisibility(View.VISIBLE);
+                mLiveKnightHacks.setVisibility(View.VISIBLE);
+                long timeLeft = endDate.getTime() - currentDate.getTime();
+                startCountDownTimer(timeLeft);
+            }
+        }
+         catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -134,7 +174,7 @@ public class LiveUpdates extends AppCompatActivity {
     }
 
     private void loadLiveUpdates() {
-        LiveUpdatesTask liveUpdatesTask = new LiveUpdatesTask(getApplicationContext(), new ResponseListener<LiveUpdate>() {
+        LiveUpdatesTask liveUpdatesTask = new LiveUpdatesTask(getApplicationContext(), new ListResponseListener<LiveUpdate>() {
             @Override
             public void onStart() {
                 mEmptyScreenView.setVisibility(View.GONE);
@@ -155,11 +195,11 @@ public class LiveUpdates extends AppCompatActivity {
                     if (LiveUpdate.isValid(currUpdate)) {
                         mCardImageList.add(currUpdate.getPicture());
                         mCardTitleList.add(currUpdate.getMessage());
-                        mCardSubtitleList.add(currUpdate.getTimeSent().toDate().toString());
-                        mCardOptionalImageList.add(currUpdate.getImage());
+                        mCardSubtitleList.add(getScheduleEventDate(currUpdate));
                     }
 
                     mVerticalSectionCardRecyclerViewAdapter.notifyDataSetChanged();
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -169,6 +209,13 @@ public class LiveUpdates extends AppCompatActivity {
             }
         });
         liveUpdatesTask.retrieveUpdates();
+    }
+
+    private String getScheduleEventDate(LiveUpdate liveUpdate) {
+        String seconds = String.valueOf(liveUpdate.getTimeSent().get("seconds"));
+        Long sec = Long.parseLong(seconds);
+
+        return new Date(sec * 1000).toString();
     }
 
     private void loadRecyclerView() {

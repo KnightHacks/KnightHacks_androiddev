@@ -2,29 +2,31 @@ package org.httpsknighthacks.knighthacksandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.httpsknighthacks.knighthacksandroid.Models.Enums.SearchFilterTypes;
 import org.httpsknighthacks.knighthacksandroid.Models.Filter;
-import org.httpsknighthacks.knighthacksandroid.Models.Optional;
 import org.httpsknighthacks.knighthacksandroid.Models.Workshop;
 import org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils;
 import org.httpsknighthacks.knighthacksandroid.Resources.RequestQueueSingleton;
-import org.httpsknighthacks.knighthacksandroid.Resources.ResponseListener;
+import org.httpsknighthacks.knighthacksandroid.Resources.ListResponseListener;
 import org.httpsknighthacks.knighthacksandroid.Resources.SearchFilterListener;
 import org.httpsknighthacks.knighthacksandroid.Tasks.FiltersTask;
 import org.httpsknighthacks.knighthacksandroid.Tasks.WorkshopsTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
+
+import static org.httpsknighthacks.knighthacksandroid.Resources.DateTimeUtils.DATE_TIME_STRING_PATTERN;
 
 public class Workshops extends AppCompatActivity {
 
@@ -100,8 +102,9 @@ public class Workshops extends AppCompatActivity {
 
     private void addHorizontalSectionCard(String imageUrl, String cardTitle, String cardSideSubtitle,
                                           String cardSubtitle, String cardTagSubtitle, String cardBody,
-                                          String cardTimestamp, String cardFooter, String cardMap) {
+                                          String cardTimestamp, String cardFooter, String url) {
         mViewTypeList.add(HorizontalSectionCard_RecyclerViewAdapter.ContentViewHolder.VIEW_TYPE);
+        mCardMapEventList.add(url);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             mCardImageList.add(imageUrl);
@@ -134,10 +137,6 @@ public class Workshops extends AppCompatActivity {
         if (cardFooter != null && !cardFooter.isEmpty()) {
             mCardFooterList.add(cardFooter);
         }
-
-        if (cardMap != null && !cardMap.isEmpty()) {
-            mCardMapEventList.add(cardMap);
-        }
     }
 
     private void addWorkshopCard(Workshop workshop) {
@@ -147,13 +146,20 @@ public class Workshops extends AppCompatActivity {
                 null,
                 null,
                 workshop.getDescription(),
-                DateTimeUtils.getTime(workshop.getStartTime().toDate().toString()),
+                DateTimeUtils.getTime(getWorkshopDate(workshop)),
                 workshop.getSkillLevel(),
-                workshop.getMapEventImage());
+                workshop.getMapUrl());
+    }
+
+    private String getWorkshopDate(Workshop workshop) {
+        String seconds = String.valueOf(workshop.getStartTime().get("seconds"));
+        Long sec = Long.parseLong(seconds);
+
+        return new Date(sec * 1000).toString();
     }
 
     private void loadFilters() {
-        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ResponseListener<Filter>() {
+        FiltersTask filtersTask = new FiltersTask(getApplicationContext(), new ListResponseListener<Filter>() {
             @Override
             public void onStart() {
 
@@ -176,7 +182,7 @@ public class Workshops extends AppCompatActivity {
     }
 
     private void loadWorkshops() {
-        WorkshopsTask workshopsTask = new WorkshopsTask(getApplicationContext(), new ResponseListener<Workshop>() {
+        WorkshopsTask workshopsTask = new WorkshopsTask(getApplicationContext(), new ListResponseListener<Workshop>() {
             @Override
             public void onStart() {
                 mEmptyScreenView.setVisibility(View.GONE);
@@ -191,11 +197,13 @@ public class Workshops extends AppCompatActivity {
                     mEmptyScreenView.setVisibility(View.VISIBLE);
                 }
 
+                Collections.sort(response);
+                
                 for (int i = 0; i < numWorkshops; i++) {
                     Workshop currWorkshop = response.get(i);
 
                     if (Workshop.isValid(currWorkshop)) {
-                        String currStartTime = currWorkshop.getStartTime().toDate().toString();
+                        String currStartTime = getWorkshopDate(currWorkshop);
 
                         if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
                             addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));
@@ -296,7 +304,7 @@ public class Workshops extends AppCompatActivity {
 
         for (int i = 0; i < numWorkshops; i++) {
             Workshop currWorkshop = workshops.get(i);
-            String currStartTime = currWorkshop.getStartTime().toDate().toString();
+            String currStartTime = getWorkshopDate(currWorkshop);
 
             if (i == 0 || DateTimeUtils.daysAreDifferent(lastStartTime, currStartTime)) {
                 addSubSectionTitle(DateTimeUtils.getWeekDayString(currStartTime));

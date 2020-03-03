@@ -2,6 +2,7 @@ package org.httpsknighthacks.knighthacksandroid.Tasks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -12,38 +13,49 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.httpsknighthacks.knighthacksandroid.Models.AdministrativeFields;
-import org.httpsknighthacks.knighthacksandroid.SignedInFragment;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 public class AdministrativeFieldsTask {
     public static final String ADMINISTRATIVE_FIELDS_COLLECTION = "administrative_fields";
 
     private DatabaseReference mReference;
     private WeakReference<Context> mContext;
-    private StringResponseListener mListener;
+    private ResponseListener mListener;
 
-    public interface StringResponseListener {
-        void onSuccess(String value);
+    public interface ResponseListener {
+        void onSuccess();
         void onFailure();
     }
 
-    public AdministrativeFieldsTask(Context context, StringResponseListener listener) {
+    public AdministrativeFieldsTask(Context context, ResponseListener listener) {
         mContext = new WeakReference<>(context);
         mReference = FirebaseDatabase.getInstance().getReference();
         mListener = listener;
     }
 
     public void retrieveAdministrativeFields() {
+        SharedPreferences pref = mContext.get().getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+
         mReference.child(ADMINISTRATIVE_FIELDS_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                SharedPreferences mPref = mContext.get().getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-                for (DataSnapshot adminFields : dataSnapshot.getChildren()) {
-                    AdministrativeFields aFields = adminFields.getValue(AdministrativeFields.class);
 
-                    if (mListener instanceof SignedInFragment) {
-                        mListener.onSuccess(String.valueOf(aFields.getPointCount()));
+                for (DataSnapshot adminFields : dataSnapshot.getChildren()) {
+                    String publicUuid = adminFields.child("publicUuid").getValue(String.class);
+
+                    //AdministrativeFields aFields = adminFields.getValue(AdministrativeFields.class);
+                    if (Objects.requireNonNull(pref.getString("publicUuid", ""))
+                            .equals(publicUuid)) {
+
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putInt("pointsCount", adminFields.child("pointsCount").getValue(Integer.class));
+                        editor.putString("pointsGroup", adminFields.child("pointsGroup").getValue(String.class));
+                        editor.putString("foodGroup", adminFields.child("foodGroup").getValue(String.class));
+                        editor.putString("hackerKey", adminFields.getKey());
+                        editor.commit();
+                        mListener.onSuccess();
                     }
                 }
             }
