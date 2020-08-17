@@ -17,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_rawRes="@raw/lightblue_loadingscreen"
-        android:scaleX="1.5"
-        android:scaleY="1.5"/>
+        android:scaleType="centerCrop"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
